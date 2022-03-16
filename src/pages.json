@@ -1,9 +1,45 @@
 {
+	"easycom": {
+		"^u-(.*)": "uview-ui/components/u-$1/u-$1.vue"
+	},
+
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+
+
+		{
+			"path": "pages/login/login",
+			"style": {
+				"navigationStyle": "custom",
+				"navigationBarTextStyle": "white"
+			}
+		},
+		{
+			"path": "pages/register/register",
+			"style": {
+				"navigationStyle": "custom",
+				"navigationBarTextStyle": "white"
+			}
+		},
+		{
+			"path": "pages/video/lessonVideo",
+			"style": {
+				"navigationStyle": "custom",
+				"navigationBarTextStyle": "white"
+			}
+		},
+		{
+			"path": "pages/message/message",
+			"style": {
+				"navigationStyle": "custom",
+				"navigationBarTextStyle": "white"
+			}
+		},
+
 		{
 			"path": "pages/index/index",
 			"style": {
-				"navigationBarTitleText": "uni-app"
+				"navigationStyle": "custom",
+				"navigationBarTextStyle": "white"
 			}
 		}
 	],

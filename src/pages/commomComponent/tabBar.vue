@@ -45,7 +45,9 @@ export default {
     },
     click2(info) {
       if (info !== this.nowPage) {
-
+        uni.navigateTo({
+          url: '/pages/personInfo/personInfo'
+        });
         // this.nowPage = 2
       }
     },

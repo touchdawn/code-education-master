@@ -21,6 +21,13 @@
 			}
 		},
 		{
+			"path": "pages/personInfo/personInfo",
+			"style": {
+				"navigationStyle": "custom",
+				"navigationBarTextStyle": "white"
+			}
+		},
+		{
 			"path": "pages/video/lessonVideo",
 			"style": {
 				"navigationStyle": "custom",

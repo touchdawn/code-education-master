@@ -67,6 +67,7 @@
     "axios": "^0.26.1",
     "core-js": "^3.6.5",
     "flyio": "^0.6.2",
+    "image-tools": "^1.4.0",
     "qiniu-js": "^3.4.0",
     "regenerator-runtime": "^0.12.1",
     "uview-ui": "^2.0.29",

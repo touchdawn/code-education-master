@@ -35,6 +35,7 @@
 <script>
 
 import axios from "axios";
+import global from 'common/common'
 
 export default {
   data() {
@@ -95,7 +96,7 @@ export default {
         let that = this;
         let postData = that.registerData;
         if (that.registerData.password === that.registerData.passwordConfirm){
-          axios.post('http://localhost:8082/users/register',postData).then(function (res){
+          axios.post(global.commonLocalServer + '/users/register',postData).then(function (res){
             console.log(res)
             if (res.data.flag === "T"){
               console.log('success')

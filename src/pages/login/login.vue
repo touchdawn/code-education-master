@@ -29,6 +29,7 @@
 <script>
 
 import axios from "axios";
+import global from 'common/common'
 
 export default {
   data() {
@@ -99,7 +100,7 @@ export default {
     submit() {
       this.$refs.form1.validate().then(res => {
         let that = this;
-        axios.get('http://localhost:8082/users/login',{params:that.loginData}).then(function (res){
+        axios.get(global.commonLocalServer+'/users/login',{params:that.loginData}).then(function (res){
           console.log(res.data.flag)
           console.log(res.data)
           if (res.data.flag === "T"){

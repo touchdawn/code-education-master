@@ -18,15 +18,18 @@
       <u-gap height="30"></u-gap>
 
       <u-upload
-          :fileList="fileList2"
-          @afterRead="imgClick2"
-          name="2"
-          multiple
-          :maxCount="1"
+          :fileList="fileList1"
+          @afterRead="afterRead"
+          @delete="deletePic"
+          name="1"
+
+          :maxCount="10"
       ></u-upload>
+      <u-button class="getSmsCode" @click="getToken">token</u-button>
 
       <u-button class="getSmsCode" @click="confirmAndSubmit">确认上传</u-button>
 
+<!--      <u-button class="getSmsCode" @click="dated">确认上传</u-button>-->
 
     </view>
   </view>
@@ -37,13 +40,16 @@
 import axios from "axios";
 import {pathToBase64} from "image-tools";
 import {convertBase64ToBlob} from "@/common/fileTransfer";
+import global from 'common/common'
 import * as qiniu from "qiniu-js";
 
 export default {
   data() {
     return {
+      token:"",
+      fileList1:[],
       fileList2:[],
-
+      picFile:"",
       videoData:{
         videoName:'',
         courseId: '',
@@ -74,8 +80,98 @@ export default {
   },
   methods: {
 
+    // 删除图片
+    deletePic(event) {
+      console.log()
+    },
+
+    async afterRead(event) {
+      // 当设置 mutiple 为 true 时, file 为数组格式，否则为对象格式
+      console.log(event)
+
+      let lists = [].concat(event.file)
+      console.log(lists)
+      let fileListLen = this[`fileList${event.name}`].length
+      console.log(fileListLen)
+      lists.map((item) => {
+        this[`fileList${event.name}`].push({
+          ...item,
+          status: 'uploading',
+          message: '上传中'
+        })
+        console.log(`fileList${event.name}`)
+        console.log(item)
+      })
+      for (let i = 0; i < lists.length; i++) {
+        const result = await this.uploadFilePromise(lists[i].url,event)
+        console.log(result)
+        let item = this[`fileList${event.name}`][fileListLen]
+        this[`fileList${event.name}`].splice(fileListLen, 1, Object.assign(item, {
+          status: 'success',
+          message: '',
+          url: result
+        }))
+        fileListLen++
+      }
+    },
+
+
+    async uploadFilePromise(url, event) {
+      var that = this
+      await pathToBase64(this.imgsrc).then(base64 => {
+        this.base64Result = base64;
+      }).catch(error => {
+        console.error(error)
+      })
+      this.picFile = new File([convertBase64ToBlob(this.base64Result)], event.file.name);
+
+      console.log(url)
+      let data = new FormData();
+      await data.append('token', that.token)
+      await data.append("file", that.picFile);
+      console.log(data)
+
+      return new Promise((resolve, reject) => {
+        console.log(data)
+        // var fileName = event.file.name
+        let a = uni.uploadFile({
+          url: 'http://up-cn-east-2.qiniup.com', // 仅为示例，非真实的接口地址
+          filePath: event.file.thumb,
+          formData: {
+            'key':Date.parse(new Date()) + event.file.name,
+            "token":that.token
+          },
+          success: (res) => {
+            console.log(res)
+            setTimeout(() => {
+              resolve(res.statusCode)
+              let postData = {
+                url:global.storageUrl+JSON.parse(res.data).key
+              }
+              axios.post(global.commonLocalServer+"/files/addNewFile",postData,{
+                // headers:{
+                //   "access-control-allow-origin":"*"
+                // }
+              }).then(res =>{
+                console.log(res)
+                if (res.data.flag === 'T'){
+                  console.log("数据库添加成功")
+                } else {
+                  that.$u.toast('错误');
+                }
+              })
+              console.log("上传成功，地址为" + JSON.parse(res.data).key)
+            }, 1000)
+          }
+        });
+      })
+    },
+
+
+
+
     getToken(){
-      axios.get("http://localhost:8082/files/getToken").then(res=>{
+      axios.get(global.commonLocalServer+"/files/getToken").then(res=>{
         this.token = res.data.data
         console.log(this.token)
       })
@@ -146,7 +242,7 @@ export default {
     submit() {
       this.$refs.form1.validate().then(res => {
         let that = this;
-        axios.get('http://localhost:8082/users/login',{params:that.loginData}).then(function (res){
+        axios.get(global.commonLocalServer+'/users/login',{params:that.loginData}).then(function (res){
           console.log(res.data.flag)
           console.log(res.data)
           if (res.data.flag === "T"){

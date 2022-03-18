@@ -31,6 +31,8 @@ import * as qiniu from 'qiniu-js'
 import { pathToBase64, base64ToPath } from 'image-tools'
 import {convertBase64ToBlob} from 'common/fileTransfer'
 import axios, {Axios} from "axios";
+import global from 'common/common'
+
 
 export default {
 
@@ -46,7 +48,7 @@ export default {
   },
   methods:{
     getToken(){
-      axios.get("http://localhost:8082/files/getToken").then(res=>{
+      axios.get(global.commonLocalServer+"/files/getToken").then(res=>{
         this.token = res.data.data
         console.log(this.token)
       })

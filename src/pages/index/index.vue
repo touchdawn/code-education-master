@@ -153,7 +153,7 @@
 		},
 
     created() {
-      this.admin = JSON.parse(window.localStorage.getItem('access-admin'))
+      this.admin = JSON.parse(window.localStorage.getItem('userLocalData'))
       console.log(this.admin)
       console.log("local:")
       console.log(localStorage)

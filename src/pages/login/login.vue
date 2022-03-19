@@ -105,7 +105,7 @@ export default {
           console.log(res.data)
           if (res.data.flag === "T"){
             console.log('success')
-            localStorage.setItem('access-admin',JSON.stringify(res.data))
+            localStorage.setItem('userLocalData',JSON.stringify(res.data))
             that.$router.replace({path:'pages/index/index'})
           }else {
             that.$u.toast(res.data.errorInfo);

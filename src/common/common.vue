@@ -10,7 +10,7 @@ const storageUrl = 'http://r8otjafce.bkt.clouddn.com/'
 
 const commonLocalhost = ""
 
-const commonLocalServer = "http://localhost:8082"
+const commonLocalServer = "http://localhost:8083"
 
 function commonFun() {
   console.log("公共方法")

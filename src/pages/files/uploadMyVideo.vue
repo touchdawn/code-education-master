@@ -46,6 +46,7 @@ import * as qiniu from "qiniu-js";
 export default {
   data() {
     return {
+		userDt:{},
       token:"",
       fileList1:[],
       fileList2:[],
@@ -74,6 +75,10 @@ export default {
   },
   computed: {
 
+  },
+  created() {
+  	this.userDt = JSON.parse(window.localStorage.getItem("userLocalData")).data
+	// console.log(this.userDt)
   },
   onLoad() {
 
@@ -149,9 +154,9 @@ export default {
                 url:global.storageUrl+JSON.parse(res.data).key
               }
               axios.post(global.commonLocalServer+"/files/addNewFile",postData,{
-                // headers:{
-                //   "access-control-allow-origin":"*"
-                // }
+                headers:{
+                  "access-control-allow-origin":"*"
+                },
               }).then(res =>{
                 console.log(res)
                 if (res.data.flag === 'T'){
@@ -171,7 +176,7 @@ export default {
 
 
     getToken(){
-      axios.get(global.commonLocalServer+"/files/getToken").then(res=>{
+      axios.get(global.commonLocalServer+"/files/getToken" ,{headers:{'token':this.userDt.token}}).then(res=>{
         this.token = res.data.data
         console.log(this.token)
       })
@@ -247,7 +252,7 @@ export default {
           console.log(res.data)
           if (res.data.flag === "T"){
             console.log('success')
-            localStorage.setItem('access-admin',JSON.stringify(res.data))
+            localStorage.setItem('userLocalData',JSON.stringify(res.data))
             that.$router.replace({path:'pages/index/index'})
           }else {
             that.$u.toast(res.data.errorInfo);

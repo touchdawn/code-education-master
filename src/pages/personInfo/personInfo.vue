@@ -15,6 +15,7 @@
 <!--      <button v-if="!hasLogin" type="primary" class="primary" @tap="bindLogin">登录</button>-->
 <!--      <button v-if="hasLogin" type="default" @tap="bindLogout">退出登录</button>-->
 <!--    </view>-->
+    <u-button @click="upLoadClicked">上传</u-button>
     <tab-bar :msg="msg"></tab-bar>
   </view>
 </template>
@@ -36,7 +37,7 @@ export default {
     }
   },
   created() {
-    let userDt = JSON.parse(window.localStorage.getItem("access-admin"))
+    let userDt = JSON.parse(window.localStorage.getItem("userLocalData"))
     console.log(userDt)
     this.userData.userName=userDt.data.name
     console.log(this.userData.userName)
@@ -45,6 +46,11 @@ export default {
     console.log(this.userData)
   },
   methods: {
+    upLoadClicked(){
+      uni.navigateTo({
+        url: '/pages/files/uploadMyVideo'
+      });
+    }
     // ...mapMutations(['logout']),
     // bindLogin() {
     //   uni.navigateTo({

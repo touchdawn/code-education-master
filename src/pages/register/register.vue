@@ -100,7 +100,7 @@ export default {
             console.log(res)
             if (res.data.flag === "T"){
               console.log('success')
-              localStorage.setItem('access-admin',JSON.stringify(res.data))
+              localStorage.setItem('userLocalData',JSON.stringify(res.data))
               console.log(localStorage)
               uni.redirectTo({
                 url: '/pages/index/index'

@@ -151,11 +151,12 @@ export default {
             setTimeout(() => {
               resolve(res.statusCode)
               let postData = {
-                url:global.storageUrl+JSON.parse(res.data).key
+                url:global.storageUrl+JSON.parse(res.data).key,
+                createId:that.userDt.id
               }
               axios.post(global.commonLocalServer+"/files/addNewFile",postData,{
                 headers:{
-                  "access-control-allow-origin":"*"
+                  "token":that.userDt.token
                 },
               }).then(res =>{
                 console.log(res)

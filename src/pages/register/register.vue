@@ -114,7 +114,7 @@ export default {
           that.$u.toast('两次密码不匹配');
         }
       }).catch(errors => {
-        uni.$u.toast('请填写')
+        uni.$u.toast('请填写222')
       })
     },
     goPage(url) {

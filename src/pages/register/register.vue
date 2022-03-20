@@ -17,6 +17,13 @@
         <u-form-item label="手机" borderBottom prop="phone">
           <u-input v-model="registerData.phone" placeholder="请输入手机号" />
         </u-form-item>
+        <u-form-item label="邮箱" prop="email">
+          <u-input type="email" v-model="registerData.email" placeholder="请输入邮箱" />
+          <u-button class="getSmsCode" style="width: 170rpx;margin-left: 20rpx;" @click="getEmail">发送验证码</u-button>
+        </u-form-item>
+          <u-form-item label="验证码" prop="verifyCode">
+            <u-input type="verifyCode" v-model="registerData.verifyCode" placeholder="请输入验证码" />
+          </u-form-item>
         <u-form-item label="密码" prop="password">
           <u-input type="password" v-model="registerData.password" placeholder="请输入密码" />
         </u-form-item>
@@ -45,6 +52,10 @@ export default {
         phone:'',
         password: '',
         passwordConfirm: '',
+        verifyCode:"",
+        email:'',
+        codeFromServer:'',
+        tampFromServer:''
       },
       rules: {
         'name': {
@@ -87,36 +98,103 @@ export default {
       phone:'',
       password: '',
       passwordConfirm: '',
+      verifyCode:"",
+      email:'',
+      codeFromServer:'',
+      tampFromServer:''
     }
   },
   methods: {
+    checkFormData(){ //判断输入合法
+      let checkPhone = !this.registerData.phone.isEmpty
+      let checkName = !this.registerData.name.isEmpty
+      let checkEmail = !this.registerData.email.isEmpty
+      let checkVerify = !this.registerData.verifyCode.isEmpty
+      let password = !this.registerData.password.isEmpty
+      let passwordConfirm = !this.registerData.passwordConfirm.isEmpty
+      let pwd = (this.registerData.password === this.registerData.passwordConfirm)
+      if (!pwd){
+        this.$u.toast('两次密码不匹配');
+      }
+      let res = (checkPhone && checkName && checkEmail && checkVerify && password && passwordConfirm && pwd)
+      console.log(res)
+      return res
+    },
+
     register() {
-      this.$refs.form1.validate().then(res => {
-        console.log(this.registerData)
-        let that = this;
-        let postData = that.registerData;
-        if (that.registerData.password === that.registerData.passwordConfirm){
-          axios.post(global.commonLocalServer + '/users/register',postData).then(function (res){
+      let that = this;
+      if (that.checkFormData()){
+        uni.request({
+          url:global.commonLocalServer+"/users/register",
+          method:"POST",
+          data: that.registerData,
+          success:(res) =>{
             console.log(res)
             if (res.data.flag === "T"){
-              console.log('success')
+              that.registerData.codeFromServer = res.data.code
+              that.registerData.tampFromServer = res.data.tamp
+              that.$u.toast('注册成功');
               localStorage.setItem('userLocalData',JSON.stringify(res.data))
-              console.log(localStorage)
               uni.redirectTo({
-                url: '/pages/index/index'
+                    url: '/pages/index/index'
               });
-              // that.$u.toast('注册成功');
-            }else {
-              that.$u.toast('错误');
+            } else {
+              that.$u.toast(res.data.errorInfo);
             }
-          })
-        } else {
-          that.$u.toast('两次密码不匹配');
-        }
-      }).catch(errors => {
-        uni.$u.toast('请填写222')
-      })
+          }
+        })
+      }
+
+      // this.$refs.form1.validate().then(res => {
+      //   console.log(this.registerData)
+      //   let that = this;
+      //   let postData = that.registerData;
+      //   if (that.registerData.password === that.registerData.passwordConfirm){
+      //     axios.post(global.commonLocalServer + '/users/register',postData).then(function (res){
+      //       console.log(res)
+      //       if (res.data.flag === "T"){
+      //         console.log('success')
+      //         localStorage.setItem('userLocalData',JSON.stringify(res.data))
+      //         console.log(localStorage)
+      //         uni.redirectTo({
+      //           url: '/pages/index/index'
+      //         });
+      //         // that.$u.toast('注册成功');
+      //       }else {
+      //         that.$u.toast('错误');
+      //       }
+      //     })
+      //   } else {
+      //     that.$u.toast('两次密码不匹配');
+      //   }
+      // }).catch(errors => {
+      //   uni.$u.toast('请填写222')
+      // })
     },
+
+    getEmail(){
+      if(this.registerData.email !== null && this.registerData.email !== ""){
+        var that = this
+        uni.request({
+          url:global.commonLocalServer+"/sendEmail",
+          method:"POST",
+          data: {
+            email: that.registerData.email
+          },
+          success:(res) =>{
+            console.log(res)
+            if (res.data.flag === "T"){
+              that.registerData.codeFromServer = res.data.code
+              that.registerData.tampFromServer = res.data.tamp
+              that.$u.toast('发送成功,请注意查收');
+            } else {
+              that.$u.toast(res.data.errorInfo);
+            }
+          }
+        })
+      }
+    },
+
     goPage(url) {
       this.$u.route({
         url: url

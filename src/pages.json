@@ -4,7 +4,27 @@
 	},
 
 	"pages": [
+		{
+			"path": "pages/login/login",
+			"style": {
+				"navigationStyle": "custom",
+				"navigationBarTextStyle": "white"
+			}
+		},
 
+		{
+			"path": "pages/Lesson/LessonInfo",
+			"style": {
+				"navigationBarTitleText": "课程详情"
+			}
+		},
+
+		{
+			"path": "pages/files/uploadMyVideo",
+			"style": {
+				"navigationBarTitleText": "上传"
+			}
+		},
 
 		{
 			"path": "pages/register/register",
@@ -13,20 +33,7 @@
 				"navigationBarTextStyle": "white"
 			}
 		},
-		{
-			"path": "pages/login/login",
-			"style": {
-				"navigationStyle": "custom",
-				"navigationBarTextStyle": "white"
-			}
-		},
-		{
-			"path": "pages/files/uploadMyVideo",
-			"style": {
-				"navigationStyle": "custom",
-				"navigationBarTextStyle": "white"
-			}
-		},
+
 
 		{
 			"path": "pages/test/uploadTest",

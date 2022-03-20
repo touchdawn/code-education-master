@@ -11,7 +11,7 @@
 <!--轮播图组件-->
     <view class="u-demo-block " >
       <u-swiper
-          :list="banner"
+          :list="lessonImgList"
           previousMargin="30"
           nextMargin="30"
           circular
@@ -19,11 +19,12 @@
           radius="5"
           bgColor="#ffffff"
           style = "margin-top: 50rpx"
+          @click="swiperClicked"
           height="400rpx"
       ></u-swiper>
     </view>
 <!--    通知组件-->
-    <view>
+    <view style="margin-top: 20rpx;">
       <u-notice-bar :text="text1"></u-notice-bar>
     </view>
 <!--    <view>{{admin.data.name}}</view>-->
@@ -93,11 +94,15 @@
   import banner from "@/common/data/swiper"
   import gridList from "@/common/data/gridList";
   import TabBar from "@/pages/commomComponent/tabBar";
+  import global from "@/common/common";
 
   export default {
     components: {TabBar, HLessonsListRow, HOprice, HRecTitle, HLessonsList, HRecCate, HPprice},
     data() {
 			return {
+        lessonList:[],
+        lessonImgList:[],
+        userDt:{},
         msg:0,
         nowPage: 0,
         admin:'',
@@ -153,26 +158,32 @@
 		},
 
     created() {
-      this.admin = JSON.parse(window.localStorage.getItem('userLocalData'))
-      console.log(this.admin)
-      console.log("local:")
-      console.log(localStorage)
-    },
+      var that = this
+      this.userDt = JSON.parse(window.localStorage.getItem("userLocalData")).data
+      uni.request({
+        url:global.commonLocalServer+"/lesson/getAllLessons",
+        method:"GET",
+        header:{
+          "content-type":"application/json",
+          'token':this.userDt.token
+        },
+        success:function(res){
+          that.lessonList = res.data.data
+          console.log(that.lessonList[0].IMG_URL)
+          for(var i=0; i<that.lessonList.length;i++){
+            that.lessonImgList.push(that.lessonList[i].IMG_URL)
+          }
+        }
+      })    },
 
     methods: {
-      // click1(info){
-      //   // console.log(info)
-      // },
-      // change1(info){
-      //   // console.log("okk")
-      //   console.log(info)
-      //   this.nowPage = info
-      //   if (this.nowPage === 1) {
-      //     uni.redirectTo({
-      //       url: '/pages/message/message'
-      //     });
-      //   }
-      // },
+      swiperClicked(index){
+        console.log("链接课程ID:")
+        console.log(this.lessonList[index].LESSON_REL)
+        uni.navigateTo({
+          url:'/pages/Lesson/LessonInfo'+"?LessonId="+this.lessonList[index].LESSON_REL
+        })
+      },
       rightClick() {
         console.log('rightClick');
       },

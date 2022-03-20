@@ -177,9 +177,33 @@ export default {
 
 
     getToken(){
-      axios.get(global.commonLocalServer+"/files/getToken" ,{headers:{'token':this.userDt.token}}).then(res=>{
-        this.token = res.data.data
-        console.log(this.token)
+      // fetch(global.commonLocalServer+"/files/getToken",{
+      //   method:"GET",
+      //   headers:{'token':this.userDt.token},
+      // }).then(res =>{
+      //   return res.json()
+      // }).then(res=>{
+      //   console.log(res)
+      // })
+
+      // axios.get(global.commonLocalServer+"/files/getToken",
+      //     {headers:{'token':this.userDt.token}}).then(res=>{
+      //   this.token = res.data.data
+      //   console.log(res)
+      // })
+      var that = this
+      uni.request({
+        url:global.commonLocalServer+"/files/getToken",
+        method:"GET",
+        header:{
+          // 'Access-Control-Allow-Origin':'*',
+          "content-type":"application/json",
+          'token':that.userDt.token
+        },
+        success:function(res){
+          that.token = res.data.data
+          console.log(that.token)
+        }
       })
     },
 

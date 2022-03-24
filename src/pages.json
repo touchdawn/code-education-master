@@ -4,11 +4,26 @@
 	},
 
 	"pages": [
+
 		{
-			"path": "pages/login/login",
+		"path": "pages/login/login",
+		"style": {
+			"navigationStyle": "custom",
+			"navigationBarTextStyle": "white"
+			}
+		},
+
+		{
+			"path": "pages/userInfo/changePassword/changePassword",
 			"style": {
-				"navigationStyle": "custom",
-				"navigationBarTextStyle": "white"
+				"navigationBarTitleText": "修改密码"
+			}
+		},
+
+		{
+			"path": "pages/userInfo/userInfo",
+			"style": {
+				"navigationBarTitleText": "我的"
 			}
 		},
 

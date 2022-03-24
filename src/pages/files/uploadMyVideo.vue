@@ -22,7 +22,6 @@
           @afterRead="afterRead"
           @delete="deletePic"
           name="1"
-
           :maxCount="10"
       ></u-upload>
       <u-button class="getSmsCode" @click="getToken">token</u-button>
@@ -77,7 +76,8 @@ export default {
 
   },
   created() {
-  	this.userDt = JSON.parse(window.localStorage.getItem("userLocalData")).data
+    this.getToken()
+  	this.userDt = JSON.parse(window.localStorage.getItem("userLocalData"))
 	// console.log(this.userDt)
   },
   onLoad() {
@@ -120,7 +120,6 @@ export default {
       }
     },
 
-
     async uploadFilePromise(url, event) {
       var that = this
       await pathToBase64(this.imgsrc).then(base64 => {
@@ -131,13 +130,14 @@ export default {
       this.picFile = new File([convertBase64ToBlob(this.base64Result)], event.file.name);
 
       console.log(url)
-      let data = new FormData();
-      await data.append('token', that.token)
-      await data.append("file", that.picFile);
-      console.log(data)
+      // let data = new FormData();
+      // await data.append('token', that.token)
+      // await data.append("file", that.picFile);
+      // console.log(data)
 
       return new Promise((resolve, reject) => {
-        console.log(data)
+        console.log("event")
+        console.log(event)
         // var fileName = event.file.name
         let a = uni.uploadFile({
           url: 'http://up-cn-east-2.qiniup.com', // 仅为示例，非真实的接口地址
@@ -151,7 +151,7 @@ export default {
             setTimeout(() => {
               resolve(res.statusCode)
               let postData = {
-                url:global.storageUrl+JSON.parse(res.data).key,
+                url:JSON.parse(res.data).key,
                 createId:that.userDt.id
               }
               axios.post(global.commonLocalServer+"/files/addNewFile",postData,{

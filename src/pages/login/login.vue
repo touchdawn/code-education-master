@@ -5,12 +5,13 @@
 <!--        title="个人中心"-->
 <!--    >-->
 <!--    </u-navbar>-->
+    <u-toast ref="uToast"></u-toast>
     <view class="top"  style="margin-top: 50rpx;"></view>
     <view class="content">
       <view class="title" style="margin-bottom: 50rpx;">欢迎登录</view>
       <u-form ref="form1" :rules="rules" :model="loginData">
-        <u-form-item label="手机" prop="phone">
-          <u-input v-model="loginData.phone" placeholder="手机号" />
+        <u-form-item label="邮箱" prop="email">
+          <u-input v-model="loginData.email" placeholder="邮箱" />
         </u-form-item>
         <u-form-item label="密码" prop="password">
           <u-input type="password" v-model="loginData.password" placeholder="请输入密码" />
@@ -25,10 +26,9 @@
     </view>
   </view>
 </template>
-
 <script>
 
-import axios from "axios";
+// import axios from "axios";
 import global from 'common/common'
 
 export default {
@@ -36,14 +36,14 @@ export default {
     return {
       loginData:{
         phone:'',
-        name: '',
+        email: '',
         password: '',
       },
       rules: {
-        'phone': {
+        'email': {
           type: 'string',
           required: true,
-          message: '请填写手机号',
+          message: '请填写邮箱',
           trigger: ['blur', 'change']
         },
         'password': {
@@ -98,24 +98,62 @@ export default {
     //   })
     // },
     submit() {
-      this.$refs.form1.validate().then(res => {
-        let that = this;
-        axios.get(global.commonLocalServer+'/users/login',{params:that.loginData}).then(function (res){
-          console.log(res.data.flag)
-          console.log(res.data)
-          if (res.data.flag === "T"){
-            console.log('success')
-            localStorage.setItem('userLocalData',JSON.stringify(res.data))
-            that.$router.replace({path:'pages/index/index'})
-          }else {
-            that.$u.toast(res.data.errorInfo);
+      let that = this
+      if (that.checkInputData()) {
+        uni.request({
+          method: "GET",
+          url: global.commonLocalServer + "/users/login",
+          data: that.loginData,
+          success: function (res) {
+            console.log(res)
+            if (res.data.flag === "T") {
+              console.log('success')
+              localStorage.setItem('userLocalData', JSON.stringify(res.data.data))
+              console.log(JSON.parse(window.localStorage.getItem("userLocalData")))
+              that.$router.replace({path: 'pages/index/index'})
+            } else {
+              that.$u.toast(res.data.errorInfo);
+            }
+          },
+          fail: function (err) {
+            uni.$u.toast(err)
           }
         })
-      }).catch(errors => {
-        uni.$u.toast('请填写')
-      })
 
-      },
+      }
+    },
+
+      // this.$refs.form1.validate().then(res => {
+      //   let that = this;
+      //   axios.get(global.commonLocalServer+'/users/login',{params:that.loginData}).then(function (res){
+      //     console.log(res.data.flag)
+      //     console.log(res.data)
+      //     if (res.data.flag === "T"){
+      //       console.log('success')
+      //       localStorage.setItem('userLocalData',JSON.stringify(res.data))
+      //       that.$router.replace({path:'pages/index/index'})
+      //     }else {
+      //       that.$u.toast(res.data.errorInfo);
+      //     }
+      //   })
+      // }).catch(errors => {
+      //   uni.$u.toast('请填写')
+      // })
+      //
+      // },
+
+    checkInputData(){
+      if (global.isEmpty(this.loginData.email)){
+        uni.$u.toast('请填写邮箱')
+        return false
+      } else if (global.isEmpty(this.loginData.password)){
+        uni.$u.toast('请填写密码')
+        return false
+      } else {
+        return true
+      }
+    },
+
     registerClicked(type) {
       this.$router.replace({path:'pages/register/register'})
 

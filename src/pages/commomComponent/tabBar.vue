@@ -24,7 +24,7 @@ export default {
     }
   },
   created() {
-    console.log(this.msg)
+    // console.log(this.msg)
     this.nowPage=this.msg
   },
   methods: {

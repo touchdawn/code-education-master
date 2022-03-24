@@ -16,12 +16,45 @@ const commonLocalServer = "http://192.168.50.149:8083"
 function commonFun() {
   console.log("公共方法")
 }
+
+function getLocalUserToken() {
+  return JSON.parse(window.localStorage.getItem("userLocalData")).token
+}
+
+function getUploadToken(){
+  let that = this
+  let token = this.getLocalUserToken()
+  uni.request({
+    url:that.commonLocalServer+"/files/getToken",
+    method:"GET",
+    header:{
+      'token': token
+    },
+    success:function(res){
+      console.log(res)
+      return res
+     }
+  })
+}
+
+function isEmpty (obj) {
+  if (!obj && obj !== 0) { return true }
+  if (typeof obj === 'string') {
+    return obj === ''
+  } else if (obj instanceof Array) {
+    return obj.length === 0
+  }
+  return false
+}
 // 暴露出这些属性和方法
 export default {
   httpUrl,
   storageUrl,
   commonLocalServer,
-  commonFun
+  commonFun,
+  getUploadToken,
+  getLocalUserToken,
+  isEmpty
 }
 </script>
 

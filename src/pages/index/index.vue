@@ -159,7 +159,7 @@
 
     created() {
       var that = this
-      this.userDt = JSON.parse(window.localStorage.getItem("userLocalData")).data
+      this.userDt = JSON.parse(window.localStorage.getItem("userLocalData"))
       uni.request({
         url:global.commonLocalServer+"/lesson/getAllLessons",
         method:"GET",
@@ -169,19 +169,20 @@
         },
         success:function(res){
           that.lessonList = res.data.data
-          console.log(that.lessonList[0].IMG_URL)
           for(var i=0; i<that.lessonList.length;i++){
-            that.lessonImgList.push(that.lessonList[i].IMG_URL)
+            that.lessonImgList.push(global.storageUrl + that.lessonList[i].IMG_URL)
           }
         }
-      })    },
+      })
+    },
 
     methods: {
       swiperClicked(index){
         console.log("链接课程ID:")
+        console.log(this.lessonList[index])
         console.log(this.lessonList[index].LESSON_REL)
         uni.navigateTo({
-          url:'/pages/Lesson/LessonInfo'+"?LessonId="+this.lessonList[index].LESSON_REL
+          url:'/pages/Lesson/LessonInfo'+"?LessonId="+this.lessonList[index].LESSON_REL + "&LessonName="+this.lessonList[index].LESSON_NAME
         })
       },
       rightClick() {

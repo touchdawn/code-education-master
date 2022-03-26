@@ -5,6 +5,14 @@
 
 	"pages": [
 		{
+			"path": "pages/login/login",
+			"style": {
+				"navigationStyle": "custom",
+				"navigationBarTextStyle": "white"
+			}
+		},
+
+		{
 			"path": "pages/teacher/course/myCourse",
 			"style": {
 				"navigationBarTitleText": "我的课程"
@@ -32,13 +40,7 @@
 			}
 		},
 
-		{
-			"path": "pages/login/login",
-			"style": {
-				"navigationStyle": "custom",
-				"navigationBarTextStyle": "white"
-			}
-		},
+
 
 
 		{

@@ -134,11 +134,11 @@ export default {
       console.log(e.name)
       if (e.name === '视频课程') {
         uni.redirectTo({
-          url: '/pages/teacher/course/uploadNewSection/uploadNewVideo' + '?lessonId=' + that.temp.lessonId
+          url: '/pages/teacher/course/uploadNewSection/uploadNewVideo' + '?lessonId=' + that.temp.lessonId + "&courseId=" + this.courseId
         })
       } else if (e.name === '图文课程(MarkDown)'){
         uni.redirectTo({
-          url: '/pages/teacher/course/uploadNewSection/uploadNewMarkDown' + '?lessonId=' + that.temp.lessonId
+          url: '/pages/teacher/course/uploadNewSection/uploadNewMarkDown' + '?lessonId=' + that.temp.lessonId + "&courseId=" + this.courseId
         })
       }
 

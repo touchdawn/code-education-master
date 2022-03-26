@@ -5,9 +5,6 @@
       <u-form-item label="教学名称" prop="sectionName">
         <u-input v-model="form.sectionName" />
       </u-form-item>
-<!--      <u-form-item label="简介" prop="courseIntro">-->
-<!--        <u&#45;&#45;textarea v-model="form.courseIntro" placeholder="请输入内容" />-->
-<!--      </u-form-item>-->
       <u-form-item label="上传教学视频" prop="courseCover">
         <image class="cover" v-if="unUploaded" :src=" videoWithUrl" mode="scaleToFill" style="width: 400rpx;height: 300rpx;" @click="coverClicked"/>
         <video class="cover" v-if="!unUploaded" :src=" videoWithUrl" mode="scaleToFill" style="width: 400rpx;height: 300rpx;" @click="coverClicked"></video>
@@ -35,15 +32,14 @@ export default {
   data (){
     return{
       unUploaded:true,
-      isUploading:true,
-      lessonId:-1,
+      isUploading:false,
+      lessonId:-2,
+      courseId:-1,
       videoWithUrl:'',
       uploadToken:'',
       form: {
         sectionName: '',
-        courseIntro: '',
         courseCover: 'courseDefaultCover.png',
-        courseTag:'',
       },
 
     }
@@ -51,6 +47,7 @@ export default {
   onLoad (e) { //option为object类型，会序列化上个页面传递的参数
     console.log(e)
     this.lessonId = parseInt(e.lessonId)
+    this.courseId = parseInt(e.courseId)
     const {
       windowHeight,
       windowWidth
@@ -89,6 +86,7 @@ export default {
     },
     
     async submit() {
+      this.isUploading = true
       console.log(this.form)
       if (this.checkUploadData()) {
         await this.uploadCourseCover()
@@ -122,12 +120,13 @@ export default {
       })
     },
 
-    addNewSectionVideo(coverWithoutUrl) {
+    addNewSectionVideo(videoWithoutUrl) {
       let that = this
       let infoClone = clone(that.form)
-      infoClone.courseCover = coverWithoutUrl
-      infoClone.courseTag = that.array[1][that.secondChosenNo]
+      infoClone.lessonVideo = videoWithoutUrl
       infoClone.creatorId = that.userDt.id
+      infoClone.parentId = that.lessonId
+      infoClone.courseId = that.courseId
       console.log(infoClone)
       uni.request({
         method:"POST",
@@ -136,12 +135,14 @@ export default {
           'token':that.userDt.token
         },
         data: infoClone,
+
         success: (res) => {
           console.log(res)
           if(res.data.flag === "T"){
             this.$refs.uToast.show({
-              message:'提交成功,正在审核中',
+              message:'提交成功!',
             })
+            that.isUploading = false
           } else {
             this.$refs.uToast.show({
               message:'提交失败，请退出后重试',

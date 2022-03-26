@@ -22,6 +22,9 @@
     <u-button @click="upLoadClicked">上传</u-button>
 
     <u-button @click="enrollNewCourseClicked">新开课程</u-button>
+
+    <u-button @click="myCourseClicked">我的课程</u-button>
+
     <tab-bar :msg="msg"></tab-bar>
   </view>
 </template>
@@ -79,6 +82,12 @@ export default {
     enrollNewCourseClicked(){
       uni.navigateTo({
         url: '/pages/teacher/course/enrollNewCourse'
+      });
+    },
+
+    myCourseClicked(){
+      uni.navigateTo({
+        url: '/pages/teacher/course/myCourse'
       });
     },
 

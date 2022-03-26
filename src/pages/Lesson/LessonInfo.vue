@@ -27,7 +27,6 @@
 <!--介绍-->
         <view v-if="m.id === 0">
           <view class="padding-lr padding-tb-sm">
-
             <view class="margin-top-xs">
               <text class="text-lg" style="font-size:32rpx;">{{LessonName}}</text>
               <view class="uni-row">
@@ -248,7 +247,7 @@ export default {
       imgOn:true,
       lessonId:0,
       lessonName:"",
-      userDt:'',
+      userDt:{},
       background: {
         backgroundImage: 'linear-gradient(45deg, rgb(28, 187, 180), rgb(141, 198, 63))'
       },

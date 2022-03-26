@@ -4,6 +4,33 @@
 	},
 
 	"pages": [
+		{
+			"path": "pages/teacher/course/myCourse",
+			"style": {
+				"navigationBarTitleText": "我的课程"
+			}
+		},
+
+		{
+			"path": "pages/teacher/course/uploadNewSection/uploadNewVideo",
+			"style": {
+				"navigationBarTitleText": "添加视频教学"
+			}
+		},
+
+		{
+			"path": "pages/teacher/course/uploadNewSection/uploadNewMarkDown",
+			"style": {
+				"navigationBarTitleText": "添加图文教学"
+			}
+		},
+
+		{
+			"path": "pages/teacher/course/editUploadedCourse",
+			"style": {
+				"navigationBarTitleText": "编辑课程"
+			}
+		},
 
 		{
 			"path": "pages/login/login",
@@ -12,6 +39,8 @@
 				"navigationBarTextStyle": "white"
 			}
 		},
+
+
 		{
 			"path": "pages/teacher/course/enrollNewCourse",
 			"style": {

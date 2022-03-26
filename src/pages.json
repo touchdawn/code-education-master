@@ -6,12 +6,19 @@
 	"pages": [
 
 		{
-		"path": "pages/login/login",
-		"style": {
-			"navigationStyle": "custom",
-			"navigationBarTextStyle": "white"
+			"path": "pages/login/login",
+			"style": {
+				"navigationStyle": "custom",
+				"navigationBarTextStyle": "white"
 			}
 		},
+		{
+			"path": "pages/teacher/course/enrollNewCourse",
+			"style": {
+				"navigationBarTitleText": "注册新课程"
+			}
+		},
+
 
 		{
 			"path": "pages/userInfo/changePassword/changePassword",

@@ -9,6 +9,9 @@
     <u-navbar title="课程详情" :isFixed="false"></u-navbar>
     <view v-if="detail">
       <video id="myVideo" @play="onPlay" @pause="onPause" autoplay page-gesture
+             enable-progress-gesture
+             enable-play-gesture
+             :initial-time="initialTime"
              v-if="videoOn"
              :src="videoUrl"
              controls :show-center-play-btn="true" style="width: 750rpx;height: 450rpx;"></video>
@@ -239,6 +242,7 @@ export default {
   name: "LessonInfo",
   data(){
     return{
+      initialTime:10,
       videoOn:false,
       videoUrl:'',
       imgOn:true,

@@ -20,6 +20,8 @@
     <u-button @click="changePersonInfoClicked" type="primary">修改个人信息</u-button>
 
     <u-button @click="upLoadClicked">上传</u-button>
+
+    <u-button @click="enrollNewCourseClicked">新开课程</u-button>
     <tab-bar :msg="msg"></tab-bar>
   </view>
 </template>
@@ -74,6 +76,12 @@ export default {
         url: '/pages/userInfo/userInfo'
       });
     },
+    enrollNewCourseClicked(){
+      uni.navigateTo({
+        url: '/pages/teacher/course/enrollNewCourse'
+      });
+    },
+
     upLoadClicked(){
       uni.navigateTo({
         url: '/pages/files/uploadMyVideo'

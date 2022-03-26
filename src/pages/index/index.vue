@@ -165,7 +165,7 @@
         method:"GET",
         header:{
           "content-type":"application/json",
-          'token':this.userDt.token
+          'token':that.userDt.token
         },
         success:function(res){
           that.lessonList = res.data.data

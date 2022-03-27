@@ -7,7 +7,7 @@
     <u-button @click="buttonClick">确认</u-button>
 
     <view>
-      <img :src="imgsrc"
+      <image :src="imgsrc"
            style="width:200rpx; height: 200rpx;"
       @tap="imgClick"/>
     </view>

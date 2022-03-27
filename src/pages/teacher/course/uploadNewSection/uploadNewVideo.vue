@@ -89,11 +89,11 @@ export default {
       this.isUploading = true
       console.log(this.form)
       if (this.checkUploadData()) {
-        await this.uploadCourseCover()
+        await this.uploadSectionVideo()
       }
     },
 
-    async uploadCourseCover() {
+    async uploadSectionVideo() {
       var that = this
       let fileName = "video" + "_" + this.userDt.id + "_" + Date.parse(new Date())
       await pathToBase64(this.videoWithUrl).then(base64 => {
@@ -159,11 +159,13 @@ export default {
         this.$refs.uToast.show({
           message:'请填写教学名称！',
         })
+        this.isUploading = false
         return false
       } else if (this.videoWithUrl === global.storageUrl + 'courseDefaultCover.png' || this.unUploaded){
         this.$refs.uToast.show({
           message:'请上传视频！',
         })
+        this.isUploading = false
         return false
       } else {
         return true

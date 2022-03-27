@@ -6,6 +6,7 @@
     </view>
   </view>
   <view class="uni-pages">
+    <u-toast ref="uToast"></u-toast>
     <u-navbar title="课程详情" :isFixed="false"></u-navbar>
     <view v-if="detail">
       <video id="myVideo" @play="onPlay" @pause="onPause" autoplay page-gesture
@@ -15,7 +16,7 @@
              v-if="videoOn"
              :src="videoUrl"
              controls :show-center-play-btn="true" style="width: 750rpx;height: 450rpx;"></video>
-      <image :src="detail.imgUrl" style="width: 100%" v-if="imgOn"></image>
+      <img :src="detail.imgUrl" style="width: 100%" v-if="imgOn"/>
     </view>
     <u-tabs v-if="detail" ref="tabs" active-color="#1CBBB4" :bold="false" font-size="28" :list="tabs"
                    :current="currentIndex" @change="clickTabs" :is-scroll="false" swiperWidth="750">
@@ -97,51 +98,51 @@
 <!--评价-->
         <view v-if="m.id === 2">
           <view class="padding-top-sm padding-lr-sm">
-            <view class="uni-row justify-between">
-              <text class="text-df">全部评价</text>
-              <text class="margin-left-sm text-df text-gray">共1个评价</text>
-            </view>
-            <view class="uni-row justify-between margin-top-sm">
-              <view class="uni-row">
-                <text
-                    style="font-size: 120rpx;height:120rpx;line-height: 120rpx;">2</text>
-                <text class="margin-left-xs"
-                      style="font-size: 40rpx;height:120rpx;line-height: 170rpx;">星</text>
-              </view>
-              <view class="uni-row flex-sub">
-                <view class="uni-row align-center" style="height:120rpx;">
-                  <image src="/static/image/p_star.png" style="height:104rpx;width:100rpx" />
-                </view>
-                <view class="margin-left-sm flex-sub" style="height:120rpx;"
-                      >
-                  <view v-if="comment_info.list.length > 0" v-for="(a,mi) in comment_info.list"
-                        :key="mi" style="height: 24rpx;">
-                    <u-line-progress inactive-color="#e6eaf2" active-color="#a4a9b2"
-                                     :show-percent="false" :percent="a.percentage" height="8" width="350"
-                                     style="height: 8rpx;">
-                    </u-line-progress>
-                  </view>
-                </view>
-              </view>
-            </view>
+<!--            <view class="uni-row justify-between">-->
+<!--              <text class="text-df">全部评价</text>-->
+<!--              <text class="margin-left-sm text-df text-gray">共1个评价</text>-->
+<!--            </view>-->
+<!--            <view class="uni-row justify-between margin-top-sm">-->
+<!--              <view class="uni-row">-->
+<!--                <text-->
+<!--                    style="font-size: 120rpx;height:120rpx;line-height: 120rpx;">2</text>-->
+<!--                <text class="margin-left-xs"-->
+<!--                      style="font-size: 40rpx;height:120rpx;line-height: 170rpx;">星</text>-->
+<!--              </view>-->
+<!--              <view class="uni-row flex-sub">-->
+<!--                <view class="uni-row align-center" style="height:120rpx;">-->
+<!--                  <image src="/static/image/p_star.png" style="height:104rpx;width:100rpx" />-->
+<!--                </view>-->
+<!--                <view class="margin-left-sm flex-sub" style="height:120rpx;"-->
+<!--                      >-->
+<!--                  <view v-if="comment_info.list.length > 0" v-for="(a,mi) in comment_info.list"-->
+<!--                        :key="mi" style="height: 24rpx;">-->
+<!--                    <u-line-progress inactive-color="#e6eaf2" active-color="#a4a9b2"-->
+<!--                                     :show-percent="false" :percent="a.percentage" height="8" width="350"-->
+<!--                                     style="height: 8rpx;">-->
+<!--                    </u-line-progress>-->
+<!--                  </view>-->
+<!--                </view>-->
+<!--              </view>-->
+<!--            </view>-->
 
             <view class="margin-top-sm">
               <view v-if="commentList.length > 0" v-for="(comt,l) in commentList" :key="l"
                     class="margin-tb">
                 <view class="uni-row align-center" style="height: 80rpx;">
                   <image
-                      :src="comt.headimgurl == null ? '/static/image/headpic.png' : comt.headimgurl"
+                      :src="getSrc(comt.avatar)"
                       style="width: 64rpx;height: 64rpx; border-radius: 100rpx;" />
                   <view class="margin-left uni-row align-center" style="width:308rpx;">
                     <text class="text-lg"
-                          style="color:#70788C;height:40rpx">{{comt.nickname}}</text>
-                    <text class="margin-left-xs text-sm text-gray">{{comt.atime}}</text>
+                          style="color:#70788C;height:40rpx">{{comt.userName}}</text>
+                    <text class="margin-left-xs text-sm text-gray">{{comt.createTime}}</text>
                   </view>
                   <view class="flex-sub align-end">
-                    <my-rate :score="comt.score"></my-rate>
+<!--                    <my-rate :score="comt.id"></my-rate>-->
                     <view class="uni-row align-center margin-top-xs">
                       <text class="margin-right-xs text-sm"
-                            style="color:#A4A9B2;">{{comt.agree_num == null ? 0 : comt.agree_num}}</text>
+                            style="color:#A4A9B2;">{{comt.votes == null ? 0 : comt.votes}}</text>
                       <u-icon
                           @click="agreeComment(comt.id,l,comt.is_agree,comt.agree_num == null ? 0 : comt.agree_num)"
                           :name="comt.is_agree === 0 ? 'heart' : 'heart-fill'" color="#dd6161">
@@ -151,23 +152,23 @@
                 </view>
 
                 <view style="margin-top: 10rpx;margin-left: 94rpx;">
-                  <text class="text-lg">{{comt.title}}</text>
-                  <view v-if="comt.replyList.length > 0" class="margin-top-sm">
-                    <view v-for="(r,ri) in comt.replyList" :key="ri"
+                  <text class="text-lg">{{comt.content}}</text>
+                  <view v-if="comt.child.length > 0" class="margin-top-sm">
+                    <view v-for="(r,ri) in comt.child" :key="ri"
                           class="radius padding-lr-sm padding-top-sm"
-                          :class="[ri + 1 === comt.replyList.length ? 'padding-bottom' : '']"
+                          :class="[ri + 1 === comt.child.length ? 'padding-bottom' : '']"
                           style="background-color: #f3f4f7;">
                       <view class="uni-row align-center" style="height: 60rpx;">
-                        <image src="/static/image/logo.png"
+                        <image :src="getSrc(r.avatar)"
                                style="width: 40rpx;height: 40rpx; border-radius: 100rpx;" />
                         <view class="uni-row margin-left-sm align-center" style="width:308rpx;">
-                          <text style="color:#70788C;">[课程团队回复]</text>
+                          <text style="color:#70788C;">{{r.userName }}</text>
                         </view>
                         <view class="flex-sub align-end">
-                          <text class="margin-left-xs text-sm text-gray">{{r.atime}}</text>
+                          <text class="margin-left-xs text-sm text-gray">{{r.createTime}}</text>
                         </view>
                       </view>
-                      <rich-text :nodes="r.title" class="text-df"></rich-text>
+                      <rich-text :nodes="r.content" class="text-df"></rich-text>
                     </view>
                   </view>
                 </view>
@@ -181,44 +182,44 @@
     </scroll-view>
 
 
-    <view v-if="currentIndex === 1 " class="tabbar">
-      <!-- #ifdef H5 || APP-PLUS -->
-      <view class="tab" @click="navToWebView('客服中心',zzConfig.yzf)">
-        <image src="/static/icon/kf.png" style="width: 40rpx;height: 40rpx;"></image>
-        <text class="title">客服</text>
-      </view>
-      <!-- #endif -->
-      <!-- #ifdef MP -->
-      <view class="tab">
-        <button open-type="contact" show-message-card="true" class="clearBtn" type="default">
-          <image src="/static/icon/kf.png" style="width: 40rpx;height: 40rpx;"></image>
-          <text class="title">客服</text>
-        </button>
-      </view>
-      <!-- #endif -->
+<!--    <view v-if="currentIndex === 1 " class="tabbar">-->
+<!--      &lt;!&ndash; #ifdef H5 || APP-PLUS &ndash;&gt;-->
+<!--      <view class="tab" @click="navToWebView('客服中心',zzConfig.yzf)">-->
+<!--        <image src="/static/icon/kf.png" style="width: 40rpx;height: 40rpx;"></image>-->
+<!--        <text class="title">客服</text>-->
+<!--      </view>-->
+<!--      &lt;!&ndash; #endif &ndash;&gt;-->
+<!--      &lt;!&ndash; #ifdef MP &ndash;&gt;-->
+<!--      <view class="tab">-->
+<!--        <button open-type="contact" show-message-card="true" class="clearBtn" type="default">-->
+<!--          <image src="/static/icon/kf.png" style="width: 40rpx;height: 40rpx;"></image>-->
+<!--          <text class="title">客服</text>-->
+<!--        </button>-->
+<!--      </view>-->
+<!--      &lt;!&ndash; #endif &ndash;&gt;-->
 
-      <view class="tab boderleft" @click="addCart('/pages/user/order/detail/detail')">
-        <image src="/static/icon/gwc.png" style="width: 40rpx;height: 40rpx;"></image>
-        <text class="title">购物车</text>
-        <text class="i-notice" v-if="shopCount > 0">{{shopCount > 99 ? 99 : shopCount}}</text>
-      </view>
-      <view class="cart" @click="addCart">
-        <text class="bar-bottom">加入购物车</text>
-      </view>
-      <view class="pay" @click="addCart('/pages/user/order/detail/detail')">
-        <text class="bar-bottom">{{detail.price > 0 ? '立即购买' : '免费好课'}}</text>
-      </view>
-    </view>
+<!--      <view class="tab boderleft" @click="addCart('/pages/user/order/detail/detail')">-->
+<!--        <image src="/static/icon/gwc.png" style="width: 40rpx;height: 40rpx;"></image>-->
+<!--        <text class="title">购物车</text>-->
+<!--        <text class="i-notice" v-if="shopCount > 0">{{shopCount > 99 ? 99 : shopCount}}</text>-->
+<!--      </view>-->
+<!--      <view class="cart" @click="addCart">-->
+<!--        <text class="bar-bottom">加入购物车</text>-->
+<!--      </view>-->
+<!--      <view class="pay" @click="addCart('/pages/user/order/detail/detail')">-->
+<!--        <text class="bar-bottom">{{detail.price > 0 ? '立即购买' : '免费好课'}}</text>-->
+<!--      </view>-->
+<!--    </view>-->
 
     <view v-if="detail && currentIndex === 2 "
           class="tabbar padding-lr-sm padding-tb-xs justify-center"
           style="flex-direction: column;height: 140rpx;background-color: rgb(28, 187, 180);">
-      <view class="uni-row align-center">
-        <text class="text-sm text-white">课程评分：</text>
-        <view>
-          <u-rate :count="5" v-model="score" active-color="#FAC923" inactive-color="#ffffff"></u-rate>
-        </view>
-      </view>
+<!--      <view class="uni-row align-center">-->
+<!--        <text class="text-sm text-white">课程评分：</text>-->
+<!--        <view>-->
+<!--          <u-rate :count="5" v-model="score" active-color="#FAC923" inactive-color="#ffffff"></u-rate>-->
+<!--        </view>-->
+<!--      </view>-->
       <view class="margin-top-xs">
         <u-search v-model="content" search-icon="edit-pen-fill" search-icon-color="#909399" placeholder="请点评一下吧"
                   height="30" :show-action="true" action-text="提交" :action-style="{color: '#ffffff'}"
@@ -255,7 +256,7 @@ export default {
       chapter_id: 0,
       timer: null,
       score: 5,
-      content: '',
+      content:'',
       currentIndex: 0,
       shopCount: 0,
       tabList: [],
@@ -292,42 +293,61 @@ export default {
       }],
       loadStatus: 'loading',
       commentList: [
+        // {
+        //   headimgurl:null,
+        //   nickname:"nickname",
+        //   atime:"atime",
+        //   score:2,
+        //   id:4,
+        //   replyList:[
+        //     {
+        //       title:"title",
+        //       atime:"atime"
+        //     }
+        //   ]
+        // },
+        // {
+        //   headimgurl:null,
+        //   nickname:"nickname",
+        //   atime:"atime",
+        //   score:2,
+        //   id:4,
+        //   replyList:[
+        //     {
+        //       title:"title",
+        //       atime:"atime"
+        //     }
+        //   ]
+        // }
         {
-          headimgurl:null,
-          nickname:"nickname",
-          atime:"atime",
-          score:2,
-          id:4,
-          replyList:[
+          createTime: "",
+          votes: 0,
+          id: -1,
+          avatar: "default%20avatar.png",
+          userName: "",
+          userId: -1,
+          content: "22",
+          child: [
             {
-              title:"title",
-              atime:"atime"
-            }
+              createTime: "a",
+              votes: 0,
+              id: 2,
+              avatar: "default%20avatar.png",
+              userName: "test032003",
+              userId: -1,
+              content: "sss"
+            },
           ]
         },
-        {
-          headimgurl:null,
-          nickname:"nickname",
-          atime:"atime",
-          score:2,
-          id:4,
-          replyList:[
-            {
-              title:"title",
-              atime:"atime"
-            }
-          ]
-        }
-
       ],
       page: 1
     }
   },
-  computed: {
-  },
   created() {
     this.currentIndex = 0
     this.userDt = JSON.parse(window.localStorage.getItem("userLocalData"))
+    console.log(this.userDt)
+    this.getComment()
     this.getAllData();
     if (this.currentIndex === 2) {
       this.listHeight = uni.upx2px(this.pageHeight) - uni.upx2px(100) - uni.upx2px(140);
@@ -347,6 +367,57 @@ export default {
     // console.log(e)
   },
   methods:{
+    getComment(){
+      var that = this
+      uni.request({
+        method:'GET',
+        url:global.commonLocalServer+"/comment/getComment/" + that.lessonId,
+        header:{'token':that.userDt.token},
+        success:function(res){
+          console.log(res)
+          that.commentList = res.data.data
+          // if(res.data.flag === "T"){
+          //   that.$u.toast(
+          //       "提交成功!"
+          //   )
+          // }
+        }
+      })
+    },
+    addComment(){
+      var that = this
+      console.log(this.content)
+      if (!global.isEmpty(this.content)){
+        let upCommentData={}
+        upCommentData.comment = this.content
+        upCommentData.creatorId = this.userDt.id
+        upCommentData.courseId = that.lessonId
+        upCommentData.parentId = -1
+        console.log(upCommentData)
+        uni.request({
+          method:'POST',
+          url:global.commonLocalServer+"/comment/addComment",
+          header:{'token':that.userDt.token},
+          data:upCommentData,
+          success:function(res){
+            console.log(res)
+            if(res.data.flag === "T"){
+              that.$u.toast(
+                  "添加成功!"
+              )
+            }
+          }
+        })
+      } else {
+        that.$u.toast("请输入评论！");
+      }
+    },
+
+    getSrc(avatar){
+      console.log(global.storageUrl + avatar)
+      return global.storageUrl + avatar
+    },
+
     clickTabs(item){
       console.log(item)
       let index = item.index
@@ -362,10 +433,19 @@ export default {
 
     onSectionClick(c){
       console.log(c)
-      this.imgOn = false
-      this.videoOn = true
-      this.videoUrl = global.storageUrl + c.URL
+      if(c.TYPE === "video"){
+        this.imgOn = false
+        this.videoOn = true
+        this.videoUrl = global.storageUrl + c.URL
+      } else if (c.TYPE ==="MD") {
+        console.log('mdmd')
+        uni.navigateTo({
+          url:'/pages/Lesson/LessonMarkDown'+"?fileUrl="+c.URL
+        })
+      }
+
     },
+
     getAllData(){
       var that = this
       uni.request({
@@ -390,6 +470,7 @@ export default {
       //   study_time: 30
       // });
     },
+
     tabPageCurrentTabSelected(index) {
       const me = this;
       this.currentIndex = index;
@@ -403,12 +484,14 @@ export default {
         }
       // }
     },
+
     onPlay() {
       clearInterval(this.timer);
       this.timer = setInterval(() => {
         this.addStudyLog();
       }, 30000);
     },
+
     onPause() {
       clearInterval(this.timer);
     }

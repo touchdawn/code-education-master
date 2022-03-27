@@ -11,6 +11,7 @@
 
 import joMarkdown from '@/components/jo-markdown/decode.vue';
 import markdownFunc from '@/components/jo-markdown/index.js';
+import global from "@/common/common";
 export default {
   name: "LessonMarkDown",
   components: {
@@ -18,9 +19,9 @@ export default {
   },
   data() {
     return {
-      url: 'http://r8otjafce.bkt.clouddn.com/test3.md',
       markdownData: {},
       md:"",
+      fileUrl:''
     };
   },
   onLoad(e) {
@@ -36,7 +37,7 @@ export default {
     getFIle(){
       var that = this
       uni.request({
-        url: 'http://r8otjafce.bkt.clouddn.com/test3.md',
+        url: global.storageUrl + that.fileUrl ,
         success: res => {
           console.log(res)
           that.markdownData = markdownFunc(res.data, 'markdown');

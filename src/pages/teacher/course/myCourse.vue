@@ -39,10 +39,10 @@
               <view class="d-flex a-end">
                 <text style="margin-bottom: 10rpx;margin-right: 110rpx;">{{item.createAt}}</text>
               </view>
-              <view>
-                <u-button type="primary" size="mini" @click="editCourseClicked(item,2)"
-                          style="margin-top: 30rpx; width: 130rpx;" text="编辑教学"></u-button>
-              </view>
+<!--              <view>-->
+<!--                <u-button type="primary" size="mini" @click="editCourseClicked(item,2)"-->
+<!--                          style="margin-top: 30rpx; width: 130rpx;" text="编辑教学"></u-button>-->
+<!--              </view>-->
             </view>
           </view>
         </view>

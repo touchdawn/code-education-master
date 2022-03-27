@@ -1,7 +1,7 @@
 <template>
   <view>
     <view class="userback">
-      <img :src="displayAvatar" style="width: 200rpx; height: 200rpx;">
+      <image :src="displayAvatar" style="width: 200rpx; height: 200rpx; margin-top: 20%;" />
       <view class="userName" style="margin-top: 100rpx;">{{userData.name}}</view>
       <view class="userOrgan" style="margin-top: 20rpx">{{userData.nickName}}</view>
       <view class="">

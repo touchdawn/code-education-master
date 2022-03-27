@@ -15,7 +15,7 @@
         </picker>
       </u-form-item>
       <u-form-item label="上传课程封面" prop="courseCover">
-        <img class="cover" :src=" imageWithUrl" mode="scaleToFill" style="width: 400rpx;height: 300rpx;" @click="coverClicked"/>
+        <image class="cover" :src=" imageWithUrl" mode="scaleToFill" style="width: 400rpx;height: 300rpx;" @click="coverClicked"/>
       </u-form-item>
     </u-form>
 

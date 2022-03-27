@@ -8,7 +8,7 @@
         <u-cell title="头像" :arrow="false" style="margin-top: 10rpx;">
           <view class="right-icon" slot="right-icon">
             <!-- 剪裁头像 -->
-            <img class="avatar" :src="userInfo.avatar" mode="scaleToFill" style="width: 100rpx;height: 100rpx;" @click="avatarClicked"/>
+            <image class="avatar" :src="userInfo.avatar" mode="scaleToFill" style="width: 100rpx;height: 100rpx;" @click="avatarClicked"/>
             <!--          <u-icon name="camera" class="camera"></u-icon>-->
           </view>
         </u-cell>

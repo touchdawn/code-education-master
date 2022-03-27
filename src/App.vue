@@ -18,4 +18,6 @@
 @import "common/common.css";
 @import "@/components/color-ui/main.css";
 @import "@/components/color-ui/icon.css";
+@import '@/components/jo-markdown/main.css';
+@import './components/jo-markdown/main.css';
 </style>

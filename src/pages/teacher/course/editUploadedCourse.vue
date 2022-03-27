@@ -2,51 +2,63 @@
 
   <view class="uni-pages">
 
-    <form>
-      <view class="uni-form-item uni-column" >
-        <view  style="height:90rpx;line-height:90rpx;
-                     font-size: 33rpx; color: #0E151D">
-          课程名称：
-        </view>
-        <view class="title padding-left text-df"
-              style="height:40rpx;line-height:30rpx; margin-left: 40rpx;
-                     font-size: 33rpx; color: #0E151D">{{courseName}}</view>
-      </view>
+    <u-form  ref="uForm" label-width="90" style="margin-left: 5%; width: 90%">
+      <u-form-item label="课程名称:" prop="courseName" style="margin-top: 40rpx;">
+        <text>{{courseName}}</text>
+      </u-form-item>
+      <u-form-item label="课程介绍:" prop="courseName" style="margin-top: 30rpx; margin-bottom: 30rpx;">
+        <text>{{detail.introduction}}</text>
+      </u-form-item>
+    </u-form>
 
-      <view class="uni-form-item uni-column">
-        <view  style="height:90rpx;line-height:90rpx;
-                     font-size: 33rpx; color: #0E151D">
-          课程介绍：
-        </view>
-        <view class="title padding-left text-df"
-              style="height:50rpx;line-height:30rpx; margin-left: 40rpx;
-                     font-size: 33rpx; color: #0E151D">{{detail.introduction}}</view>
-      </view>
-    </form>
+<!--    <form>-->
+<!--      <view class="uni-form-item uni-column" >-->
+<!--        <view  style="height:90rpx;line-height:90rpx;-->
+<!--                     font-size: 33rpx; color: #0E151D">-->
+<!--          课程名称：-->
+<!--        </view>-->
+<!--        <view class="title padding-left text-df"-->
+<!--              style="height:40rpx;line-height:30rpx; margin-left: 40rpx;-->
+<!--                     font-size: 33rpx; color: #0E151D">{{courseName}}</view>-->
+<!--      </view>-->
+
+<!--      <view class="uni-form-item uni-column">-->
+<!--        <view  style="height:90rpx;line-height:90rpx;-->
+<!--                     font-size: 33rpx; color: #0E151D">-->
+<!--          课程介绍：-->
+<!--        </view>-->
+<!--        <view class="title padding-left text-df"-->
+<!--              style="height:50rpx;line-height:30rpx; margin-left: 40rpx;-->
+<!--                     font-size: 33rpx; color: #0E151D">{{detail.introduction}}</view>-->
+<!--      </view>-->
+<!--    </form>-->
 
     <view style="background-color: #f1f1f1;width: 750rpx;">
       <view v-for="(n,j) in detail.chapter" :key="j">
-        <text class="padding-left text-df" style="height:90rpx;line-height:90rpx;">{{n.TITLE}}</text>
+        <text class="padding-left text-df" style="height:100rpx;line-height:90rpx;font-size: 33rpx;">{{n.TITLE}}</text>
         <view class="bg-white">
           <view v-for="(c,k) in n.child" :key="k">
             <view @click="onSectionClick(c)"
-                  class="uni-row margin-left u-border-bottom align-center" style="height:100rpx;">
+                  class="uni-row margin-left u-border-bottom align-center" style="height:80rpx;">
               <!--                  <image :src="chapterIcon(c)" style="width: 40rpx;height: 40rpx;"></image>-->
               <text class="flex-sub margin-left-xs margin-right text-df"
-                    :class="'text-gray'"
-                    :style=" '#1CBBB4'">{{c.TITLE}}</text>
+                    :class="'text-black'"
+                    :style=" '#1CBBB4'" style="font-size: 33rpx; margin-left: 40rpx;">{{c.TITLE}}</text>
             </view>
           </view>
-          <view class="uni-row margin-left u-border-bottom align-center" style="height:100rpx;">
+          <view class="uni-row margin-left u-border-bottom align-center" style="height:80rpx;">
             <text class="flex-sub margin-left-xs margin-right text-df"
                   @click="addNewSectionClicked(detail.chapter[j])"
-                  :style=" '#1CBBB4'" style="font-size: 33rpx;">+添加《{{detail.chapter[j].TITLE}}》章节的新教学</text>
+                  :class="'text-blue'"
+                  :style=" '#1CBBB4'" style="font-size: 28rpx;
+                  width: 80%;
+                     text-align:center;">+ 添加《{{detail.chapter[j].TITLE}}》章节的新教学</text>
           </view>
         </view>
       </view>
       <view class="padding-left text-df" @click="newChapterClicked"
             style="height:90rpx;line-height:90rpx; color: #2C405A">
-        <text style="font-size: 38rpx;">+添加新章节</text>
+        <text style="font-size: 33rpx;" :class="'text-blue'">+ 添加新章节</text>
       </view>
     </view>
 
@@ -134,11 +146,11 @@ export default {
       console.log(e.name)
       if (e.name === '视频课程') {
         uni.redirectTo({
-          url: '/pages/teacher/course/uploadNewSection/uploadNewVideo' + '?lessonId=' + that.temp.lessonId + "&courseId=" + this.courseId
+          url: '/pages/teacher/course/uploadNewSection/uploadNewVideo' + '?lessonId=' + that.temp.lessonId + "&courseId=" + that.courseId
         })
       } else if (e.name === '图文课程(MarkDown)'){
         uni.redirectTo({
-          url: '/pages/teacher/course/uploadNewSection/uploadNewMarkDown' + '?lessonId=' + that.temp.lessonId + "&courseId=" + this.courseId
+          url: '/pages/teacher/course/uploadNewSection/uploadNewMarkDown' + '?lessonId=' + that.temp.lessonId + "&courseId=" + that.courseId
         })
       }
 
@@ -147,6 +159,9 @@ export default {
     },
 
     newChapterClicked(){
+      uni.redirectTo({
+        url: '/pages/teacher/course/addNewChapter' + '?courseName=' + this.courseName + "&courseId=" + this.courseId
+      })
       console.log('newChapterClicked')
     },
 

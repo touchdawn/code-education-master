@@ -4,6 +4,14 @@
 	},
 
 	"pages": [
+
+		{
+			"path": "pages/Lesson/LessonMarkDown",
+			"style": {
+				"navigationBarTitleText": "课程"
+			}
+		},
+
 		{
 			"path": "pages/login/login",
 			"style": {
@@ -11,6 +19,13 @@
 				"navigationBarTextStyle": "white"
 			}
 		},
+		{
+			"path": "pages/teacher/course/addNewChapter",
+			"style": {
+				"navigationBarTitleText": "添加章节"
+			}
+		},
+
 
 		{
 			"path": "pages/teacher/course/myCourse",

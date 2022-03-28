@@ -1,6 +1,7 @@
 <template>
 
   <view class="uni-pages">
+    <u-toast ref="uToast"></u-toast>
 
     <u-form  ref="uForm" label-width="90" style="margin-left: 5%; width: 90%">
       <u-form-item label="课程名称:" prop="courseName" style="margin-top: 40rpx;">
@@ -125,6 +126,7 @@ export default {
     }
   },
   onLoad (e) { //option为object类型，会序列化上个页面传递的参数
+    var that = this
     console.log(e)
     this.courseId = parseInt(e.courseId)
     this.courseName = e.courseName
@@ -133,6 +135,14 @@ export default {
       windowWidth
     } = uni.getSystemInfoSync();
     this.pageHeight = windowHeight / windowWidth * 750;
+    uni.$on('updateEditCourse',function(data){
+      console.log('监听到事件来自 update ，携带参数 msg 为：' + data.msg);
+      if (data.msg === '页面更新') {
+        that.detail = {}
+        that.getAllData();
+        that.$u.toast('添加成功！')
+      }
+    })
   },
   methods:{
     addNewSectionClicked(e){
@@ -145,11 +155,11 @@ export default {
       var that = this
       console.log(e.name)
       if (e.name === '视频课程') {
-        uni.redirectTo({
+        uni.navigateTo({
           url: '/pages/teacher/course/uploadNewSection/uploadNewVideo' + '?lessonId=' + that.temp.lessonId + "&courseId=" + that.courseId
         })
       } else if (e.name === '图文课程(MarkDown)'){
-        uni.redirectTo({
+        uni.navigateTo({
           url: '/pages/teacher/course/uploadNewSection/uploadNewMarkDown' + '?lessonId=' + that.temp.lessonId + "&courseId=" + that.courseId
         })
       }
@@ -159,10 +169,9 @@ export default {
     },
 
     newChapterClicked(){
-      uni.redirectTo({
+      uni.navigateTo({
         url: '/pages/teacher/course/addNewChapter' + '?courseName=' + this.courseName + "&courseId=" + this.courseId
       })
-      console.log('newChapterClicked')
     },
 
     onSectionClick(c){

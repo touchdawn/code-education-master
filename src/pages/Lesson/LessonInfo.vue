@@ -168,7 +168,8 @@
                     <view class="flex-sub">
                       <view class="uni-row align-center margin-top-xs">
                         <text class="text-lg" @click="replyComment(comt)">{{comt.content}}</text>
-                        <u-icon name="trash" style="position: absolute; right: 20rpx;">
+                        <u-icon name="trash" style="position: absolute; right: 20rpx;"
+                        v-if="comt.userId === userDt.id"  @click = deleteComment(comt)>
                         </u-icon>
                       </view>
                     </view>
@@ -189,7 +190,13 @@
                           <text class="margin-left-xs text-sm text-gray">{{r.createTime}}</text>
                         </view>
                       </view>
-                      <rich-text :nodes="r.content" class="text-df"></rich-text>
+<!--                      <rich-text :nodes="r.content" class="text-df"></rich-text>-->
+                        <view class="uni-row align-center margin-top-xs ">
+                          <text class="text-df" @click="replyComment(comt)">{{r.content}}</text>
+                          <u-icon name="trash" style="position: absolute; right: 40rpx;"
+                                  v-if="comt.userId === userDt.id" @click = deleteComment(r)>
+                          </u-icon>
+                        </view>
                     </view>
                   </view>
                 </view>
@@ -254,7 +261,15 @@
 <!--    </view>-->
 
 
-
+    <view>
+      <!-- 提示窗示例 -->
+      <uni-popup ref="alertDialog" type="dialog">
+        <uni-popup-dialog type="error" cancelText="取消" confirmText="删除"
+                          title="警告" content="确认删除该评论吗？"
+                          @confirm="dialogConfirm"
+                          ></uni-popup-dialog>
+      </uni-popup>
+    </view>
 
   </view>
 </view>
@@ -291,6 +306,9 @@ export default {
         placeholder:'请点评一下吧',
         parentId:-1,
         content:'',
+      },
+      temp:{
+        deleteCourseId:-1,
       },
       currentIndex: 0,
       shopCount: 0,
@@ -356,7 +374,7 @@ export default {
     this.currentIndex = 0
     this.userDt = JSON.parse(window.localStorage.getItem("userLocalData"))
     console.log(this.userDt)
-    this.getComment()
+    // this.getComment()
     this.getAllData();
     if (this.currentIndex === 2) {
       this.listHeight = uni.upx2px(this.pageHeight) - uni.upx2px(100) - uni.upx2px(140);
@@ -373,7 +391,6 @@ export default {
       windowWidth
     } = uni.getSystemInfoSync();
     this.pageHeight = windowHeight / windowWidth * 750;
-    // console.log(e)
   },
   methods:{
     test2(){
@@ -402,13 +419,10 @@ export default {
         url:global.commonLocalServer+"/comment/getComment/" + that.lessonId,
         header:{'token':that.userDt.token},
         success:function(res){
-          console.log(res)
-          that.commentList = res.data.data
-          // if(res.data.flag === "T"){
-          //   that.$u.toast(
-          //       "提交成功!"
-          //   )
+          // for (let i = 0; i < res.data.data.length; i++){
+          //   that.$set(that.commentList,i,res.data.data[i])
           // }
+          that.commentList = res.data.data
         }
       })
     },
@@ -433,6 +447,12 @@ export default {
               that.$u.toast(
                   "添加成功!"
               )
+              that.commentInfo.placeholder = '请点评一下吧'
+              that.commentInfo.parentId = -1
+              that.commentInfo.content = ''
+              that.commentList = []
+              that.getComment()
+
             }
           }
         })
@@ -451,6 +471,7 @@ export default {
       this.currentIndex = item.index
       if (index === 2) {
         this.listHeight = uni.upx2px(this.pageHeight) - uni.upx2px(100) - uni.upx2px(140);
+        this.getComment()
       } else {
         if(index === 1){
         }
@@ -470,7 +491,6 @@ export default {
           url:'/pages/Lesson/LessonMarkDown'+"?fileUrl="+c.URL
         })
       }
-
     },
 
     getAllData(){
@@ -498,6 +518,7 @@ export default {
       // });
     },
 
+
     tabPageCurrentTabSelected(index) {
       const me = this;
       this.currentIndex = index;
@@ -510,6 +531,34 @@ export default {
           this.listHeight = uni.upx2px(this.pageHeight) - uni.upx2px(100);
         }
       // }
+    },
+
+    deleteComment(comt){
+      console.log(comt.id)
+      this.temp.deleteCourseId = comt.id
+      this.$refs.alertDialog.open()
+
+    },
+
+    dialogConfirm(){
+      let that = this
+      uni.request({
+        method:'GET',
+        url:global.commonLocalServer + "/comment/deleteComment/" + that.temp.deleteCourseId,
+        header:{"token":that.userDt.token},
+        success:function(res){
+          console.log(res)
+          if (res.data.flag === 'T'){
+            that.$u.toast(
+               "删除成功!"
+            )
+            that.commentList = []
+            that.getComment()
+            // that.currentIndex = 2
+
+          }
+        }
+      })
     },
 
     onPlay() {
@@ -539,21 +588,7 @@ export default {
   flex-direction: row;
   height: 100rpx;
 }
-.sticky-box {
-  /* #ifndef APP-PLUS-NVUE */
-  display: flex;
-  position: -webkit-sticky;
-  /* #endif */
-  position: sticky;
-  top: var(--window-top);
-  z-index: 99;
-  flex-direction: row;
-  margin: 0px;
-  padding: 15px 0 15px 0;
-  background-color: #F4F5F6;
-  border-bottom-style: solid;
-  border-bottom-color: #E2E2E2;
-}
+
 .tab {
   width: 120rpx;
   justify-content: center;

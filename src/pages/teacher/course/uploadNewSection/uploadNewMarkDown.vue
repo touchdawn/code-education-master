@@ -137,6 +137,8 @@ export default {
               message:'提交成功!',
             })
             that.isUploading = false
+            uni.navigateBack({delta: 1})
+            uni.$emit('updateEditCourse',{msg:'页面更新'})
           } else {
             this.$refs.uToast.show({
               message:'提交失败，请退出后重试',

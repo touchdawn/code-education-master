@@ -4,8 +4,8 @@
 
   <view class="bg-white" style="width: 750rpx;" v-if="currentIndex === i" v-for="(m, i) in list1" :key="i">
     <view v-if="now === 0">
-      <view class="px-20" style="margin-top: 30rpx">
-        <view v-for="(item,index) in passedList" class="shadow u-border-radius d-flex a-center" style="height: 200rpx;padding: 10rpx; margin-bottom: 30rpx;">
+      <view class="px-20" style="margin-top: 30rpx;">
+        <view v-for="(item,index) in passedList" class="shadow u-border-radius d-flex a-center" style="height: 200rpx; margin-bottom: 30rpx; padding-bottom: 20rpx;">
           <image class="u-border-radius flex-shrink mx-20" :src="item.imgUrl" style="width: 260rpx;height: 160rpx;"></image>
           <view class="d-flex flex-column j-sb " style="padding-right: 10rpx;height: 80%">
             <view style="margin-top: 10rpx;">
@@ -16,7 +16,7 @@
               <view class="d-flex a-end">
                 <text style="margin-bottom: 10rpx;margin-right: 110rpx;">{{item.createAt}}</text>
               </view>
-              <view >
+              <view>
                 <u-button type="primary" size="mini" @click="editCourseClicked(item,1)"
                           style="margin-top: 30rpx; width: 130rpx;" text="编辑教学"></u-button>
               </view>

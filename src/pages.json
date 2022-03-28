@@ -58,13 +58,6 @@
 		},
 
 		{
-			"path": "pages/teacher/course/uploadNewSection/uploadNewMarkDown",
-			"style": {
-				"navigationBarTitleText": "添加图文教学"
-			}
-		},
-
-		{
 			"path": "pages/teacher/course/editUploadedCourse",
 			"style": {
 				"navigationBarTitleText": "编辑课程"

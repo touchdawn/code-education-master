@@ -30,7 +30,7 @@ export default {
   methods: {
     click0(info) {
       if (info !== this.nowPage) {
-        uni.navigateTo({
+        uni.redirectTo({
           url: '/pages/index/index'
         });
       }
@@ -38,14 +38,14 @@ export default {
 
     click1(info){
       if (info !== this.nowPage) {
-        uni.navigateTo({
+        uni.redirectTo({
           url: '/pages/message/message'
         });
       }
     },
     click2(info) {
       if (info !== this.nowPage) {
-        uni.navigateTo({
+        uni.redirectTo({
           url: '/pages/personInfo/personInfo'
         });
         // this.nowPage = 2

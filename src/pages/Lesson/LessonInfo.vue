@@ -21,10 +21,10 @@
     <u-tabs v-if="detail" ref="tabs" active-color="#1CBBB4" :bold="false" font-size="28" :list="tabs"
                    :current="currentIndex" @change="clickTabs" :is-scroll="false" swiperWidth="750">
     </u-tabs>
+
     <scroll-view v-if="detail" scroll-y="auto" style="width: 750rpx;"
                  :style="{height: listHeight + 'px'}">
       <view class="bg-white" style="width: 750rpx;" v-if="currentIndex === i" v-for="(m, i) in tabs" :key="i">
-
 <!--介绍-->
         <view v-if="m.id === 0">
           <view class="padding-lr padding-tb-sm">
@@ -97,7 +97,14 @@
 
 <!--评价-->
         <view v-if="m.id === 2">
-          <view class="padding-top-sm padding-lr-sm">
+<!--          如果没有评论-->
+          <view class="image-content" style="align-items: center; " v-if="commentList.length === 0">
+            <image style="width: 300px; height: 200px; margin-top: 15%;" :src="noComment()"
+                   @error="imageError"></image>
+            <text style="color: #8f8f8f;  margin-top:5%; font-size: 40rpx;">添加第一条评论吧~</text>
+          </view>
+
+          <view class="padding-top-sm padding-lr-sm" style="margin-bottom: 150rpx;">
 <!--            <view class="uni-row justify-between">-->
 <!--              <text class="text-df">全部评价</text>-->
 <!--              <text class="margin-left-sm text-df text-gray">共1个评价</text>-->
@@ -130,29 +137,43 @@
               <view v-if="commentList.length > 0" v-for="(comt,l) in commentList" :key="l"
                     class="margin-tb">
                 <view class="uni-row align-center" style="height: 80rpx;">
-                  <image
+                  <image @click="replyComment(comt)"
                       :src="getSrc(comt.avatar)"
                       style="width: 64rpx;height: 64rpx; border-radius: 100rpx;" />
-                  <view class="margin-left uni-row align-center" style="width:308rpx;">
-                    <text class="text-lg"
+                  <view class="margin-left uni-row align-center" @click="replyComment(comt)" style="width:308rpx;" >
+                    <text class="text-lg" @click="replyComment(comt)"
                           style="color:#70788C;height:40rpx">{{comt.userName}}</text>
                     <text class="margin-left-xs text-sm text-gray">{{comt.createTime}}</text>
                   </view>
+
+<!--                  点赞-->
                   <view class="flex-sub align-end">
 <!--                    <my-rate :score="comt.id"></my-rate>-->
                     <view class="uni-row align-center margin-top-xs">
                       <text class="margin-right-xs text-sm"
-                            style="color:#A4A9B2;">{{comt.votes == null ? 0 : comt.votes}}</text>
+                            style="color:#A4A9B2;">{{comt.votes === null ? 0 : comt.votes}}</text>
                       <u-icon
                           @click="agreeComment(comt.id,l,comt.is_agree,comt.agree_num == null ? 0 : comt.agree_num)"
                           :name="comt.is_agree === 0 ? 'heart' : 'heart-fill'" color="#dd6161">
                       </u-icon>
                     </view>
                   </view>
+
                 </view>
 
+
                 <view style="margin-top: 10rpx;margin-left: 94rpx;">
-                  <text class="text-lg">{{comt.content}}</text>
+<!--                  父评论-->
+                  <view>
+                    <view class="flex-sub">
+                      <view class="uni-row align-center margin-top-xs">
+                        <text class="text-lg" @click="replyComment(comt)">{{comt.content}}</text>
+                        <u-icon name="trash" style="position: absolute; right: 20rpx;">
+                        </u-icon>
+                      </view>
+                    </view>
+                  </view>
+<!--                  子评论-->
                   <view v-if="comt.child.length > 0" class="margin-top-sm">
                     <view v-for="(r,ri) in comt.child" :key="ri"
                           class="radius padding-lr-sm padding-top-sm"
@@ -172,10 +193,31 @@
                     </view>
                   </view>
                 </view>
-
               </view>
             </view>
+            <text style="text-align:center; margin-top: 40rpx;" v-if="commentList.length > 0">没有更多评论了~</text>
           </view>
+
+          <view v-if="detail && currentIndex === 2 "
+                class="tabbar padding-lr-sm padding-tb-xs justify-center "
+                style="flex-direction: column;height: 100rpx; position: fixed;bottom: 0rpx; width: 100%;
+          background-color: rgb(28, 187, 180);
+          ">
+            <!--      <view class="uni-row align-center">-->
+            <!--        <text class="text-sm text-white">课程评分：</text>-->
+            <!--        <view>-->
+            <!--          <u-rate :count="5" v-model="score" active-color="#FAC923" inactive-color="#ffffff"></u-rate>-->
+            <!--        </view>-->
+            <!--      </view>-->
+            <view class="margin-top-xs" >
+              <u-search v-model="commentInfo.content" search-icon="edit-pen-fill" search-icon-color="#909399" :placeholder="commentInfo.placeholder"
+                        height="30" :show-action="true" action-text="提交" :focus="commentFocus" @blur="commentInputBlur"
+                        :action-style="{color: '#ffffff'} "
+                        @custom="addComment()" style="padding-bottom: 8rpx;" > </u-search>
+            </view>
+          </view>
+
+
           </view>
 
       </view>
@@ -211,21 +253,9 @@
 <!--      </view>-->
 <!--    </view>-->
 
-    <view v-if="detail && currentIndex === 2 "
-          class="tabbar padding-lr-sm padding-tb-xs justify-center"
-          style="flex-direction: column;height: 140rpx;background-color: rgb(28, 187, 180);">
-<!--      <view class="uni-row align-center">-->
-<!--        <text class="text-sm text-white">课程评分：</text>-->
-<!--        <view>-->
-<!--          <u-rate :count="5" v-model="score" active-color="#FAC923" inactive-color="#ffffff"></u-rate>-->
-<!--        </view>-->
-<!--      </view>-->
-      <view class="margin-top-xs">
-        <u-search v-model="content" search-icon="edit-pen-fill" search-icon-color="#909399" placeholder="请点评一下吧"
-                  height="30" :show-action="true" action-text="提交" :action-style="{color: '#ffffff'}"
-                  @custom="addComment"></u-search>
-      </view>
-    </view>
+
+
+
   </view>
 </view>
 </template>
@@ -243,6 +273,7 @@ export default {
   data(){
     return{
       initialTime:10,
+      commentFocus:false,
       videoOn:false,
       videoUrl:'',
       imgOn:true,
@@ -256,7 +287,11 @@ export default {
       chapter_id: 0,
       timer: null,
       score: 5,
-      content:'',
+      commentInfo: {
+        placeholder:'请点评一下吧',
+        parentId:-1,
+        content:'',
+      },
       currentIndex: 0,
       shopCount: 0,
       tabList: [],
@@ -293,32 +328,6 @@ export default {
       }],
       loadStatus: 'loading',
       commentList: [
-        // {
-        //   headimgurl:null,
-        //   nickname:"nickname",
-        //   atime:"atime",
-        //   score:2,
-        //   id:4,
-        //   replyList:[
-        //     {
-        //       title:"title",
-        //       atime:"atime"
-        //     }
-        //   ]
-        // },
-        // {
-        //   headimgurl:null,
-        //   nickname:"nickname",
-        //   atime:"atime",
-        //   score:2,
-        //   id:4,
-        //   replyList:[
-        //     {
-        //       title:"title",
-        //       atime:"atime"
-        //     }
-        //   ]
-        // }
         {
           createTime: "",
           votes: 0,
@@ -367,6 +376,25 @@ export default {
     // console.log(e)
   },
   methods:{
+    test2(){
+      console.log(2222)
+    },
+    replyComment(comt){
+      console.log(comt)
+      this.commentInfo.placeholder = "回复@"+comt.userName
+      this.commentInfo.parentId = comt.id
+      console.log(this.commentInfo.parentId)
+      this.commentFocus = true
+    },
+    commentInputBlur(){
+      console.log('blur')
+      setTimeout( this.resetCommentInfo,100 )
+    },
+    resetCommentInfo(){
+      this.commentInfo.placeholder ='请点评一下吧'
+      this.commentInfo.parentId = -1
+      this.commentFocus = false
+    },
     getComment(){
       var that = this
       uni.request({
@@ -386,13 +414,13 @@ export default {
     },
     addComment(){
       var that = this
-      console.log(this.content)
-      if (!global.isEmpty(this.content)){
+      console.log(that.commentInfo)
+      if (!global.isEmpty(that.commentInfo.content)){
         let upCommentData={}
-        upCommentData.comment = this.content
-        upCommentData.creatorId = this.userDt.id
+        upCommentData.comment = that.commentInfo.content
+        upCommentData.parentId = that.commentInfo.parentId
+        upCommentData.creatorId = that.userDt.id
         upCommentData.courseId = that.lessonId
-        upCommentData.parentId = -1
         console.log(upCommentData)
         uni.request({
           method:'POST',
@@ -414,7 +442,6 @@ export default {
     },
 
     getSrc(avatar){
-      console.log(global.storageUrl + avatar)
       return global.storageUrl + avatar
     },
 
@@ -494,6 +521,11 @@ export default {
 
     onPause() {
       clearInterval(this.timer);
+    },
+
+    noComment(){
+      console.log(global.storageUrl + "noComment.png")
+      return global.storageUrl + 'noComment.png'
     }
   }
 
@@ -507,7 +539,21 @@ export default {
   flex-direction: row;
   height: 100rpx;
 }
-
+.sticky-box {
+  /* #ifndef APP-PLUS-NVUE */
+  display: flex;
+  position: -webkit-sticky;
+  /* #endif */
+  position: sticky;
+  top: var(--window-top);
+  z-index: 99;
+  flex-direction: row;
+  margin: 0px;
+  padding: 15px 0 15px 0;
+  background-color: #F4F5F6;
+  border-bottom-style: solid;
+  border-bottom-color: #E2E2E2;
+}
 .tab {
   width: 120rpx;
   justify-content: center;

@@ -108,9 +108,15 @@ export default {
             console.log(res)
             if (res.data.flag === "T") {
               console.log('success')
+              // #ifdef H5
               localStorage.setItem('userLocalData', JSON.stringify(res.data.data))
               console.log(JSON.parse(window.localStorage.getItem("userLocalData")))
-              that.$router.replace({path: 'pages/index/index'})
+              // #endif
+              // #ifdef  MP-WEIXIN
+              wx.setStorageSync('userLocalData', JSON.stringify(res.data.data));
+              // #endif
+              uni.navigateTo({url: '/pages/index/index'})
+              // that.$router.replace({path: 'pages/index/index'})
             } else {
               that.$u.toast(res.data.errorInfo);
             }

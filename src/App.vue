@@ -20,4 +20,6 @@
 @import "@/components/color-ui/icon.css";
 @import '@/components/jo-markdown/main.css';
 @import './components/jo-markdown/main.css';
+@import '@/uni_modules/uni-scss/index.scss';
+
 </style>

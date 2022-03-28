@@ -151,10 +151,10 @@
 <!--                    <my-rate :score="comt.id"></my-rate>-->
                     <view class="uni-row align-center margin-top-xs">
                       <text class="margin-right-xs text-sm"
-                            style="color:#A4A9B2;">{{comt.votes === null ? 0 : comt.votes}}</text>
+                            style="color:#A4A9B2;">{{comt.voteNumber === null ? 0 : comt.voteNumber}}</text>
                       <u-icon
-                          @click="agreeComment(comt.id,l,comt.is_agree,comt.agree_num == null ? 0 : comt.agree_num)"
-                          :name="comt.is_agree === 0 ? 'heart' : 'heart-fill'" color="#dd6161">
+                          @click="voteComment(comt.id,l,comt.voted,comt)"
+                          :name="comt.voted === false ? 'heart' : 'heart-fill'" color="#dd6161">
                       </u-icon>
                     </view>
                   </view>
@@ -354,6 +354,8 @@ export default {
           userName: "",
           userId: -1,
           content: "22",
+          voteNumber:-1,
+          voted:false,
           child: [
             {
               createTime: "a",
@@ -393,6 +395,38 @@ export default {
     this.pageHeight = windowHeight / windowWidth * 750;
   },
   methods:{
+    voteComment(id,l,voted,comt){
+      console.log(comt.voted)
+      var that = this
+      let uploadData = {}
+      uploadData.userId = that.userDt.id
+      uploadData.commentId = id
+      uploadData.courseId = that.lessonId
+      uploadData.voteId = comt.voteId
+      uploadData.action = comt.voted === false ?"vote":"delete"
+      let header = {token:that.userDt.token}
+      console.log("upload:")
+      console.log(uploadData)
+      uni.request({
+        method:'POST',
+        url: global.commonLocalServer + "/vote/addVote",
+        data:uploadData,
+        header:header,
+        success: function (res){
+          console.log("res:")
+          console.log(res)
+          if (uploadData.action === "vote"){
+            that.commentList[l].voteId = res.data.data
+            that.commentList[l].voteNumber ++
+            that.commentList[l].voted = true
+          } else {
+            that.commentList[l].voteId = -1
+            that.commentList[l].voteNumber --
+            that.commentList[l].voted = false
+          }
+        }
+      })
+    },
     test2(){
       console.log(2222)
     },
@@ -416,12 +450,13 @@ export default {
       var that = this
       uni.request({
         method:'GET',
-        url:global.commonLocalServer+"/comment/getComment/" + that.lessonId,
+        url:global.commonLocalServer+"/comment/getComment/" + that.lessonId + "/" + that.userDt.id,
         header:{'token':that.userDt.token},
         success:function(res){
           // for (let i = 0; i < res.data.data.length; i++){
           //   that.$set(that.commentList,i,res.data.data[i])
           // }
+          console.log(res)
           that.commentList = res.data.data
         }
       })

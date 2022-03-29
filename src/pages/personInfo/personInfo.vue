@@ -61,7 +61,7 @@ export default {
     // this.userData.nickName=userDt.data.nickName
     // this.userData.phone=userDt.data.phone
     let that = this
-    console.log(that.userDt.token)
+    // console.log(that.userDt.token)
     uni.request({
       url: global.commonLocalServer + '/users/getById/' + that.userDt.id,
       method:"GET",

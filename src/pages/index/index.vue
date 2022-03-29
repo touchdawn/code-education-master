@@ -49,8 +49,8 @@
       <u-toast ref="uToast" />
     </view>
 <!--    搜索框-->
-    <u-search placeholder="日照香炉生紫烟" class="px-20"
-              v-model="keyword" style="margin-top: 30rpx;"></u-search>
+    <u-search placeholder="输入想学的" class="px-20"
+              v-model="keyword" @custom="searchClicked()"></u-search>
 
 <!--推荐分类-->
   <h-rec-cate></h-rec-cate>
@@ -153,10 +153,6 @@
       },1000)
     },
 
-		onLoad() {
-
-		},
-
     created() {
       var that = this
       this.userDt = JSON.parse(window.localStorage.getItem("userLocalData"))
@@ -177,6 +173,17 @@
     },
 
     methods: {
+      searchClicked(){
+        if (this.keyword !== '')
+        {
+          var that = this
+          uni.navigateTo({
+            url: '/pages/search/searchResult' + '?lessonName=' + that.keyword
+          })
+          that.keyword = ''
+        }
+      },
+
       swiperClicked(index){
         console.log("链接课程ID:")
         console.log(this.lessonList[index])

@@ -5,15 +5,17 @@
   <view class="bg-white" style="width: 750rpx;" v-if="currentIndex === i" v-for="(m, i) in list1" :key="i">
     <view v-if="now === 0">
       <view class="px-20" style="margin-top: 30rpx;">
-        <view v-for="(item,index) in passedList" class="shadow u-border-radius d-flex a-center" style="height: 200rpx; margin-bottom: 30rpx; padding-bottom: 20rpx;">
-          <image class="u-border-radius flex-shrink mx-20" :src="item.imgUrl" style="width: 260rpx;height: 160rpx;"></image>
+        <view v-for="(item,index) in passedList" class="shadow u-border-radius d-flex a-center"
+              style="height: 200rpx; margin-bottom: 30rpx;" >
+          <image class="u-border-radius flex-shrink mx-20" @click="cardClicked(item)"
+                 :src="item.imgUrl" style="width: 260rpx;height: 160rpx;"></image>
           <view class="d-flex flex-column j-sb " style="padding-right: 10rpx;height: 80%">
-            <view style="margin-top: 10rpx;">
+            <view style="margin-top: 10rpx;" @click="cardClicked(item)">
               <view class="u-line-1" style="font-size: 32rpx; margin-bottom: 5rpx;">{{item.lessonName}}</view>
               <view class="u-line-1 gray-color" style="font-size: 26rpx;">{{item.courseIntroduction}}</view>
             </view>
-            <view class="d-flex w-100">
-              <view class="d-flex a-end">
+            <view class="d-flex w-100" >
+              <view class="d-flex a-end" @click="cardClicked(item)">
                 <text style="margin-bottom: 10rpx;margin-right: 110rpx;">{{item.createAt}}</text>
               </view>
               <view>
@@ -28,8 +30,10 @@
 
     <view v-if="now === 1">
       <view class="px-20" style="margin-top: 30rpx">
-        <view v-for="(item,index) in unpassedList" class="shadow u-border-radius d-flex a-center" style="height: 200rpx;padding: 10rpx; margin-bottom: 30rpx;">
-          <image class="u-border-radius flex-shrink mx-20" :src="item.imgUrl" style="width: 260rpx;height: 160rpx;"></image>
+        <view v-for="(item,index) in unpassedList" class="shadow u-border-radius d-flex a-center"
+              style="height: 200rpx;padding: 10rpx; margin-bottom: 30rpx;">
+          <image class="u-border-radius flex-shrink mx-20"
+                 :src="item.imgUrl" style="width: 260rpx;height: 160rpx;"></image>
           <view class="d-flex flex-column j-sb " style="padding-right: 10rpx;height: 80%">
             <view style="margin-top: 10rpx;">
               <view class="u-line-1" style="font-size: 32rpx; margin-bottom: 5rpx;">{{item.lessonName}}</view>
@@ -91,6 +95,13 @@ export default {
   },
 
   methods: {
+    cardClicked(item){
+      // console.log(item)
+      uni.navigateTo({
+        url:'/pages/Lesson/LessonInfo'+"?LessonId="+item.id + "&LessonName="+item.lessonName
+      })
+    },
+
     editCourseClicked(item){
       console.log(item)
       uni.navigateTo({

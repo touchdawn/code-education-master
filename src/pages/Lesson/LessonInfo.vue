@@ -192,7 +192,7 @@
                       </view>
 <!--                      <rich-text :nodes="r.content" class="text-df"></rich-text>-->
                         <view class="uni-row align-center margin-top-xs ">
-                          <text class="text-df" @click="replyComment(comt)">{{r.content}}</text>
+                          <text class="text-df" >{{r.content}}</text>
                           <u-icon name="trash" style="position: absolute; right: 40rpx;"
                                   v-if="comt.userId === userDt.id" @click = deleteComment(r)>
                           </u-icon>

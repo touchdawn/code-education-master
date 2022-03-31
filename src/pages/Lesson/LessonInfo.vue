@@ -27,51 +27,89 @@
       <view class="bg-white" style="width: 750rpx;" v-if="currentIndex === i" v-for="(m, i) in tabs" :key="i">
 <!--介绍-->
         <view v-if="m.id === 0">
-          <view class="padding-lr padding-tb-sm">
+          <view class="padding-lr padding-tb-sm" style="height: 230rpx">
             <view class="margin-top-xs">
-              <text class="text-lg" style="font-size:32rpx;">{{LessonName}}</text>
-              <view class="uni-row">
-                <my-rate :score="4"></my-rate>
-                <text class="text-df"
-                      style="color:#70788C;margin-left:5rpx">5分</text>
-                <text class="text-df margin-left-sm"
-                      style="color:#70788C;">5人在学</text>
-                <view  class="uni-row">
-                  <text class="text-df" style="color:#70788C">适学人群</text>
-                  <text class="text-df margin-left-sm">2222</text>
-                </view>
-              </view>
+              <text  style="font-size:32rpx; margin-bottom: 40rpx; font-size: 40rpx;">{{LessonName}}</text>
+<!--              <view class="uni-row">-->
+<!--                <my-rate :score="4"></my-rate>-->
+<!--                <text class="text-df"-->
+<!--                      style="color:#70788C;margin-left:5rpx">5分</text>-->
+<!--                <text class="text-df margin-left-sm"-->
+<!--                      style="color:#70788C;">5人在学</text>-->
+<!--                <view  class="uni-row">-->
+<!--&lt;!&ndash;                  <text class="text-df" style="color:#70788C">适学人群</text>&ndash;&gt;-->
+<!--&lt;!&ndash;                  <text class="text-df margin-left-sm">2222</text>&ndash;&gt;-->
+
+<!--                </view>-->
+<!--              </view>-->
             </view>
 
             <view class="uni-row">
               <view style="width:345rpx;height:80rpx;">
                 <view class="uni-row">
-                  <text class="text-df" style="color:#70788C">有效期</text>
-                  <text class="text-df margin-left-sm">1年</text>
-                  <text class="text-df" style="color:#70788C;margin-left:20rpx;">|</text>
-                  <text class="text-df margin-left-sm">1课时</text>
+<!--                  <text class="text-df" style="color:#70788C">有效期</text>-->
+<!--                  <text class="text-df margin-left-sm">1年</text>-->
+<!--                  <text class="text-df" style="color:#70788C;margin-left:20rpx;">|</text>-->
+<!--                  <text class="text-df ">1课时</text>-->
                 </view>
 
-                <view class="uni-row">
-                  <text class="text-df" style="color:#70788C">老 师</text>
-                  <text class="text-df margin-left-sm">teacher</text>
+<!--                <view class="uni-row">-->
+<!--                  <view class="text-df" style="color:#70788C; ">老 师</view>-->
+<!--                  <view class="d-flex" style="flex-direction: row;">-->
+<!--                    <image :src = "getTeacherAvatar()" style="width: 80rpx; height: 80rpx;"></image>-->
+<!--                    <text class="text-df margin-left-sm" style="display:inline">{{detail.teacherName}}</text>-->
+<!--                  </view>-->
+<!--                </view>-->
+                <view class="uni-row align-center" style="height: 80rpx; width: 100%">
+                  <image
+                         :src="getTeacherAvatar()"
+                         style="height: 80rpx; width: 100rpx; border-radius: 100rpx; margin-right: 20rpx;" />
+                  <view  style="width:308rpx;" >
+                    <text class="text-lg"
+                          style="color:#70788C;height:40rpx">{{detail.teacherName}}</text>
+                    <text class="margin-left-xs text-sm text-gray">{{detail.createTime}}</text>
+                  </view>
+
+                  <!--                  点赞-->
+<!--                  <view class="flex-sub align-end">-->
+<!--                    &lt;!&ndash;                    <my-rate :score="comt.id"></my-rate>&ndash;&gt;-->
+<!--                    <view class="uni-row align-center margin-top-xs">-->
+<!--                      <text class="margin-right-xs text-sm"-->
+<!--                            style="color:#A4A9B2;">{{comt.voteNumber === null ? 0 : comt.voteNumber}}</text>-->
+<!--                      <u-icon-->
+<!--                          @click="voteComment(comt.id,l,comt.voted,comt)"-->
+<!--                          :name="comt.voted === false ? 'heart' : 'heart-fill'" color="#dd6161">-->
+<!--                      </u-icon>-->
+<!--                    </view>-->
+<!--                  </view>-->
                 </view>
               </view>
-              <view v-if="true" class="uni-row justify-end align-end"
-                    style="width:345rpx;height:80rpx;">
-                <text class="text-lg"
-                      style="margin-top:18rpx;color:#e13b29;margin-bottom:4rpx;">¥</text>
-                <text class="margin-left-xs"
-                      style="font-size:50rpx;color:#e13b29;">100</text>
+<!--              <view v-if="true" class="uni-row justify-end align-end"-->
+<!--                    style="width:345rpx;height:80rpx;">-->
+<!--                <text class="text-lg"-->
+<!--                      style="margin-top:18rpx;color:#e13b29;margin-bottom:4rpx;">¥</text>-->
+<!--                <text class="margin-left-xs"-->
+<!--                      style="font-size:50rpx;color:#e13b29;">100</text>-->
+<!--              </view>-->
+              <view class="flex-sub align-end">
+                <!--                    <my-rate :score="comt.id"></my-rate>-->
+                <view class="uni-row align-center margin-top-xs">
+                  <text class="text-sm"
+                        style="color:#A4A9B2;font-size: 40rpx;">{{detail.favNum}}</text>
+                  <u-icon
+                      @click="addFavourite()"
+                      :name="detail.isFavourite === false ? 'star' : 'star-fill'" color="#dd6161" size="28">
+                  </u-icon>
+                </view>
               </view>
             </view>
 
           </view>
           <u-gap bg-color="#f1f1f1" height="20"></u-gap>
           <view class="margin-top-sm padding-lr bg-white padding-tb-sm">
-            <view class="text-lg">课程介绍</view>
+            <view class="text-xl" style="margin-bottom: 20rpx;">课程介绍</view>
 <!--            <u-parse class="margin-top-sm" :html="detail.content"></u-parse>-->
-                <text>{{detail.introduction}}</text>
+                <text class="text-lg">{{detail.introduction}}</text>
           </view>
         </view>
 
@@ -158,7 +196,6 @@
                       </u-icon>
                     </view>
                   </view>
-
                 </view>
 
 
@@ -314,6 +351,8 @@ export default {
       shopCount: 0,
       tabList: [],
       detail: {
+        favouriteId:-2,
+        favNum:0,
         chapter:[
           {
             title:"tttt",
@@ -395,6 +434,42 @@ export default {
     this.pageHeight = windowHeight / windowWidth * 750;
   },
   methods:{
+    addFavourite(){
+      // console.log(comt.voted)
+      var that = this
+      let uploadData = {}
+      uploadData.userId = that.userDt.id
+      uploadData.courseId = that.lessonId
+
+
+      uploadData.favouriteId = that.detail.favouriteId
+      uploadData.action = that.detail.isFavourite === false ?"add":"delete"
+
+
+      let header = {token:that.userDt.token}
+      console.log("upload:")
+      console.log(uploadData)
+      uni.request({
+        method:'POST',
+        url: global.commonLocalServer + "/fav/addFavourite",
+        data:uploadData,
+        header:header,
+        success: function (res){
+          console.log("res:")
+          console.log(res)
+          if (uploadData.action === "add"){
+            that.detail.favouriteId = res.data.data
+            that.detail.favNum ++
+            that.detail.isFavourite = true
+          } else {
+            that.detail.favouriteId = -1
+            that.detail.favNum --
+            that.detail.isFavourite = false
+          }
+        }
+      })
+    },
+
     voteComment(id,l,voted,comt){
       console.log(comt.voted)
       var that = this
@@ -427,9 +502,7 @@ export default {
         }
       })
     },
-    test2(){
-      console.log(2222)
-    },
+
     replyComment(comt){
       console.log(comt)
       this.commentInfo.placeholder = "回复@"+comt.userName
@@ -531,14 +604,14 @@ export default {
     getAllData(){
       var that = this
       uni.request({
-        url:global.commonLocalServer+"/lesson/getCourseInfo/" + this.lessonId,
+        url:global.commonLocalServer+"/lesson/getCourseInfo/" + that.lessonId + "/" + that.userDt.id,
         method:"GET",
         header:{
           'token':that.userDt.token
         },
         success:function(res){
           that.detail = res.data.data
-          console.log(that.detail)
+          // console.log(that.detail)
           that.detail.imgUrl = global.storageUrl + that.detail.imgUrl
           console.log(that.detail)
         }
@@ -610,7 +683,12 @@ export default {
     noComment(){
       console.log(global.storageUrl + "noComment.png")
       return global.storageUrl + 'noComment.png'
+    },
+
+    getTeacherAvatar(){
+      return global.storageUrl + this.detail.teacherAvatar
     }
+
   }
 
 }

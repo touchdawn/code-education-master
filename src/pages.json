@@ -11,11 +11,16 @@
 				"navigationBarTextStyle": "white"
 			}
 		},
-
 		{
-			"path": "pages/search/searchResult",
+			"path": "pages/message/messageDetail/replyMessage",
 			"style": {
-				"navigationBarTitleText": "搜索结果"
+				"navigationBarTitleText": "回复消息"
+			}
+		},
+		{
+			"path": "pages/message/messageDetail/readMessage",
+			"style": {
+				"navigationBarTitleText": "消息详情"
 			}
 		},
 
@@ -26,6 +31,25 @@
 				"navigationBarTextStyle": "white"
 			}
 		},
+
+
+
+		{
+			"path": "pages/personInfo/myFavourite/myFavourite",
+			"style": {
+				"navigationBarTitleText": "我的收藏"
+			}
+		},
+
+
+
+		{
+			"path": "pages/search/searchResult",
+			"style": {
+				"navigationBarTitleText": "搜索结果"
+			}
+		},
+
 
 
 
@@ -150,8 +174,15 @@
 		{
 			"path": "pages/message/message",
 			"style": {
+				"navigationBarTitleText": "消息",
 				"navigationStyle": "custom",
-				"navigationBarTextStyle": "white"
+				"app-plus": {
+					"titleNView": {
+						"autoBackButton": false
+					},
+					"scrollIndicator": "none"
+				}
+
 			}
 		}
 	],

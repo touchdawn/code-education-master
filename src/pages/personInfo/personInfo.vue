@@ -25,6 +25,8 @@
 
     <u-button @click="myCourseClicked">我的课程</u-button>
 
+    <u-button @click="myFavClicked">我的收藏夹</u-button>
+
     <tab-bar :msg="msg"></tab-bar>
   </view>
 </template>
@@ -88,6 +90,12 @@ export default {
     myCourseClicked(){
       uni.navigateTo({
         url: '/pages/teacher/course/myCourse'
+      });
+    },
+
+    myFavClicked(){
+      uni.navigateTo({
+        url: '/pages/personInfo/myFavourite/myFavourite'
       });
     },
 

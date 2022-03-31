@@ -1,46 +1,41 @@
 <template>
   <view >
     <!--    搜索框-->
-    <!--    <u-search placeholder="输入想学的" class="px-20"-->
-    <!--              v-model="lessonName"  @custom="searchClicked()"></u-search>-->
+<!--    <u-search placeholder="输入想学的" class="px-20"-->
+<!--              v-model="lessonName"  @custom="searchClicked()"></u-search>-->
 
-    <view style="text-align:center; margin-top: 3%; padding-bottom: 3%;;
-     font-size: 40rpx; border-bottom: 3rpx solid #bdbdbd;">
-      <text >消息</text>
-    </view>
-
-    <view class="px-20 border-bottom" style="margin-top: 10rpx;">
-      <view v-for="(item,index) in messageList" v-if="messageList.length !== 0"
-            class=" u-border-radius d-flex a-center"
-            style="height: 200rpx; border-bottom: 3rpx solid #bdbdbd;">
-        <image class="u-border-radius flex-shrink " @click="cardClicked(item)"
-               :src="item.senderAvatar" style="width: 100rpx;height: 100rpx; margin-left: 20rpx; margin-right: 40rpx;"></image>
+    <view class="px-20" style="margin-top: 30rpx;">
+      <view v-for="(item,index) in favList" v-if="favList.length !== 0"
+            class="shadow u-border-radius d-flex a-center"
+            style="height: 200rpx; margin-bottom: 30rpx;">
+        <image class="u-border-radius flex-shrink mx-20" @click="cardClicked(item)"
+               :src="item.imgUrl" style="width: 260rpx;height: 160rpx;"></image>
         <view class="d-flex flex-column j-sb " style="padding-right: 10rpx;height: 80%">
           <view style="margin-top: 10rpx;" @click="cardClicked(item)">
-            <view class="u-line-1" style="font-size: 32rpx; margin-bottom: 5rpx;">{{item.title}}</view>
-            <view class="u-line-1 gray-color" style="font-size: 26rpx;">{{item.content}}</view>
+            <view class="u-line-1" style="font-size: 32rpx; margin-bottom: 5rpx;">{{item.lessonName}}</view>
+            <view class="u-line-1 gray-color" style="font-size: 26rpx;">{{item.courseIntroduction}}</view>
           </view>
           <view class="d-flex  align-center uni-row margin-top-xs">
             <view class="d-flex a-end" @click="cardClicked(item)">
-              <text style="margin-bottom: 10rpx;">{{item.sendTime}}</text>
+              <text style="margin-bottom: 10rpx;">{{item.createAt}}</text>
             </view>
-            <view class="a-end">
-              <u-icon name="trash" style="position: absolute; right: 40rpx; margin-bottom: 20rpx;"
-                      @click = deleteFav(item)>
-              </u-icon>
-              <!--                <u-button   type="primary" size="mini" @click="editCourseClicked(item,1)"-->
-              <!--                          style="margin-top: 30rpx; width: 130rpx; margin-left: 90rpx;" text="编辑教学"></u-button>-->
-            </view>
+              <view class="a-end">
+                <u-icon name="trash" style="position: absolute; right: 40rpx; margin-bottom: 20rpx;"
+                         @click = deleteFav(item)>
+                </u-icon>
+<!--                <u-button   type="primary" size="mini" @click="editCourseClicked(item,1)"-->
+<!--                          style="margin-top: 30rpx; width: 130rpx; margin-left: 90rpx;" text="编辑教学"></u-button>-->
+              </view>
           </view>
         </view>
       </view>
     </view>
-    <view v-if="messageList.length  === 0" style="text-align:center">
+    <view v-if="favList.length  === 0" style="text-align:center">
       <view >
         <image style="width: 200px; height: 200px; margin-top: 15%;"
                :src="noResult()" ></image>
       </view>
-      <text style="color: #8f8f8f;  margin-top:7%; font-size: 40rpx;">暂无消息</text>
+      <text style="color: #8f8f8f;  margin-top:7%; font-size: 40rpx;">搜索不到哦~</text>
     </view>
 
     <view>
@@ -52,27 +47,24 @@
         ></uni-popup-dialog>
       </uni-popup>
     </view>
-    <tab-bar :msg="msg"></tab-bar>
   </view>
 </template>
 
 <script>
 import global from "@/common/common";
 import HLessonsListRow from "@/components/h-lessons-list-row/h-lessons-list-row";
-import TabBar from "@/pages/commomComponent/tabBar";
 
 export default {
   name: "myFavourite",
-  components: {TabBar, HLessonsListRow},
+  components: {HLessonsListRow},
   data() {
     return {
-      msg:1,
       lessonName:"node",
       temp:{
         deleteFavId:-1,
         courseId: -1
       },
-      messageList:[
+      favList:[
         {
           id:1,
           name:"1hao",
@@ -106,7 +98,7 @@ export default {
     cardClicked(item){
       // console.log(item)
       uni.navigateTo({
-        url:'/pages/message/messageDetail/readMessage'+"?messageId="+item.messageId
+        url:'/pages/Lesson/LessonInfo'+"?LessonId="+item.id + "&LessonName="+item.lessonName
       })
     },
     searchClicked(){
@@ -137,7 +129,7 @@ export default {
         success: function (res){
           console.log("res:")
           console.log(res)
-          that.messageList = []
+          that.favList = []
           that.getLists()
         }
       })
@@ -147,14 +139,14 @@ export default {
       var that = this
       uni.request({
         method:'GET',
-        url: global.commonLocalServer+ '/message/getMyMessage/' + that.userDt.id,
+        url: global.commonLocalServer+ '/fav/getFavouriteCourseByUserId/' + that.userDt.id,
         header : {'token': that.userDt.token},
         success: function (res) {
           // if (res.data.data !== null)
-          // that.messageList = res.data.data
-          that.messageList = that.addQiniuUrl(res.data.data)
+          // that.favList = res.data.data
+          that.favList = that.addQiniuUrl(res.data.data)
 
-          console.log(that.messageList)
+          console.log(that.favList)
 
         }
       })
@@ -167,7 +159,7 @@ export default {
     addQiniuUrl(listInput){
       if (listInput.length >0){
         for (let i=0;i<listInput.length;i++){
-          listInput[i].senderAvatar = global.storageUrl + listInput[i].senderAvatar
+          listInput[i].imgUrl = global.storageUrl + listInput[i].imgUrl
         }
         return listInput
       } else {

@@ -180,7 +180,7 @@ export default {
     getAllData(){
       var that = this
       uni.request({
-        url:global.commonLocalServer+"/lesson/getCourseInfo/" + this.courseId,
+        url:global.commonLocalServer+"/lesson/getCourseInfo/" + that.courseId + "/" + that.userDt.id,
         method:"GET",
         header:{
           'token':that.userDt.token

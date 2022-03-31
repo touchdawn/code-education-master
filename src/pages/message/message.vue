@@ -3,6 +3,7 @@
     <!--    搜索框-->
     <!--    <u-search placeholder="输入想学的" class="px-20"-->
     <!--              v-model="lessonName"  @custom="searchClicked()"></u-search>-->
+    <u-toast ref="uToast" />
 
     <view style="text-align:center; margin-top: 3%; padding-bottom: 3%;;
      font-size: 40rpx; border-bottom: 3rpx solid #bdbdbd;">
@@ -13,17 +14,24 @@
       <view v-for="(item,index) in messageList" v-if="messageList.length !== 0"
             class=" u-border-radius d-flex a-center"
             style="height: 200rpx; border-bottom: 3rpx solid #bdbdbd;">
-        <image class="u-border-radius flex-shrink " @click="cardClicked(item)"
+        <view>
+          <u-badge :isDot="true" type="error" v-if="item.isRead === 1"></u-badge>
+          <image class="u-border-radius flex-shrink " @click="cardClicked(item,index)"
                :src="item.senderAvatar" style="width: 100rpx;height: 100rpx; margin-left: 20rpx; margin-right: 40rpx;"></image>
+
+        </view>
         <view class="d-flex flex-column j-sb " style="padding-right: 10rpx;height: 80%">
-          <view style="margin-top: 10rpx;" @click="cardClicked(item)">
-            <view class="u-line-1" style="font-size: 32rpx; margin-bottom: 5rpx;">{{item.title}}</view>
-            <view class="u-line-1 gray-color" style="font-size: 26rpx;">{{item.content}}</view>
+          <view style="margin-top: 10rpx; position: relative" @click="cardClicked(item,index)">
+
+            <view class="u-line-1" style="font-size: 32rpx; margin-bottom: 5rpx;">
+<!--              <text style="margin-right: 5%;" >[新]</text>-->
+<!--              <u-icon name="info-circle-fill"></u-icon>-->
+              {{item.title}}
+            </view>
+            <view class="u-line-1 " >{{item.senderNickName}}</view>
           </view>
           <view class="d-flex  align-center uni-row margin-top-xs">
-            <view class="d-flex a-end" @click="cardClicked(item)">
-              <text style="margin-bottom: 10rpx;">{{item.sendTime}}</text>
-            </view>
+              <text class="gray-color" style="margin-bottom: 10rpx;font-size: 26rpx" >{{item.sendTime}}</text>
             <view class="a-end">
               <u-icon name="trash" style="position: absolute; right: 40rpx; margin-bottom: 20rpx;"
                       @click = deleteFav(item)>
@@ -99,12 +107,22 @@ export default {
     this.getLists()
   },
   onLoad (e) { //option为object类型，会序列化上个页面传递的参数
+    var that = this
     console.log(e)
     this.lessonName = e.lessonName
+    uni.$on('messageUpdate',function(data){
+      console.log('监听到事件来自 update ，携带参数 msg 为：' + data.msg);
+      that.messageList = []
+      that.getLists()
+      that.$u.toast("删除成功")
+    })
   },
   methods: {
-    cardClicked(item){
-      // console.log(item)
+
+    cardClicked(item,index){
+      this.messageList[index].isRead = 0
+      // this.$set(this.messageList,index,0)
+
       uni.navigateTo({
         url:'/pages/message/messageDetail/readMessage'+"?messageId="+item.messageId
       })

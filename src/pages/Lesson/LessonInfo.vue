@@ -7,6 +7,7 @@
   </view>
   <view class="uni-pages">
     <u-toast ref="uToast"></u-toast>
+    <button @click="test3ee">3ee</button>
     <u-navbar title="课程详情" :isFixed="false"></u-navbar>
     <view v-if="detail">
       <video id="myVideo" @play="onPlay" @pause="onPause" autoplay page-gesture
@@ -22,8 +23,8 @@
                    :current="currentIndex" @change="clickTabs" :is-scroll="false" swiperWidth="750">
     </u-tabs>
 
-    <scroll-view v-if="detail" scroll-y="auto" style="width: 750rpx;"
-                 :style="{height: listHeight + 'px'}">
+<!--    <scroll-view v-if="detail" scroll-y="auto" style="width: 750rpx;"-->
+<!--                 :style="{height: listHeight + 'px'}">-->
       <view class="bg-white" style="width: 750rpx;" v-if="currentIndex === i" v-for="(m, i) in tabs" :key="i">
 <!--介绍-->
         <view v-if="m.id === 0">
@@ -64,7 +65,7 @@
                   <image
                          :src="getTeacherAvatar()"
                          style="height: 80rpx; width: 100rpx; border-radius: 100rpx; margin-right: 20rpx;" />
-                  <view  style="width:308rpx;" >
+                  <view  style="width:308rpx;">
                     <text class="text-lg"
                           style="color:#70788C;height:40rpx">{{detail.teacherName}}</text>
                     <text class="margin-left-xs text-sm text-gray">{{detail.createTime}}</text>
@@ -98,7 +99,13 @@
                         style="color:#A4A9B2;font-size: 40rpx;">{{detail.favNum}}</text>
                   <u-icon
                       @click="addFavourite()"
-                      :name="detail.isFavourite === false ? 'star' : 'star-fill'" color="#dd6161" size="28">
+                      :name="detail.isFavourite === false ? 'star' : 'star-fill'" color="#F8D100FF" size="28">
+                  </u-icon>
+                  <text class="text-sm"
+                        style="color:#A4A9B2;font-size: 40rpx;"> | </text>
+                  <u-icon
+                      @click="chatClicked()"
+                      name="chat"  size="28">
                   </u-icon>
                 </view>
               </view>
@@ -107,9 +114,10 @@
           </view>
           <u-gap bg-color="#f1f1f1" height="20"></u-gap>
           <view class="margin-top-sm padding-lr bg-white padding-tb-sm">
-            <view class="text-xl" style="margin-bottom: 20rpx;">课程介绍</view>
-<!--            <u-parse class="margin-top-sm" :html="detail.content"></u-parse>-->
-                <text class="text-lg">{{detail.introduction}}</text>
+            <view style="display:flex;">
+              <text class="text-xl" style="margin-bottom: 20rpx;">课程介绍</text>
+            </view>
+            <text class="text-lg">{{detail.introduction}}</text>
           </view>
         </view>
 
@@ -265,7 +273,7 @@
           </view>
 
       </view>
-    </scroll-view>
+<!--    </scroll-view>-->
 
 
 <!--    <view v-if="currentIndex === 1 " class="tabbar">-->
@@ -352,7 +360,9 @@ export default {
       tabList: [],
       detail: {
         favouriteId:-2,
+        teacherId:-1,
         favNum:0,
+        teacherAvatar:'', // ←一定要有，不然会请求undefined
         chapter:[
           {
             title:"tttt",
@@ -425,6 +435,13 @@ export default {
   },
   onLoad (e) { //option为object类型，会序列化上个页面传递的参数
     console.log(e)
+    var that = this
+    uni.$on('sendMessageSuccess',function(data){
+      // that.$u.toast("发送成功")
+      // that.test3ee(that)
+
+      // console.log(222)
+    })
     this.lessonId = e.LessonId
     this.LessonName = e.LessonName
     const {
@@ -434,6 +451,19 @@ export default {
     this.pageHeight = windowHeight / windowWidth * 750;
   },
   methods:{
+    test3ee(that){
+      that.$u.toast(
+          "添加成功!"
+      )
+    },
+
+    chatClicked(){
+      var that = this
+      uni.navigateTo({
+        url: '/pages/message/messageDetail/sendMessage' + '?teacherId=' + that.detail.teacherId + "&teacherName=" + that.detail.teacherName
+      })
+    },
+
     addFavourite(){
       // console.log(comt.voted)
       var that = this
@@ -613,6 +643,7 @@ export default {
           that.detail = res.data.data
           // console.log(that.detail)
           that.detail.imgUrl = global.storageUrl + that.detail.imgUrl
+          that.tabs[2].name = '评价(' + that.detail.totalComment + ")"
           console.log(that.detail)
         }
       })

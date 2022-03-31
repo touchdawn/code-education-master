@@ -11,18 +11,19 @@
 <!--      </view>-->
 <!--    </view>-->
     <u-toast ref="uToast" />
+
     <view style="margin-left: 6%;margin-top: 6%; width: 88%">
       <view style="font-weight:bold; margin-bottom: 6%;">
         <u--text size="23" lineHeight="33"
-                 :text="'回复：'+senderMessage.title"></u--text>
+                 :text="'发送给：'+sendData.teacherName"></u--text>
       </view>
       <view style="margin-bottom: 10%;">
         <u--text size="16" lineHeight="33"
                  text="主题："></u--text>
-        <u-input  v-model="replyMessageTitle" placeholder="请输入标题"
+        <u-input  v-model="sendData.title" placeholder="请输入标题"
                   count height="120" style="margin-top: 3%;"></u-input>
       </view>
-      <u--textarea  v-model="replyMessage" placeholder="请输入内容"
+      <u--textarea  v-model="sendData.content" placeholder="请输入内容"
                 count height="120"></u--textarea>
 
       <view style="margin-top: 10%; display:flex; ">
@@ -57,17 +58,16 @@
 import global from "@/common/common";
 
 export default {
-  name: "replyMessage",
+  name: "sendMessage",
   data(){
     return{
       userDt:{},
-      senderMessage:{
-        messageId:'',
+      sendData:{
+        teacherName:'',
         title:'',
-        senderId:''
+        content:'',
+        receiverId:''
       },
-      replyMessageTitle:"",
-      replyMessage:"",
 
     }
   },
@@ -76,9 +76,8 @@ export default {
   },
   onLoad(e){
     console.log(e)
-    this.senderMessage.messageId = e.senderMsgId
-    this.senderMessage.title = e.title
-    this.senderMessage.senderId = e.senderId
+    this.sendData.teacherName = e.teacherName
+    this.sendData.receiverId = e.teacherId
   },
   methods:{
     goBackClicked(){
@@ -89,26 +88,23 @@ export default {
       }
     },
     navigateBackConfirm() {
-      this.senderMessage = {}
-      this.replyMessageTitle = ''
-      this.replyMessage = ''
+      this.sendData = {}
       uni.navigateBack({delta:1})
     },
     sendClicked(){
-      console.log(this.senderMessage.messageId)
-      if (this.checkInput() === true){
-        this.$refs.alertDialog.open()
-      }
-    },
+        if (this.checkInput() === true){
+          this.$refs.alertDialog.open()
+        }
+      },
     dialogConfirm(){
       var that = this
       let uploadData = {}
       uploadData.senderId = that.userDt.id
-      uploadData.parentMessageId = that.senderMessage.messageId
-      uploadData.receiverId = that.senderMessage.senderId
-      uploadData.title = that.replyMessageTitle
-      uploadData.content = that.replyMessage
-      uploadData.method = 'reply'
+      uploadData.receiverId = that.sendData.receiverId
+      uploadData.title = that.sendData.title
+      uploadData.content = that.sendData.content
+      uploadData.parentMessageId = "-1"
+      uploadData.method = 'add'
 
       let header = {token:that.userDt.token}
       console.log("upload:")
@@ -121,22 +117,27 @@ export default {
         success: function (res){
           console.log("res:")
           console.log(res)
+          if (res.data.flag === 'T') {
+            uni.$emit('sendMessageSuccess',{msg:'发送成功'})
+            uni.navigateBack({delta: 1})
+          } else {
+            that.$u.toast("删除失败")
+          }
         }
       })
     },
 
     checkInput(){
-      if(global.isEmpty(this.replyMessageTitle)){
+      if(global.isEmpty(this.sendData.title)){
         this.$u.toast("请填写标题！")
         return false
-      } else if (global.isEmpty(this.replyMessage)) {
+      } else if (global.isEmpty(this.sendData.content)) {
         this.$u.toast("请填写内容！")
         return false
       } else {
         return true
       }
     }
-
   }
 }
 </script>

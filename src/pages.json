@@ -11,12 +11,21 @@
 				"navigationBarTextStyle": "white"
 			}
 		},
+
+		{
+			"path": "pages/message/messageDetail/sendMessage",
+			"style": {
+				"navigationBarTitleText": "发送消息"
+			}
+		},
+
 		{
 			"path": "pages/message/messageDetail/replyMessage",
 			"style": {
 				"navigationBarTitleText": "回复消息"
 			}
 		},
+
 		{
 			"path": "pages/message/messageDetail/readMessage",
 			"style": {

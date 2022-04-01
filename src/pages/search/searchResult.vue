@@ -68,7 +68,13 @@ export default {
   },
 
   created() {
-    this.userDt = JSON.parse(window.localStorage.getItem("userLocalData"))
+    // this.userDt = JSON.parse(window.localStorage.getItem("userLocalData"))
+    try{
+      const userLocalDataValue = uni.getStorageSync('userLocalData');
+      if(userLocalDataValue){
+        this.userDt = JSON.parse(userLocalDataValue)
+      }
+    }catch(e){}
     this.getLists()
   },
   onLoad (e) { //option为object类型，会序列化上个页面传递的参数

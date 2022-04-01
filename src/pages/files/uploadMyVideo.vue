@@ -77,8 +77,15 @@ export default {
   },
   created() {
     this.getToken()
-  	this.userDt = JSON.parse(window.localStorage.getItem("userLocalData"))
-	// console.log(this.userDt)
+  	// this.userDt = JSON.parse(window.localStorage.getItem("userLocalData"))
+    try{
+      const value = uni.getStorageSync('userLocalData');
+      if(value){
+        // console.log(value)
+        this.userDt = JSON.parse(value)
+      }
+    }catch(e){}
+
   },
   onLoad() {
 
@@ -277,7 +284,7 @@ export default {
           console.log(res.data)
           if (res.data.flag === "T"){
             console.log('success')
-            localStorage.setItem('userLocalData',JSON.stringify(res.data))
+            // localStorage.setItem('userLocalData',JSON.stringify(res.data))
             that.$router.replace({path:'pages/index/index'})
           }else {
             that.$u.toast(res.data.errorInfo);

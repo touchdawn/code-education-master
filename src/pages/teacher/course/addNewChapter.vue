@@ -31,7 +31,13 @@ export default {
     }
   },
   created() {
-    this.userDt = JSON.parse(window.localStorage.getItem("userLocalData"))
+    // this.userDt = JSON.parse(window.localStorage.getItem("userLocalData"))
+    try{
+      const userLocalDataValue = uni.getStorageSync('userLocalData');
+      if(userLocalDataValue){
+        this.userDt = JSON.parse(userLocalDataValue)
+      }
+    }catch(e){}
     // this.getAllData();
     // if (this.currentIndex === 2) {
     //   this.listHeight = uni.upx2px(this.pageHeight) - uni.upx2px(100) - uni.upx2px(140);

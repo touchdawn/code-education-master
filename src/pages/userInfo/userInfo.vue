@@ -104,7 +104,13 @@ export default {
   },
   created() {
     var that = this
-    this.userDt = JSON.parse(window.localStorage.getItem("userLocalData"))
+    // this.userDt = JSON.parse(window.localStorage.getItem("userLocalData"))
+    try{
+      const userLocalDataValue = uni.getStorageSync('userLocalData');
+      if(userLocalDataValue){
+        this.userDt = JSON.parse(userLocalDataValue)
+      }
+    }catch(e){}
     this.userId = parseInt(this.userDt.id)
     uni.request({
       url:global.commonLocalServer+"/users/getById/" + this.userId,
@@ -296,7 +302,6 @@ export default {
     },
     //更新性别
     radioGroupChange(e) { //e为v-model绑定的0/1
-      console.log(JSON.parse(window.localStorage.getItem("userLocalData")).id)
       console.log(e);//0,1
       console.log(this.userInfo.gender)//0,1
       this.updateProfile('gender')

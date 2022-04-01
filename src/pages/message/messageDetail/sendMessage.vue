@@ -71,7 +71,14 @@ export default {
     }
   },
   created() {
-    this.userDt = JSON.parse(window.localStorage.getItem("userLocalData"))
+    // this.userDt = JSON.parse(window.localStorage.getItem("userLocalData"))
+    try{
+      const value = uni.getStorageSync('userLocalData');
+      if(value){
+        // console.log(value)
+        this.userDt = JSON.parse(value)
+      }
+    }catch(e){}
   },
   onLoad(e){
     console.log(e)

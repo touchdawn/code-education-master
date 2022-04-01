@@ -50,7 +50,13 @@ name: "changePassword",
     }
   },
   created() {
-    this.userDt = JSON.parse(window.localStorage.getItem("userLocalData"))
+    // this.userDt = JSON.parse(window.localStorage.getItem("userLocalData"))
+    try{
+      const userLocalDataValue = uni.getStorageSync('userLocalData');
+      if(userLocalDataValue){
+        this.userDt = JSON.parse(userLocalDataValue)
+      }
+    }catch(e){}
     console.log(this.userDt)
   },
   methods:{

@@ -1,18 +1,20 @@
 <template>
-  <view class="form-content" style="width:80%; margin-left: 10%;">
+  <view class="form-content">
     <u-toast ref="uToast"></u-toast>
-    <u-form :model="form" ref="uForm" label-width="90" style="margin-top: 20rpx;">
-      <u-form-item label="教学名称" prop="sectionName">
-        <u-input v-model="form.sectionName" />
+    <u-form :model="form" ref="uForm" label-width="90">
+      <u-form-item label="申请依据" prop="applyReason">
+        <u--textarea v-model="form.applyReason" height="90"
+                     :placeholder="placeholder" count />
       </u-form-item>
-      <u-form-item label="上传文件MarkDown" prop="courseCover">
-        <image class="cover" v-if="unUploaded" :src=" imgWithUrl" mode="scaleToFill" style="width: 400rpx;height: 300rpx;" @click="coverClicked"/>
-        <image class="cover" v-if="!unUploaded" :src=" uploadedImgWithUrl" mode="scaleToFill" style="width: 400rpx;height: 300rpx;" @click="coverClicked"/>
+      <u-form-item label="上传教学视频(3分钟左右即可)" prop="courseCover" style="margin-top: 8%;">
+        <image class="cover" v-if="unUploaded" :src=" videoWithUrl" mode="scaleToFill" style="width: 400rpx;height: 300rpx;" @click="coverClicked"/>
+        <video class="cover" v-if="!unUploaded" :src=" videoWithUrl" mode="scaleToFill" style="width: 400rpx;height: 300rpx;" @click="coverClicked"></video>
+
       </u-form-item>
     </u-form>
 
-    <view>
-      <u-button @click="submit" type="primary" style="margin-top: 20rpx;">
+    <view style="margin-top: 10%;">
+      <u-button @click="submit">
         <text v-if="!isUploading">提交审核</text>
         <u-loading-icon v-if="isUploading" mode="circle" style="margin-left: 20rpx;" text="上传中"></u-loading-icon>
       </u-button>
@@ -27,30 +29,26 @@ import {convertBase64ToBlob} from "@/common/fileTransfer";
 import clone from "uview-ui/libs/luch-request/utils/clone";
 
 export default {
-  name: "uploadNewMarkDown",
-  data(){
-    return {
+  name: "applyForTeacher",
+  data (){
+    return{
+      userDt:{},
+      placeholder:"写一些自己的优点 / 成就 / 特长 以及胜任的理由",
       unUploaded:true,
       isUploading:false,
       lessonId:-2,
       courseId:-1,
+      videoWithUrl:'',
       uploadToken:'',
-      imgWithUrl:'',
-      mdUrlToUpload:'',
-      uploadedImgWithUrl: global.storageUrl + 'markdown-default.png',
       form: {
-        sectionName: '',
-        courseCover: 'courseDefaultCover.png',
+        applyReason: '',
+        courseCover: 'teacherApplicaton.png',
       },
     }
   },
-  onLoad (e) { //option为object类型，会序列化上个页面传递的参数
-    console.log(e)
-    this.lessonId = parseInt(e.lessonId)
-    this.courseId = parseInt(e.courseId)
-  },
+
   created() {
-    this.imgWithUrl = global.storageUrl + this.form.courseCover
+    this.videoWithUrl = global.storageUrl + this.form.courseCover
     // this.userDt = JSON.parse(window.localStorage.getItem("userLocalData"))
     try{
       const userLocalDataValue = uni.getStorageSync('userLocalData');
@@ -63,13 +61,13 @@ export default {
   methods:{
     coverClicked(){
       var that = this
-      uni.chooseFile({
+      uni.chooseVideo({
         count: 1,
+        sizeType: ['original', 'compressed'],
         success: function (res) {
           console.log(res)
-          that.mdUrlToUpload = res.tempFilePaths[0]
-          console.log(that.mdUrlToUpload)
-          let token = global.getLocalUserToken()
+          that.videoWithUrl = res.tempFilePath
+          let token = that.userDt.token
           uni.request({
             url: global.commonLocalServer + "/files/getToken",
             method: "GET",
@@ -78,7 +76,7 @@ export default {
             },
             success: function (res) {
               that.unUploaded = false
-              console.log(res)
+              console.log(res.data.data)
               that.uploadToken = res.data.data
             }
           })
@@ -90,14 +88,14 @@ export default {
       this.isUploading = true
       console.log(this.form)
       if (this.checkUploadData()) {
-        await this.uploadSectionMd()
+        await this.uploadApplicationVideo()
       }
     },
 
-    async uploadSectionMd() {
+    async uploadApplicationVideo() {
       var that = this
-      let fileName = "MD" + "_" + this.userDt.id + "_" + Date.parse(new Date())
-      await pathToBase64(that.mdUrlToUpload).then(base64 => {
+      let fileName = "video" + "_" + this.userDt.id + "_" + "application" + Date.parse(new Date())
+      await pathToBase64(this.videoWithUrl).then(base64 => {
         this.base64Result = base64;
       }).catch(error => {
         console.error(error)
@@ -106,7 +104,7 @@ export default {
       return new Promise( (resolve, reject) => {
         let a = uni.uploadFile({
           url:'http://up-cn-east-2.qiniup.com',
-          filePath:that.mdUrlToUpload,
+          filePath:that.videoWithUrl,
           formData: {
             'key':fileName,
             "token":that.uploadToken
@@ -115,22 +113,21 @@ export default {
             console.log(JSON.parse(res.data).key)
             that.isUploading = false
             // that.uploadUserData(JSON.parse(res.data).key)
-            that.addNewSectionMd(JSON.parse(res.data).key)
+            that.addNewApplicationVideo(JSON.parse(res.data).key)
           }
         })
       })
     },
-    addNewSectionMd(mdWithoutUrl) { //用的video接口,没区别
+
+    addNewApplicationVideo(fileWithoutUrl) {
       let that = this
       let infoClone = clone(that.form)
-      infoClone.lessonVideo = mdWithoutUrl
-      infoClone.creatorId = that.userDt.id
-      infoClone.parentId = that.lessonId
-      infoClone.courseId = that.courseId
+      infoClone.fileUrl = fileWithoutUrl
+      infoClone.applicantId = that.userDt.id
       console.log(infoClone)
       uni.request({
         method:"POST",
-        url:global.commonLocalServer + '/lesson/addNewSectionVideo',
+        url:global.commonLocalServer + '/admin/addTeacherApplication',
         header:{
           'token':that.userDt.token
         },
@@ -144,7 +141,7 @@ export default {
             })
             that.isUploading = false
             uni.navigateBack({delta: 1})
-            uni.$emit('updateEditCourse',{msg:'页面更新'})
+            uni.$emit('postApplicationSuccess',{msg:'教师申请上传成功'})
           } else {
             this.$refs.uToast.show({
               message:'提交失败，请退出后重试',
@@ -154,17 +151,18 @@ export default {
         }
       })
     },
+
     checkUploadData(){
-      // console.log(this.mdUrlToUpload)
-      if (global.isEmpty(this.form.sectionName)){
+      console.log(this.videoWithUrl)
+      if (global.isEmpty(this.form.applyReason)){
         this.$refs.uToast.show({
-          message:'请填写教学名称！',
+          message:'请填写申请依据！',
         })
         this.isUploading = false
         return false
-      } else if (this.unUploaded || this.mdUrlToUpload === ''){
+      } else if (this.videoWithUrl === global.storageUrl + 'teacherApplicaton.png' || this.unUploaded){
         this.$refs.uToast.show({
-          message:'请上传MarkDown文件！',
+          message:'请上传视频！',
         })
         this.isUploading = false
         return false
@@ -177,5 +175,7 @@ export default {
 </script>
 
 <style scoped>
-
+.form-content {
+  padding: 30px;
+}
 </style>

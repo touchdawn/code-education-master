@@ -2,12 +2,17 @@
   <view>
     <view class="userback">
       <image :src="displayAvatar" style="width: 200rpx; height: 200rpx; margin-top: 20%;" />
-      <view class="userName" style="margin-top: 100rpx;">{{userData.name}}</view>
+      <view style="display: flex; align-items: center;margin-top: 100rpx;justify-content: center;">
+        <view class="userName" style="margin-right: 3%; margin-left: 3%;">{{userData.name}}</view>
+        <u-tag text="学员" size="mini" type="primary" v-if="userDt.type === 0"></u-tag>
+        <u-tag text="教员" size="mini" type="success" v-if="userDt.type === 1"></u-tag>
+
+      </view>
       <view class="userOrgan" style="margin-top: 20rpx">{{userData.nickName}}</view>
       <view class="">
         <view class="" style="margin-top: 40rpx;">
-          <view class="content">软件版本</view>
-          <view class="action">2.0.0</view>
+          <view class="content" @click="showLocalStorage">软件版本</view>
+          <view class="action">3.1.5</view>
         </view>
       </view>
     </view>
@@ -19,9 +24,11 @@
 
     <u-button @click="changePersonInfoClicked" type="primary">修改个人信息</u-button>
 
-    <u-button @click="upLoadClicked">上传</u-button>
+<!--    <u-button @click="upLoadClicked">上传</u-button>-->
 
-    <u-button @click="enrollNewCourseClicked">新开课程</u-button>
+    <u-button @click="applyForTeacherClicked">申请成为教师</u-button>
+
+    <u-button @click="enrollNewCourseClicked" v-if="userDt.type !== 0">新开课程</u-button>
 
     <u-button @click="myCourseClicked">我的课程</u-button>
 
@@ -55,8 +62,14 @@ export default {
     console.log("loaded")
   },
   created() {
-    console.log(JSON.parse(window.localStorage.getItem("userLocalData")))
-    this.userDt = JSON.parse(window.localStorage.getItem("userLocalData"))
+    // this.userDt = JSON.parse(window.localStorage.getItem("userLocalData"))
+    try{
+      const userLocalDataValue = uni.getStorageSync('userLocalData');
+      if(userLocalDataValue){
+        // console.log(value)
+        this.userDt = JSON.parse(userLocalDataValue)
+      }
+    }catch(e){}
     // console.log(userDt)
     // this.userData = userDt.data
     // this.userData.userName=userDt.data.name
@@ -76,6 +89,24 @@ export default {
     })
   },
   methods: {
+
+
+    showLocalStorage(){
+      try{
+        const value = uni.getStorageSync('userLocalData');
+        if(value){
+          this.userDt = JSON.parse(value)
+          console.log(this.userDt)
+        }
+      }catch(e){}
+    },
+
+    applyForTeacherClicked() {
+      uni.navigateTo({
+        url:'/pages/student/applyForTeacher'
+      })
+    },
+
     changePersonInfoClicked(){
       uni.navigateTo({
         url: '/pages/userInfo/userInfo'

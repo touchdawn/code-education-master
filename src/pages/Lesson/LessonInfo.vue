@@ -423,7 +423,14 @@ export default {
   },
   created() {
     this.currentIndex = 0
-    this.userDt = JSON.parse(window.localStorage.getItem("userLocalData"))
+    // this.userDt = JSON.parse(window.localStorage.getItem("userLocalData"))
+    try{
+      const value = uni.getStorageSync('userLocalData');
+      if(value){
+        // console.log(value)
+        this.userDt = JSON.parse(value)
+      }
+    }catch(e){}
     console.log(this.userDt)
     // this.getComment()
     this.getAllData();

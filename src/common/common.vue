@@ -18,7 +18,13 @@ function commonFun() {
 }
 
 function getLocalUserToken() {
-  return JSON.parse(window.localStorage.getItem("userLocalData")).token
+  try{
+    const value = uni.getStorageSync('userLocalData');
+    if(value){
+      console.log(JSON.parse(value))
+    }
+  }catch(e){}
+  return JSON.parse(value).token
 }
 
 function getUploadToken(){

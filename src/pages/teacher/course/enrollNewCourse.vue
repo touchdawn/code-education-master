@@ -261,7 +261,13 @@ export default {
   // 必须要在onReady生命周期，因为onLoad生命周期组件可能尚未创建完毕
   created() {
     this.imageWithUrl = global.storageUrl + this.form.courseCover
-    this.userDt = JSON.parse(window.localStorage.getItem("userLocalData"))
+    // this.userDt = JSON.parse(window.localStorage.getItem("userLocalData"))
+    try{
+      const userLocalDataValue = uni.getStorageSync('userLocalData');
+      if(userLocalDataValue){
+        this.userDt = JSON.parse(userLocalDataValue)
+      }
+    }catch(e){}
 
   },
   onReady() {

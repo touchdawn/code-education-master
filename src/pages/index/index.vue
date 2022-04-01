@@ -155,7 +155,16 @@
 
     created() {
       var that = this
-      this.userDt = JSON.parse(window.localStorage.getItem("userLocalData"))
+      try{
+        const value = uni.getStorageSync('userLocalData');
+        if(value){
+          // console.log(value)
+          console.log(JSON.parse(value))
+          this.userDt = JSON.parse(value)
+        }
+      }catch(e){}
+
+      // this.userDt = JSON.parse(window.localStorage.getItem("userLocalData"))
       uni.request({
         url:global.commonLocalServer+"/lesson/getAllLessons",
         method:"GET",

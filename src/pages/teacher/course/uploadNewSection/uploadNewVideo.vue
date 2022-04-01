@@ -8,7 +8,6 @@
       <u-form-item label="上传教学视频" prop="courseCover">
         <image class="cover" v-if="unUploaded" :src=" videoWithUrl" mode="scaleToFill" style="width: 400rpx;height: 300rpx;" @click="coverClicked"/>
         <video class="cover" v-if="!unUploaded" :src=" videoWithUrl" mode="scaleToFill" style="width: 400rpx;height: 300rpx;" @click="coverClicked"></video>
-
       </u-form-item>
     </u-form>
 
@@ -41,7 +40,6 @@ export default {
         sectionName: '',
         courseCover: 'courseDefaultCover.png',
       },
-
     }
   },
   onLoad (e) { //option为object类型，会序列化上个页面传递的参数
@@ -56,8 +54,13 @@ export default {
   },
   created() {
     this.videoWithUrl = global.storageUrl + this.form.courseCover
-    this.userDt = JSON.parse(window.localStorage.getItem("userLocalData"))
-
+    // this.userDt = JSON.parse(window.localStorage.getItem("userLocalData"))
+    try{
+      const userLocalDataValue = uni.getStorageSync('userLocalData');
+      if(userLocalDataValue){
+        this.userDt = JSON.parse(userLocalDataValue)
+      }
+    }catch(e){}
   },
   methods:{
     coverClicked(){

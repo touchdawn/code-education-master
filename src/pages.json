@@ -11,6 +11,20 @@
 				"navigationBarTextStyle": "white"
 			}
 		},
+		{
+			"path": "pages/student/applyForTeacher",
+			"style": {
+				"navigationBarTitleText": "申请成为教师"
+			}
+		},
+
+		{
+			"path": "pages/login/login",
+			"style": {
+				"navigationStyle": "custom",
+				"navigationBarTextStyle": "white"
+			}
+		},
 
 		{
 			"path": "pages/message/messageDetail/sendMessage",
@@ -30,14 +44,6 @@
 			"path": "pages/message/messageDetail/readMessage",
 			"style": {
 				"navigationBarTitleText": "消息详情"
-			}
-		},
-
-		{
-			"path": "pages/login/login",
-			"style": {
-				"navigationStyle": "custom",
-				"navigationBarTextStyle": "white"
 			}
 		},
 

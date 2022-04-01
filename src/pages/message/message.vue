@@ -101,7 +101,14 @@ export default {
   },
 
   created() {
-    this.userDt = JSON.parse(window.localStorage.getItem("userLocalData"))
+    // this.userDt = JSON.parse(window.localStorage.getItem("userLocalData"))
+    try{
+      const value = uni.getStorageSync('userLocalData');
+      if(value){
+        // console.log(value)
+        this.userDt = JSON.parse(value)
+      }
+    }catch(e){}
     this.getLists()
   },
   onLoad (e) { //option为object类型，会序列化上个页面传递的参数

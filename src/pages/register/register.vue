@@ -134,7 +134,14 @@ export default {
               that.registerData.codeFromServer = res.data.code
               that.registerData.tampFromServer = res.data.tamp
               that.$u.toast('注册成功');
-              localStorage.setItem('userLocalData',JSON.stringify(res.data))
+              // localStorage.setItem('userLocalData',JSON.stringify(res.data))
+              try {
+                uni.setStorageSync('userLocalData', JSON.stringify(res.data.data));
+                console.log('data.data')
+                console.log(res.data.data)
+              } catch (e) {
+                // error
+              }
               uni.redirectTo({
                     url: '/pages/index/index'
               });

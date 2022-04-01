@@ -29,7 +29,6 @@
       <view style="margin-top: 10%; display:flex; ">
         <u-button type="warning" style="width: 40%;" @click="goBackClicked">取消</u-button>
         <u-button type="primary"  style="width: 40%;" @click="sendClicked">发送</u-button>
-
       </view>
     </view>
 

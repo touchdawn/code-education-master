@@ -28,8 +28,8 @@
 
 <script>
 // #ifdef MP
-import Decode from '../decode.vue';
 // #endif
+import Decode from '../decode.vue';
 export default {
 	name: 'Rtable',
 	data(){
@@ -44,10 +44,12 @@ export default {
 		}
 	},
 	components:{
-		// #ifdef MP
-		Decode,
-		// #endif
-	},
+		// // #ifdef MP
+		// Decode,
+		// // #endif
+    Decode: ()=> import('../decode.vue')
+
+  },
 	mounted(){this.ready()},
 	onReady(){this.ready()},
 	methods:{

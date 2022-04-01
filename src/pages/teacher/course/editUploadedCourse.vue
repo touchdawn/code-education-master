@@ -5,13 +5,17 @@
 
     <u-form  ref="uForm" label-width="90" style="margin-left: 5%; width: 90%">
       <u-form-item label="课程名称:" prop="courseName" style="margin-top: 40rpx;">
-        <text>{{courseName}}</text>
+<!--        <text>{{courseName}}</text>-->
+        <u--input v-model="courseName" ></u--input>
       </u-form-item>
-      <u-form-item label="课程介绍:" prop="courseName" style="margin-top: 30rpx; margin-bottom: 30rpx;">
-        <text>{{detail.introduction}}</text>
+      <u-form-item label="课程介绍:" prop="courseName" style="margin-top: 30rpx; margin-bottom: 2%;">
+<!--        <text>{{detail.introduction}}</text>-->
+        <u--textarea v-model="detail.introduction"></u--textarea>
       </u-form-item>
     </u-form>
-
+    <view style=" display:flex; border-bottom: 2rpx solid #CCCCCC">
+      <u-button type="primary"  style="width: 40%; margin-bottom: 4%;" @click="sendClicked">修改</u-button>
+    </view>
 <!--    <form>-->
 <!--      <view class="uni-form-item uni-column" >-->
 <!--        <view  style="height:90rpx;line-height:90rpx;-->
@@ -36,15 +40,21 @@
 
     <view style="background-color: #f1f1f1;width: 750rpx;">
       <view v-for="(n,j) in detail.chapter" :key="j">
-        <text class="padding-left text-df" style="height:100rpx;line-height:90rpx;font-size: 33rpx;">{{n.TITLE}}</text>
+        <view class="uni-row margin-left u-border-bottom align-center">
+          <text class="padding-left text-df" style="height:100rpx;line-height:90rpx;font-size: 33rpx;">{{n.TITLE}}</text>
+          <u-button style="margin-right: 5%; width: 18%" :plain="true"
+                    size="mini" type="error" @click="deleteChapterClicked(n)"> 删除本章</u-button>
+        </view>
         <view class="bg-white">
           <view v-for="(c,k) in n.child" :key="k">
-            <view @click="onSectionClick(c)"
+            <view
                   class="uni-row margin-left u-border-bottom align-center" style="height:80rpx;">
               <!--                  <image :src="chapterIcon(c)" style="width: 40rpx;height: 40rpx;"></image>-->
               <text class="flex-sub margin-left-xs margin-right text-df"
                     :class="'text-black'"
                     :style=" '#1CBBB4'" style="font-size: 33rpx; margin-left: 40rpx;">{{c.TITLE}}</text>
+              <u-button style="margin-right: 5%; width: 18%" :plain="true"
+                        size="mini" type="error" @click="deleteClicked(c)">删除本节</u-button>
             </view>
           </view>
           <view class="uni-row margin-left u-border-bottom align-center" style="height:80rpx;">
@@ -62,6 +72,17 @@
         <text style="font-size: 33rpx;" :class="'text-blue'">+ 添加新章节</text>
       </view>
     </view>
+
+    <view>
+      <!-- 取消提示框 -->
+      <uni-popup ref="deleteConfirmDialog" type="dialog">
+        <uni-popup-dialog type="error" cancelText="取消" confirmText="确认"
+                          title="确定删除？" :content="temp.deleteMsg"
+                          @confirm="deleteConfirm"
+        ></uni-popup-dialog>
+      </uni-popup>
+    </view>
+
 
     <u-action-sheet
         :show="showChoose"
@@ -85,8 +106,14 @@ export default {
       showChoose:false,
       courseId:-1,
       courseName:'',
+      changeData:{
+        courseName:'',
+        introduction:''
+      },
       temp:{
         lessonId:-1,
+        deleteId:-1,
+        deleteMsg:'确定删除吗？'
       },
       detail: {
         chapter:[
@@ -145,10 +172,45 @@ export default {
     })
   },
   methods:{
+    deleteClicked(c){
+      console.log(c)
+      this.temp.deleteId = c.ID
+      this.$refs.deleteConfirmDialog.open()
+
+    },
+    deleteChapterClicked(c) {
+      console.log(c)
+      this.temp.deleteId = c.ID
+      this.temp.deleteMsg="删除后其下子项目将一并删除"
+      this.$refs.deleteConfirmDialog.open()
+
+    },
     addNewSectionClicked(e){
       // console.log(e)
       this.temp.lessonId = e.ID
       this.showChoose = true
+    },
+
+    deleteConfirm(){
+      var that = this
+      let header = {token:that.userDt.token}
+      uni.request({
+        method:'GET',
+        url: global.commonLocalServer + "/lesson/deleteSection/" + that.temp.deleteId,
+        header:header,
+        success: function (res){
+          console.log("res:")
+          console.log(res)
+          if (res.data.flag === 'T') {
+            that.refreshList()
+          }
+        }
+      })
+    },
+
+    refreshList() {
+      this.detail = {}
+      this.getAllData();
     },
 
     typeSelect(e) {
@@ -174,9 +236,7 @@ export default {
       })
     },
 
-    onSectionClick(c){
-      console.log(c)
-    },
+
     getAllData(){
       var that = this
       uni.request({
@@ -192,6 +252,8 @@ export default {
           that.detail.imgUrl = global.storageUrl + that.detail.imgUrl
           // that.detail.chapter[that.detail.chapter.length] = {"TITLE":"添加新章节"}
           console.log(that.detail)
+          that.changeData.introduction = that.detail.introduction
+          that.changeData.courseName = that.courseName
         }
       })
     },

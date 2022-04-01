@@ -32,13 +32,11 @@
           </view>
           <view class="d-flex  align-center uni-row margin-top-xs">
               <text class="gray-color" style="margin-bottom: 10rpx;font-size: 26rpx" >{{item.sendTime}}</text>
-            <view class="a-end">
-              <u-icon name="trash" style="position: absolute; right: 40rpx; margin-bottom: 20rpx;"
-                      @click = deleteFav(item)>
-              </u-icon>
-              <!--                <u-button   type="primary" size="mini" @click="editCourseClicked(item,1)"-->
-              <!--                          style="margin-top: 30rpx; width: 130rpx; margin-left: 90rpx;" text="编辑教学"></u-button>-->
-            </view>
+<!--            <view class="a-end">-->
+<!--              <u-icon name="trash" style="position: absolute; right: 40rpx; margin-bottom: 20rpx;"-->
+<!--                      @click = deleteFav(item)>-->
+<!--              </u-icon>-->
+<!--            </view>-->
           </view>
         </view>
       </view>

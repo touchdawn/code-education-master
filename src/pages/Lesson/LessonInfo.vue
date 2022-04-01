@@ -1,13 +1,13 @@
 <template>
-<view>
   <view>
+    <u-toast ref="uToast"></u-toast>
+    <view>
     <view class="flex align-center py-2">
       <text class="font-md font-weight-bold">{{lessonId}}</text>
     </view>
   </view>
   <view class="uni-pages">
-    <u-toast ref="uToast"></u-toast>
-    <button @click="test3ee">3ee</button>
+<!--    <button @click="test3ee">3ee</button>-->
     <u-navbar title="课程详情" :isFixed="false"></u-navbar>
     <view v-if="detail">
       <video id="myVideo" @play="onPlay" @pause="onPause" autoplay page-gesture
@@ -438,8 +438,10 @@ export default {
     var that = this
     uni.$on('sendMessageSuccess',function(data){
       // that.$u.toast("发送成功")
-      // that.test3ee(that)
-
+      that.test3ee(that)
+      this.$u.toast(
+          "添加成功!"
+      )
       // console.log(222)
     })
     this.lessonId = e.LessonId
@@ -452,7 +454,7 @@ export default {
   },
   methods:{
     test3ee(that){
-      that.$u.toast(
+      this.$u.toast(
           "添加成功!"
       )
     },

@@ -28,8 +28,8 @@
 
 <script>
 // #ifdef MP
-// #endif
 import Decode from '../decode.vue';
+// #endif
 export default {
 	name: 'Rtable',
 	data(){

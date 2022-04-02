@@ -53,8 +53,10 @@
               <text class="flex-sub margin-left-xs margin-right text-df"
                     :class="'text-black'"
                     :style=" '#1CBBB4'" style="font-size: 33rpx; margin-left: 40rpx;">{{c.TITLE}}</text>
-              <u-button style="margin-right: 5%; width: 18%" :plain="true"
+              <u-button style="margin-right: 5%; width: 18%" :plain="true" v-if="c.STATUS === 1"
                         size="mini" type="error" @click="deleteClicked(c)">删除本节</u-button>
+              <text style="margin-right: 2%; width: 18%"  v-if="c.STATUS === 0"
+                        type="error" @click="deleteClicked(c)">待审核</text>
             </view>
           </view>
           <view class="uni-row margin-left u-border-bottom align-center" style="height:80rpx;">
@@ -246,7 +248,7 @@ export default {
     getAllData(){
       var that = this
       uni.request({
-        url:global.commonLocalServer+"/lesson/getCourseInfo/" + that.courseId + "/" + that.userDt.id,
+        url:global.commonLocalServer+"/lesson/getCourseAllInfo/" + that.courseId + "/" + that.userDt.id,
         method:"GET",
         header:{
           'token':that.userDt.token

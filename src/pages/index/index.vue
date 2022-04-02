@@ -28,26 +28,28 @@
       <u-notice-bar :text="text1"></u-notice-bar>
     </view>
 <!--    <view>{{admin.data.name}}</view>-->
+
 <!--    宫格布局组件-->
-    <view>
-      <u-grid
-          :border="false"
-          col="5"
-      >
-        <u-grid-item
-            v-for="(listItem,listIndex) in gridList"
-            :key="listIndex"
-        >
-          <u-icon
-              :customStyle="{paddingTop:20+'rpx'}"
-              :name="listItem.name"
-              :size="22"
-          ></u-icon>
-          <text class="grid-text">{{listItem.title}}</text>
-        </u-grid-item>
-      </u-grid>
-      <u-toast ref="uToast" />
-    </view>
+<!--    <view>-->
+<!--      <u-grid-->
+<!--          :border="false"-->
+<!--          col="5"-->
+<!--      >-->
+<!--        <u-grid-item-->
+<!--            v-for="(listItem,listIndex) in gridList"-->
+<!--            :key="listIndex"-->
+<!--        >-->
+<!--          <u-icon-->
+<!--              :customStyle="{paddingTop:20+'rpx'}"-->
+<!--              :name="listItem.name"-->
+<!--              :size="22"-->
+<!--          ></u-icon>-->
+<!--          <text class="grid-text">{{listItem.title}}</text>-->
+<!--        </u-grid-item>-->
+<!--      </u-grid>-->
+<!--      <u-toast ref="uToast" />-->
+<!--    </view>-->
+
 <!--    搜索框-->
     <u-search placeholder="输入想学的" class="px-20"
               v-model="keyword" @custom="searchClicked()"></u-search>
@@ -166,7 +168,7 @@
 
       // this.userDt = JSON.parse(window.localStorage.getItem("userLocalData"))
       uni.request({
-        url:global.commonLocalServer+"/lesson/getAllLessons",
+        url:global.commonLocalServer+"/lesson/getRandLessons/" + 4,
         method:"GET",
         header:{
           "content-type":"application/json",

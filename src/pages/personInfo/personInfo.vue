@@ -33,7 +33,7 @@
 
     <u-button @click="myFavClicked">我的收藏夹</u-button>
 
-    <u-button @click="applyForTeacherClicked">申请成为教师</u-button>
+    <u-button @click="applyForTeacherClicked" v-if="userDt.type === 0">申请成为教师</u-button>
     <tab-bar :msg="msg"></tab-bar>
   </view>
 </template>

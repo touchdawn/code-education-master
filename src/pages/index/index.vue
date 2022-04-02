@@ -175,7 +175,7 @@
         success:function(res){
           that.lessonList = res.data.data
           for(var i=0; i<that.lessonList.length;i++){
-            that.lessonImgList.push(global.storageUrl + that.lessonList[i].IMG_URL)
+            that.lessonImgList.push(global.storageUrl + that.lessonList[i].imgUrl)
           }
         }
       })
@@ -196,9 +196,9 @@
       swiperClicked(index){
         console.log("链接课程ID:")
         console.log(this.lessonList[index])
-        console.log(this.lessonList[index].LESSON_REL)
+        console.log(this.lessonList[index].lessonId)
         uni.navigateTo({
-          url:'/pages/Lesson/LessonInfo'+"?LessonId="+this.lessonList[index].LESSON_REL + "&LessonName="+this.lessonList[index].LESSON_NAME
+          url:'/pages/Lesson/LessonInfo'+"?LessonId="+this.lessonList[index].lessonId + "&LessonName="+this.lessonList[index].lessonName
         })
       },
       rightClick() {

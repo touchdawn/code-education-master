@@ -15,7 +15,7 @@
         </picker>
       </u-form-item>
       <u-form-item label="上传课程封面" prop="courseCover">
-        <image class="cover" :src=" imageWithUrl" mode="scaleToFill" style="width: 400rpx;height: 300rpx;" @click="coverClicked"/>
+        <image class="cover" :src="imageWithUrl" mode="scaleToFill" style="width: 400rpx;height: 300rpx;" @click="coverClicked"></image>
       </u-form-item>
     </u-form>
 
@@ -132,8 +132,8 @@ export default {
         count: 1,
         sizeType: ['original', 'compressed'],
         success: function (res) {
-          that.imageWithUrl = res.tempFilePaths
-          let token = global.getLocalUserToken()
+          that.imageWithUrl = res.tempFilePaths[0]
+          let token = that.userDt.token
           uni.request({
             url: global.commonLocalServer + "/files/getToken",
             method: "GET",
@@ -211,7 +211,7 @@ export default {
       return new Promise( (resolve, reject) => {
         let a = uni.uploadFile({
           url:'http://up-cn-east-2.qiniup.com',
-          filePath:that.imageWithUrl[0],
+          filePath:that.imageWithUrl,
           formData: {
             'key':fileName,
             "token":that.uploadToken

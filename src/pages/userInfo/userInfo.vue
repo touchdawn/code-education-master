@@ -152,10 +152,10 @@ export default {
       // await data.append('token', that.uploadToken)
       // await data.append("file", that.picFile);
       return new Promise( (resolve, reject) => {
-        console.log(that.userInfo.avatar[0])
+        console.log(that.userInfo.avatar)
         let a = uni.uploadFile({
           url:'http://up-cn-east-2.qiniup.com',
-          filePath:that.userInfo.avatar[0],
+          filePath:that.userInfo.avatar,
           formData: {
              'key':fileName,
              "token":that.uploadToken
@@ -196,7 +196,7 @@ export default {
         count: 1,
         sizeType: ['original', 'compressed'],
         success: function (res) {
-          that.userInfo.avatar = res.tempFilePaths
+          that.userInfo.avatar = res.tempFilePaths[0]
           let token = global.getLocalUserToken()
           uni.request({
             url: global.commonLocalServer + "/files/getToken",

@@ -7,6 +7,7 @@
 const httpUrl = 'http://39.105.17.99:8080/'
 
 const storageUrl = 'http://r8otjafce.bkt.clouddn.com/'
+// const storageUrl = 'http://r9pcezjhx.bkt.clouddn.com/'
 
 const commonLocalhost = ""
 
@@ -19,12 +20,12 @@ function commonFun() {
 
 function getLocalUserToken() {
   try{
-    const value = uni.getStorageSync('userLocalData');
-    if(value){
-      console.log(JSON.parse(value))
+    const value1 = uni.getStorageSync('userLocalData');
+    if(value1){
+      // console.log(JSON.parse(value1))
+      return JSON.parse(value1).token
     }
   }catch(e){}
-  return JSON.parse(value).token
 }
 
 function getUploadToken(){

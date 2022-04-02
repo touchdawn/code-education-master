@@ -26,14 +26,14 @@
 
 <!--    <u-button @click="upLoadClicked">上传</u-button>-->
 
-    <u-button @click="applyForTeacherClicked">申请成为教师</u-button>
 
     <u-button @click="enrollNewCourseClicked" v-if="userDt.type !== 0">新开课程</u-button>
 
-    <u-button @click="myCourseClicked">我的课程</u-button>
+    <u-button @click="myCourseClicked" v-if="userDt.type === 1">我的课程</u-button>
 
     <u-button @click="myFavClicked">我的收藏夹</u-button>
 
+    <u-button @click="applyForTeacherClicked">申请成为教师</u-button>
     <tab-bar :msg="msg"></tab-bar>
   </view>
 </template>

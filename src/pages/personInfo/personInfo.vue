@@ -1,7 +1,7 @@
 <template>
   <view>
     <view class="userback">
-      <image :src="displayAvatar" style="width: 200rpx; height: 200rpx; margin-top: 20%;" />
+      <image :src="displayAvatar" style="width: 200rpx; height: 200rpx; margin-top: 20%;border-radius: 50%;"/>
       <view style="display: flex; align-items: center;margin-top: 100rpx;justify-content: center;">
         <view class="userName" style="margin-right: 3%; margin-left: 3%;">{{userData.name}}</view>
         <u-tag text="学员" size="mini" type="primary" v-if="userDt.type === 0"></u-tag>

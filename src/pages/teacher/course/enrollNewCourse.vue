@@ -6,7 +6,7 @@
         <u-input v-model="form.courseName" />
       </u-form-item>
       <u-form-item label="简介" prop="courseIntro">
-        <u--textarea v-model="form.courseIntro" placeholder="请输入内容" />
+        <u--textarea v-model="form.courseIntro" placeholder="请输入内容" count />
       </u-form-item>
       <u-form-item label="课程类型" prop="tag">
 <!--        <u-input v-model="globalStorage" />-->

@@ -30,7 +30,7 @@
         <view v-if="m.id === 0">
           <view class="padding-lr padding-tb-sm" style="height: 230rpx">
             <view class="margin-top-xs">
-              <text  style="font-size:32rpx; margin-bottom: 40rpx; font-size: 40rpx;">{{LessonName}}</text>
+              <text style="font-size:32rpx; margin-bottom: 40rpx; font-size: 40rpx;">{{detail.courseName}}</text>
 <!--              <view class="uni-row">-->
 <!--                <my-rate :score="4"></my-rate>-->
 <!--                <text class="text-df"-->
@@ -452,7 +452,7 @@ export default {
       // console.log(222)
     })
     this.lessonId = e.LessonId
-    this.LessonName = e.LessonName
+    // this.LessonName = e.LessonName
     const {
       windowHeight,
       windowWidth

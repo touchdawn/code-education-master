@@ -2,10 +2,10 @@
   <!--    推荐分类-->
   <view style="margin-top: 30rpx;">
     <view>
-      <view class="d-flex j-sb px-20" style="height: 375rpx;width: 100%;background-color: #1BBF80">
+      <view class="d-flex j-sb px-20" style="height: 340rpx;width: 100%;background-color: #1BBF80">
         <view class="white-color d-flex flex-column" >
-          <text style="font-size: 26rpx; padding: 20rpx 0 10rpx 0; border-bottom: 3rpx solid #FFFFFF;">专属定制 优质服务</text>
-          <text class="font-weight" style="font-size: 36rpx; margin-top: 20rpx">APP定制开发</text>
+          <text style="font-size: 26rpx; padding: 20rpx 0 10rpx 0; border-bottom: 3rpx solid #FFFFFF;">热门语言 从零开始</text>
+          <text class="font-weight" style="font-size: 36rpx; margin-top: 20rpx">编程学习路线</text>
         </view>
       </view>
       <!--      <view class="bg-white-color shadow u-border-radius d-flex flex-wrap"-->
@@ -27,35 +27,35 @@
             style="width: 710rpx;height: 350rpx;margin: -175rpx auto 30rpx;">
         <!--        <view class="" v-for="(i,index) in 4">-->
         <view class="h-100 d-flex flex-column j-sb py-20 a-center"
-              style="flex: 1; height: 300rpx; border-right: 1rpx solid #CCCCCC"
+              style="flex: 1; height: 300rpx; border-right: 1rpx solid #CCCCCC" @click="viewClicked"
         >
-          <text class="font-weight" style="margin-top: 20rpx;padding-bottom: 10rpx;font-size: 26rpx; border-bottom: 2rpx solid #1BBF80">APP</text>
-          <image src="http://1.15.117.159/wp-content/uploads/2020/07/6.gif"
+          <text class="font-weight" style="margin-top: 20rpx;padding-bottom: 10rpx;font-size: 26rpx; border-bottom: 2rpx solid #1BBF80">Python</text>
+          <image src="http://r8otjafce.bkt.clouddn.com/pythonLogo.png"
                  class="img-160" ></image>
         </view>
 
         <view class="h-100 d-flex flex-column j-sb py-20 a-center"
               style="flex: 1; height: 300rpx; border-right: 1rpx solid #CCCCCC"
         >
-          <image src="http://1.15.117.159/wp-content/uploads/2020/07/1.gif"
+          <image src="http://r8otjafce.bkt.clouddn.com/cppLogo.png"
                  class="img-160" ></image>
-          <text class="font-weight" style="margin-top: 20rpx;padding-bottom: 10rpx;font-size: 26rpx; border-bottom: 2rpx solid #1BBF80">APP</text>
+          <text class="font-weight" style="margin-top: 20rpx;padding-bottom: 10rpx;font-size: 26rpx; border-bottom: 2rpx solid #1BBF80">CPP</text>
         </view>
 
         <view class="h-100 d-flex flex-column j-sb py-20 a-center"
               style="flex: 1; height: 300rpx; border-right: 1rpx solid #CCCCCC"
         >
-          <text class="font-weight" style="margin-top: 20rpx;padding-bottom: 10rpx;font-size: 26rpx; border-bottom: 2rpx solid #1BBF80">APP</text>
-          <image src="http://1.15.117.159/wp-content/uploads/2020/07/4.gif"
+          <text class="font-weight" style="margin-top: 20rpx;padding-bottom: 10rpx;font-size: 26rpx; border-bottom: 2rpx solid #1BBF80">JavaScript</text>
+          <image src="http://r8otjafce.bkt.clouddn.com/JavaScriptLogo.png"
                  class="img-160" ></image>
         </view>
 
         <view class="h-100 d-flex flex-column j-sb py-20 a-center"
               style="flex: 1; height: 300rpx"
         >
-          <image src="http://1.15.117.159/wp-content/uploads/2020/07/7.gif"
+          <image src="http://r8otjafce.bkt.clouddn.com/javaLogo.png"
                  class="img-160" ></image>
-          <text class="font-weight" style="margin-top: 20rpx;padding-bottom: 10rpx;font-size: 26rpx; border-bottom: 2rpx solid #1BBF80">APP</text>
+          <text class="font-weight" style="margin-top: 20rpx;padding-bottom: 10rpx;font-size: 26rpx; border-bottom: 2rpx solid #1BBF80">Java</text>
         </view>
 
         <!--        </view>-->
@@ -69,8 +69,16 @@
 import HLessonsList from "@/components/h-lessons-list/h-lessons-list";
 export default {
   name: "h-rec-cate",
-  components: {HLessonsList}
+  components: {HLessonsList},
+  methods:{
+    viewClicked(){
+      uni.navigateTo({
+        url:'/pages/skillMap/skillMap'+"?id="+'1'
+      })
+    }
+  }
 }
+
 </script>
 
 <style scoped>

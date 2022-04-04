@@ -4,11 +4,21 @@
 	},
 
 	"pages": [
+
+
 		{
 			"path": "pages/login/login",
 			"style": {
 				"navigationStyle": "custom",
 				"navigationBarTextStyle": "white"
+			}
+		},
+
+
+		{
+			"path": "pages/skillMap/skillMap",
+			"style": {
+				"navigationBarTitleText": "技能树"
 			}
 		},
 

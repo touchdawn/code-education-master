@@ -55,7 +55,36 @@
               v-model="keyword" @custom="searchClicked()"></u-search>
 
 <!--推荐分类-->
-  <h-rec-cate></h-rec-cate>
+    <h-rec-cate></h-rec-cate>
+
+    <view class="px-20 d-flex j-sb flex-wrap" style="margin-top: 40rpx;">
+      <!--    <text>{{ restLessonList2 }}787</text>-->
+      <view v-for="(i,index) in restLessonList" class="shadow"
+            style="border-top-right-radius: 10rpx; border-top-left-radius: 10rpx;
+              width: 345rpx; margin-bottom: 30rpx;" @click="listItemClicked(index)" >
+        <!--          <view class="">-->
+        <image :src="addQiniuUrl(i.imgUrl)"
+               style="height: 220rpx; width: 400rpx"></image>
+        <view class="px-10">
+          <view class="u-line-1 font-weight black-color" style="font-size: 28rpx; margin-top: 10rpx;">{{ i.lessonName }}</view>
+          <view class="u-line-1 gray-color" style="font-size: 24rpx; margin-bottom: 15rpx;">{{i.courseIntroduction}}</view>
+        </view>
+
+<!--        <view class="d-flex j-sb px-20" style="margin-top: 5rpx;">-->
+<!--          <view class="d-flex a-end">-->
+<!--            <h-pprice></h-pprice>-->
+<!--            <h-oprice></h-oprice>-->
+<!--          </view>-->
+<!--        </view>-->
+<!--        <u-icon name="shopping-cart" color="#1bbf80" size="36" style=""></u-icon>-->
+
+
+        <!--        </view>-->
+      </view>
+    </view>
+
+
+
 
   <h-lessons-list></h-lessons-list>
 
@@ -103,7 +132,9 @@
     data() {
 			return {
         lessonList:[],
+        restLessonList:[],
         lessonImgList:[],
+        swiperNumber:4,
         userDt:{},
         msg:0,
         nowPage: 0,
@@ -168,7 +199,7 @@
 
       // this.userDt = JSON.parse(window.localStorage.getItem("userLocalData"))
       uni.request({
-        url:global.commonLocalServer+"/lesson/getRandLessons/" + 4,
+        url:global.commonLocalServer+"/lesson/getRandLessons/" + 100,
         method:"GET",
         header:{
           "content-type":"application/json",
@@ -176,11 +207,24 @@
         },
         success:function(res){
           that.lessonList = res.data.data
-          for(var i=0; i<that.lessonList.length;i++){
-            that.lessonImgList.push(global.storageUrl + that.lessonList[i].imgUrl)
+          for(var i=0; i < that.swiperNumber; i++){
+            // for(var i=0; i<that.lessonList.length;i++){
+              that.lessonImgList.push(global.storageUrl + that.lessonList[i].imgUrl)
           }
+          that.restLessonList = that.lessonList.splice(that.swiperNumber + 1) //前四个做轮播图，后面的添加到列表里
+          console.log(that.restLessonList)
+
+          // try {
+          //   uni.setStorageSync('restLessonList', that.restLessonList);
+          // } catch (e) {
+          //   // error
+          // }
         }
       })
+    },
+
+    onLoad(){
+      console.log('index loaded')
     },
 
     methods: {
@@ -194,13 +238,25 @@
           that.keyword = ''
         }
       },
-
+      addQiniuUrl(input){
+        // console.log(global.storageUrl + input)
+        return global.storageUrl + input
+      },
       swiperClicked(index){
         console.log("链接课程ID:")
         console.log(this.lessonList[index])
         console.log(this.lessonList[index].lessonId)
         uni.navigateTo({
-          url:'/pages/Lesson/LessonInfo'+"?LessonId="+this.lessonList[index].lessonId + "&LessonName="+this.lessonList[index].lessonName
+          url:'/pages/Lesson/LessonInfo'+"?LessonId="+this.lessonList[index].lessonId + "&LessonName="+this.lessonList[index].lessonName.toString()
+        })
+      },
+
+      listItemClicked(index){
+        console.log("链接课程ID:")
+        console.log(this.restLessonList[index])
+        console.log(this.restLessonList[index].lessonId)
+        uni.navigateTo({
+          url:'/pages/Lesson/LessonInfo'+"?LessonId="+this.restLessonList[index].lessonId + "&LessonName="+this.restLessonList[index].lessonName.toString()
         })
       },
       rightClick() {

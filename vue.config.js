@@ -5,11 +5,11 @@ module.exports = {
         disableHostCheck: true
     }
         // devServer:{
-        //     port:'8083',
+        //     port:'8081',
         //     disableHostCheck:true,
         //     proxy:{
         //         '/dpc':{
-        //             target:'http://localhost:8083',
+        //             target:'http://localhost:8081',
         //             changeOrigin:true,
         //             pathRewrite:{
         //                 '^/dpc': ''

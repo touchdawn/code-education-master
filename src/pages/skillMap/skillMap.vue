@@ -1,7 +1,7 @@
 <template>
   <view style="background-color: #f2f2f2;padding-top: 10rpx;" >
 <!--    <YSteps lineNum='0' color='#fff' backgroundColor='#000fff' :infoList='list'></YSteps>-->
-    <view class="bg">
+    <view class="bg" :style="getStyle()">
       <view class="steps">
         <view class="steps_item" v-for="(i, index) in list">
           <view class="s_r">
@@ -118,6 +118,11 @@ export default {
       // console.log(global.storageUrl + input)
       return global.storageUrl + input
     },
+
+    getStyle(){
+      let bgImgStr = global.storageUrl + "python_dbdb.png"
+      return 'background-image: url(' +  bgImgStr +')' ;
+    }
   }
 }
 </script>
@@ -130,6 +135,10 @@ page {
 .bg {
   margin: 20upx 0;
   background-color: #f2f2f2;
+  //background-image: url('http://r8otjafce.bkt.clouddn.com/python_dbdb.png');
+  background-position:center  center;
+  background-attachment:fixed;
+  background-repeat: no-repeat;
   display: flex;
 }
 

@@ -107,6 +107,13 @@
                       @click="chatClicked()"
                       name="chat"  size="28">
                   </u-icon>
+                  <text class="text-sm"
+                        style="color:#A4A9B2;font-size: 40rpx;"> | </text>
+                  <u-icon
+                      @click="homeworkClicked()"
+                      name="order"  size="28">
+
+                  </u-icon>
                 </view>
               </view>
             </view>
@@ -460,6 +467,11 @@ export default {
     this.pageHeight = windowHeight / windowWidth * 750;
   },
   methods:{
+    homeworkClicked(){
+      uni.navigateTo({
+        url:'/pages/teacher/homework/allHomework'+"?courseId="+this.lessonId
+      })
+    },
     test3ee(that){
       this.$u.toast(
           "添加成功!"

@@ -4,13 +4,35 @@
 	},
 
 	"pages": [
-
-
 		{
 			"path": "pages/login/login",
 			"style": {
 				"navigationStyle": "custom",
 				"navigationBarTextStyle": "white"
+			}
+		},
+
+
+		{
+			"path": "pages/teacher/homework/allHomework",
+			"style": {
+				"navigationBarTitleText": "作业"
+			}
+		},
+
+
+		{
+			"path": "pages/student/homework/doHomework",
+			"style": {
+				"navigationBarTitleText": "作业"
+			}
+		},
+
+
+		{
+			"path": "pages/teacher/homework/addHomework",
+			"style": {
+				"navigationBarTitleText": "添加作业"
 			}
 		},
 

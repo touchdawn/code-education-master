@@ -4,6 +4,7 @@
 	},
 
 	"pages": [
+
 		{
 			"path": "pages/login/login",
 			"style": {
@@ -12,6 +13,12 @@
 			}
 		},
 
+		{
+			"path": "pages/student/homework/readHomework",
+			"style": {
+				"navigationBarTitleText": "查看作业"
+			}
+		},
 
 		{
 			"path": "pages/teacher/homework/allHomework",

@@ -30,8 +30,10 @@
         <view v-if="m.id === 0">
           <view class="padding-lr padding-tb-sm" style="height: 230rpx">
             <view class="margin-top-xs">
-              <text style="font-size:32rpx; margin-bottom: 40rpx; font-size: 40rpx;">{{detail.courseName}}</text>
-<!--              <view class="uni-row">-->
+<!--              <text style="font-size:32rpx; margin-bottom: 40rpx; font-size: 40rpx;">{{detail.courseName}}</text>-->
+              <u--text  style="margin-bottom: 10rpx;" :text="detail.courseName" size="20" lineHeight="30"></u--text>
+
+              <!--              <view class="uni-row">-->
 <!--                <my-rate :score="4"></my-rate>-->
 <!--                <text class="text-df"-->
 <!--                      style="color:#70788C;margin-left:5rpx">5分</text>-->
@@ -61,10 +63,10 @@
 <!--                    <text class="text-df margin-left-sm" style="display:inline">{{detail.teacherName}}</text>-->
 <!--                  </view>-->
 <!--                </view>-->
-                <view class="uni-row align-center" style="height: 80rpx; width: 100%">
+                <view class="uni-row align-center" style="height: 80rpx; width: 400rpx">
                   <image
                          :src="getTeacherAvatar()"
-                         style="height: 80rpx; width: 100rpx; border-radius: 100rpx; margin-right: 20rpx;" />
+                         style="height: 80rpx; width: 80rpx; border-radius: 100rpx; margin-right: 20rpx;" />
                   <view  style="width:308rpx;">
                     <text class="text-lg"
                           style="color:#70788C;height:40rpx">{{detail.teacherName}}</text>
@@ -92,7 +94,7 @@
 <!--                <text class="margin-left-xs"-->
 <!--                      style="font-size:50rpx;color:#e13b29;">100</text>-->
 <!--              </view>-->
-              <view class="flex-sub align-end">
+              <view class="flex-sub align-end" >
                 <!--                    <my-rate :score="comt.id"></my-rate>-->
                 <view class="uni-row align-center margin-top-xs">
                   <text class="text-sm"
@@ -124,7 +126,8 @@
             <view style="display:flex;">
               <text class="text-xl" style="margin-bottom: 20rpx;">课程介绍</text>
             </view>
-            <text class="text-lg">{{detail.introduction}}</text>
+<!--            <text class="text-lg">{{detail.introduction}}</text>-->
+            <u--text class="text-lg" :text="detail.introduction" lineHeight="30" size="17"></u--text>
           </view>
         </view>
 
@@ -138,8 +141,7 @@
                       class="uni-row margin-left u-border-bottom align-center" style="height:100rpx;">
 <!--                  <image :src="chapterIcon(c)" style="width: 40rpx;height: 40rpx;"></image>-->
                   <text class="flex-sub margin-left-xs margin-right text-df"
-                        :class="'text-gray'"
-                        :style=" '#1CBBB4'">{{c.TITLE}}</text>
+                        >{{c.TITLE}}</text>
                   <text v-if="true" class="iconfont text-df text-green"
                         style="height:90rpx;line-height:90rpx;width:80rpx;">免费</text>
                 </view>

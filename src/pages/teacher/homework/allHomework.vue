@@ -9,7 +9,7 @@
 <!--        <image class="u-border-radius flex-shrink " @click="cardClicked(item,index)"-->
 <!--               :src="item.senderAvatar" style="width: 100rpx;height: 100rpx; margin-left: 20rpx; margin-right: 40rpx;"></image>-->
 <!--      </view>-->
-      <view class="d-flex flex-column  " style="padding-right: 10rpx;">
+      <view class="d-flex flex-column  " style="padding-right: 10rpx; width: 900rpx">
         <view style="margin-top: 10rpx; position: relative" @click="cardClicked(item,index)">
 
           <view class="u-line-1" style="font-size: 32rpx; ">
@@ -19,13 +19,15 @@
           </view>
 <!--          <view class="u-line-1 " >{{item.senderNickName}}</view>-->
         </view>
-        <view class="d-flex  align-center uni-row margin-top-xs">
+        <view class=" margin-top-xs">
           <text class="gray-color" style="font-size: 26rpx" >{{item.createAt}}</text>
-          <!--            <view class="a-end">-->
-          <!--              <u-icon name="trash" style="position: absolute; right: 40rpx; margin-bottom: 20rpx;"-->
-          <!--                      @click = deleteFav(item)>-->
-          <!--              </u-icon>-->
-          <!--            </view>-->
+<!--          <view class="a-end">-->
+          <text style="font-size: 30rpx; margin-left: 57%;" v-if="item.doneFlag === '0'">
+            待完成</text>
+          <text style="font-size: 30rpx; margin-left: 22%; color: #1aad16"
+                v-if="item.doneFlag === '1'" >
+            {{timeTransfer(item.doneTime)}}已完成</text>
+<!--          </view>-->
         </view>
       </view>
     </view>
@@ -93,9 +95,15 @@ export default {
   methods:{
     cardClicked(item,index){
       console.log(item)
-      uni.navigateTo({
-        url: '/pages/student/homework/doHomework' + '?hwId=' + item.id
-      })
+      if(item.doneFlag === '0'){
+        uni.navigateTo({
+          url: '/pages/student/homework/doHomework' + '?hwId=' + item.id
+        })
+      } else {
+        uni.navigateTo({
+          url: '/pages/student/homework/readHomework' + '?hwId=' + item.id + '&userId=' + this.userDt.id
+        })
+      }
     },
     addNewHomeworkClicked(){
       uni.navigateTo({
@@ -105,7 +113,7 @@ export default {
     getHwList(){
       let that = this
       uni.request({
-        url:global.commonLocalServer +  '/homework/getHomeworkByCourseId/'+this.courseId,
+        url:global.commonLocalServer +  '/homework/getHomeworkByCourseId/'+this.courseId + '/' + that.userDt.id,
         header:{token:that.userDt.token},
         method:'GET',
         success:function (res){
@@ -125,6 +133,31 @@ export default {
           that.authority = res.data.data
         }
       })
+    },
+    timeTransfer(str){
+      var n = parseInt(str);
+      var D = new Date(n);
+      var year = D.getFullYear();//四位数年份
+
+      var month = D.getMonth()+1;//月份(0-11),0为一月份
+      month = month<10?('0'+month):month;
+
+      var day = D.getDate();//月的某一天(1-31)
+      day = day<10?('0'+day):day;
+
+      var hours = D.getHours();//小时(0-23)
+      hours = hours<10?('0'+hours):hours;
+
+      var minutes = D.getMinutes();//分钟(0-59)
+      minutes = minutes<10?('0'+minutes):minutes;
+
+      // var seconds = D.getSeconds();//秒(0-59)
+      // seconds = seconds<10?('0'+seconds):seconds;
+      // var week = D.getDay();//周几(0-6),0为周日
+      // var weekArr = ['周日','周一','周二','周三','周四','周五','周六'];
+
+      var now_time = year+'-'+month+'-'+day+' '+hours+':'+minutes;
+      return now_time;
     },
     noResult() {
       return global.storageUrl + 'noHomework.png'

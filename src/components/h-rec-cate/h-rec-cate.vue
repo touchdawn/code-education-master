@@ -24,7 +24,7 @@
       <!--      </view>-->
 
       <view class="bg-white-color shadow u-border-radius d-flex flex-wrap j-sa"
-            style="width: 710rpx;height: 350rpx;margin: -175rpx auto 30rpx;">
+            style="width: 710rpx;height: 300rpx;margin: -175rpx auto 30rpx;">
         <!--        <view class="" v-for="(i,index) in 4">-->
         <view class="h-100 d-flex flex-column j-sb py-20 a-center"
               style="flex: 1; height: 300rpx; border-right: 1rpx solid #CCCCCC" @click="viewClicked"

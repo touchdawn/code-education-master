@@ -10,7 +10,7 @@
     <view class="content">
       <view class="title" style="margin-bottom: 50rpx;">注册</view>
 <!--      <u-form ref="form1" :model="registerData" :ref="rules">-->
-        <u-form ref="form1" :rules="rules" :model="registerData">
+        <u-form ref="form1" :rules="rules" :model="registerData"  label-width="60">
         <u-form-item label="姓名" borderBottom prop="name"  >
           <u-input v-model="registerData.name" placeholder="请输入姓名" required="true" />
         </u-form-item>
@@ -27,7 +27,7 @@
         <u-form-item label="密码" prop="password">
           <u-input type="password" v-model="registerData.password" placeholder="请输入密码" />
         </u-form-item>
-        <u-form-item label="确认密码"  prop="passwordConfirm">
+        <u-form-item label="确认"  prop="passwordConfirm">
           <u-input type="password" v-model="registerData.passwordConfirm" placeholder="确认密码" />
         </u-form-item>
       </u-form>

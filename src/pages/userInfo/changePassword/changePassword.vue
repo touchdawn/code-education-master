@@ -5,11 +5,11 @@
 <!--      <view class="title" style="margin-bottom: 50rpx;">欢迎登录</view>-->
       <u-form ref="form1"  :model="userData">
 
-        <u-form-item label="密码" prop="oldPassword">
+        <u-form-item label="密码" prop="oldPassword"  label-width="60">
           <u-input type="password" v-model="userData.oldPassword" placeholder="请输入密码" />
         </u-form-item>
 
-        <u-form-item label="新密码" prop="newPassword">
+        <u-form-item label="新密码" prop="newPassword" label-width="60">
           <u-input type="password" v-model="userData.newPassword" placeholder="新密码" />
         </u-form-item>
 

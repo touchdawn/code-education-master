@@ -1,6 +1,6 @@
 <template>
   <!--    推荐分类-->
-  <view style="margin-top: 30rpx;">
+  <view style="margin-top: 10rpx;">
     <view>
       <view class="d-flex j-sb px-20" style="height: 340rpx;width: 100%;background-color: #1BBF80">
         <view class="white-color d-flex flex-column" >

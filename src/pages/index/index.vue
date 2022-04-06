@@ -24,7 +24,7 @@
       ></u-swiper>
     </view>
 <!--    通知组件-->
-    <view style="margin-top: 20rpx;">
+    <view style="margin-top: 10rpx; margin-bottom: 10rpx;">
       <u-notice-bar :text="text1"></u-notice-bar>
     </view>
 <!--    <view>{{admin.data.name}}</view>-->

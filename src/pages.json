@@ -6,6 +6,13 @@
 	"pages": [
 
 		{
+			"path": "pages/teacher/homework/homeworkStatistics",
+			"style": {
+				"navigationBarTitleText": "作业统计"
+			}
+		},
+
+		{
 			"path": "pages/login/login",
 			"style": {
 				"navigationStyle": "custom",

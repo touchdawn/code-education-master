@@ -1,62 +1,63 @@
 <template>
-<view>
-  <u-tabs :list="list1" @click="click"></u-tabs>
+  <view>
+    <u-tabs :list="list1" @click="click"></u-tabs>
 
-  <view class="bg-white"  v-if="currentIndex === i" v-for="(m, i) in list1" :key="i">
-    <view v-if="now === 0">
-      <view class="px-20" style="margin-top: 30rpx;">
-        <view v-for="(item,index) in passedList" class="shadow u-border-radius d-flex a-center"
-              style="height: 200rpx; margin-bottom: 30rpx;" >
+    <view class="bg-white"  v-if="currentIndex === i" v-for="(m, i) in list1" :key="i">
+      <view v-if="now === 0">
+        <view class="px-20" style="margin-top: 30rpx;">
+          <view v-for="(item,index) in passedList" class="shadow u-border-radius d-flex a-center"
+                style="height: 200rpx; margin-bottom: 30rpx;" >
 
-          <image class="u-border-radius flex-shrink mx-20" @click="cardClicked(item)"
-                 :src="item.imgUrl" style="width: 260rpx;height: 160rpx;"></image>
+            <image class="u-border-radius flex-shrink mx-20" @click="cardClicked(item)"
+                   :src="item.imgUrl" style="width: 260rpx;height: 160rpx;"></image>
 
-          <view style="padding-right: 10rpx;height: 80%">
-            <view style="margin-top: 10rpx;" @click="cardClicked(item)">
-              <view class="u-line-1" style="font-size: 32rpx; margin-bottom: 5rpx;">{{item.lessonName}}</view>
-              <view class="u-line-1 gray-color" style="font-size: 26rpx;">{{item.courseIntroduction}}</view>
-            </view>
-<!--              <view class="d-flex a-end" @click="cardClicked(item)">-->
-<!--                <text style="margin-bottom: 10rpx;margin-right: 110rpx;">{{item.createAt}}</text>-->
-<!--              </view>-->
+            <view style="padding-right: 10rpx;height: 80%;width: 100%;">
+              <view style="margin-top: 10rpx;" @click="cardClicked(item)">
+                <view class="u-line-1" style="font-size: 32rpx; margin-bottom: 5rpx; padding-left: 2%;text-overflow: ellipsis;
+">{{item.lessonName}}</view>
+                <view class="u-line-1 gray-color" style="font-size: 26rpx;padding-left: 2%;">{{item.courseIntroduction}}</view>
+              </view>
+              <!--              <view class="d-flex a-end" @click="cardClicked(item)">-->
+              <!--                <text style="margin-bottom: 10rpx;margin-right: 110rpx;">{{item.createAt}}</text>-->
+              <!--              </view>-->
               <view style="display:flex;">
                 <u-button type="success" size="mini" @click="editHomeworkClicked(item,1)"
                           style="margin-top: 30rpx; width: 130rpx;" text="查看作业"></u-button>
                 <u-button type="primary" size="mini" @click="editCourseClicked(item)"
                           style="margin-top: 30rpx; width: 130rpx; margin-left: 5%" text="编辑教学"></u-button>
               </view>
+            </view>
           </view>
         </view>
       </view>
-    </view>
 
-    <view v-if="now === 1">
-      <view class="px-20" style="margin-top: 30rpx">
-        <view v-for="(item,index) in unpassedList" class="shadow u-border-radius d-flex a-center"
-              style="height: 200rpx;padding: 10rpx; margin-bottom: 30rpx;">
-          <image class="u-border-radius flex-shrink mx-20"
-                 :src="item.imgUrl" style="width: 260rpx;height: 160rpx;"></image>
-          <view class="d-flex flex-column j-sb " style="padding-right: 10rpx;height: 80%">
-            <view style="margin-top: 10rpx;">
-              <view class="u-line-1" style="font-size: 32rpx; margin-bottom: 5rpx;">{{item.lessonName}}</view>
-              <view class="u-line-1 gray-color" style="font-size: 26rpx;">{{item.courseIntroduction}}</view>
-            </view>
-            <view class="d-flex  w-100">
-              <view class="d-flex a-end">
-                <text style="margin-bottom: 10rpx;margin-right: 110rpx;">{{item.createAt}}</text>
+      <view v-if="now === 1">
+        <view class="px-20" style="margin-top: 30rpx">
+          <view v-for="(item,index) in unpassedList" class="shadow u-border-radius d-flex a-center"
+                style="height: 200rpx;padding: 10rpx; margin-bottom: 30rpx;">
+            <image class="u-border-radius flex-shrink mx-20"
+                   :src="item.imgUrl" style="width: 260rpx;height: 160rpx;"></image>
+            <view class="d-flex flex-column j-sb " style="padding-right: 10rpx;height: 80%">
+              <view style="margin-top: 10rpx;">
+                <view class="u-line-1" style="font-size: 32rpx; margin-bottom: 5rpx;">{{item.lessonName}}</view>
+                <view class="u-line-1 gray-color" style="font-size: 26rpx;">{{item.courseIntroduction}}</view>
               </view>
-<!--              <view>-->
-<!--                <u-button type="primary" size="mini" @click="editCourseClicked(item,2)"-->
-<!--                          style="margin-top: 30rpx; width: 130rpx;" text="编辑教学"></u-button>-->
-<!--              </view>-->
+              <view class="d-flex  w-100">
+                <view class="d-flex a-end">
+                  <text style="margin-bottom: 10rpx;margin-right: 110rpx;">{{item.createAt}}</text>
+                </view>
+                <!--              <view>-->
+                <!--                <u-button type="primary" size="mini" @click="editCourseClicked(item,2)"-->
+                <!--                          style="margin-top: 30rpx; width: 130rpx;" text="编辑教学"></u-button>-->
+                <!--              </view>-->
+              </view>
             </view>
           </view>
         </view>
       </view>
     </view>
-  </view>
 
-</view>
+  </view>
 </template>
 
 <script>

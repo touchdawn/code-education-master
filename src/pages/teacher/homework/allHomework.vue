@@ -22,10 +22,10 @@
         <view class=" margin-top-xs">
           <text class="gray-color" style="font-size: 26rpx" >{{item.createAt}}</text>
 <!--          <view class="a-end">-->
-          <text style="font-size: 30rpx; margin-left: 57%;" v-if="item.doneFlag === '0'">
+          <text style="font-size: 30rpx; margin-left: 57%;" v-if="item.doneFlag === '0' && authority==='readOnly' ">
             待完成</text>
           <text style="font-size: 30rpx; margin-left: 22%; color: #1aad16"
-                v-if="item.doneFlag === '1'" >
+                v-if="item.doneFlag === '1' && authority==='readOnly'" >
             {{timeTransfer(item.doneTime)}}已完成</text>
 <!--          </view>-->
         </view>
@@ -95,15 +95,22 @@ export default {
   methods:{
     cardClicked(item,index){
       console.log(item)
-      if(item.doneFlag === '0'){
+      if (this.authority==='readOnly'){
+        if(item.doneFlag === '0'){
+          uni.navigateTo({
+            url: '/pages/student/homework/doHomework' + '?hwId=' + item.id
+          })
+        } else {
+          uni.navigateTo({
+            url: '/pages/student/homework/readHomework' + '?hwId=' + item.id + '&userId=' + this.userDt.id
+          })
+        }
+      } else if (this.authority==='creator') {
         uni.navigateTo({
-          url: '/pages/student/homework/doHomework' + '?hwId=' + item.id
-        })
-      } else {
-        uni.navigateTo({
-          url: '/pages/student/homework/readHomework' + '?hwId=' + item.id + '&userId=' + this.userDt.id
+          url: '/pages/teacher/homework/homeworkStatistics' + '?hwId=' + item.id
         })
       }
+
     },
     addNewHomeworkClicked(){
       uni.navigateTo({

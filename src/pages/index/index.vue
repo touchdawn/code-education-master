@@ -25,7 +25,7 @@
     </view>
 <!--    通知组件-->
     <view style="margin-top: 10rpx; margin-bottom: 10rpx;">
-      <u-notice-bar :text="text1"></u-notice-bar>
+      <u-notice-bar :text="text1" @click="goToRecent()"></u-notice-bar>
     </view>
 <!--    <view>{{admin.data.name}}</view>-->
 
@@ -131,6 +131,7 @@
     components: {TabBar, HLessonsListRow, HOprice, HRecTitle, HLessonsList, HRecCate, HPprice},
     data() {
 			return {
+        latestCourseId:-1,
         lessonList:[],
         restLessonList:[],
         lessonImgList:[],
@@ -197,6 +198,7 @@
         }
       }catch(e){}
 
+      this.getLocalUserData()
       // this.userDt = JSON.parse(window.localStorage.getItem("userLocalData"))
       uni.request({
         url:global.commonLocalServer+"/lesson/getRandLessons/" + 100,
@@ -228,6 +230,56 @@
     },
 
     methods: {
+      goToRecent(){
+        if (this.latestCourseId === -1){
+          console.log("没有")
+        } else {
+          uni.navigateTo({
+            url:'/pages/Lesson/LessonInfo'+"?LessonId="+this.latestCourseId + "&LessonName=ggg"
+          })
+          uni.$emit('videoAutoStart',{msg:'断点开始'})
+        }
+      },
+
+      test68(){
+        console.log(686868)
+      },
+
+      getLocalUserData() {
+        var that = this
+        //获取后端数据，若没有则创建
+        uni.request({
+          url: global.commonLocalServer + "/userData/getUserData/" + that.userDt.id,
+          method: 'GET',
+          header: {token: that.userDt.token},
+          success: function (res) {
+            console.log(res)
+            that.latestCourseId = res.data.data.latestCourseId
+            console.log(that.latestCourseId)
+            //如果后端有数据this.latestCourseId
+            if (res.data.flag === 'T') {
+              try {
+                //存在本地中
+                uni.setStorageSync('userCourseCurrentTime', res.data.data.userData);
+                that.userServerStorageId = res.data.data.id
+                console.log("存后端localData成功")
+              } catch (e) {
+                console.log("error")
+              }
+            } else {
+              console.log("userCourseCurrentTime不存在，开始创建")
+              try {
+                // uni.setStorageSync('userCourseCurrentTime',JSON.stringify({'userId':this.userDt.id}));
+                uni.setStorageSync('userCourseCurrentTime', '');
+                console.log("userCourseCurrentTime空创建成功")
+              } catch (e) {
+                console.log("error")
+              }
+            }
+          }
+        })
+      },
+
       searchClicked(){
         if (this.keyword !== '')
         {

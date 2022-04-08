@@ -48,6 +48,7 @@ export default {
   data(){
     return {
       userDt:{},
+      refreshUserData:false,
       msg:2,
       displayAvatar:"",
       userData:{
@@ -58,8 +59,33 @@ export default {
     }
   },
 
+  watch:{
+    refreshUserData(newVal,oldVal){
+      console.log('new' + newVal)
+      if (newVal){
+        this.refreshData()
+      }
+    }
+  },
+
+  // updated : function(){
+  //   console.log("898697")
+  // },
+  // computed: {
+  //   // 计算属性的 getter
+  //   refreshUserData: function () {
+  //     console.log('new' )
+  //     this.refreshData()
+  //   }
+  // },
+
   onLoad(){
     console.log("loaded")
+    var that = this
+    uni.$on('refreshUserData',function(data){
+      console.log('caught')
+      that.refreshUserData = true
+    })
   },
   created() {
     // this.userDt = JSON.parse(window.localStorage.getItem("userLocalData"))
@@ -75,21 +101,29 @@ export default {
     // this.userData.userName=userDt.data.name
     // this.userData.nickName=userDt.data.nickName
     // this.userData.phone=userDt.data.phone
-    let that = this
     // console.log(that.userDt.token)
-    uni.request({
-      url: global.commonLocalServer + '/users/getById/' + that.userDt.id,
-      method:"GET",
-      header:{'token':that.userDt.token},
-      success: function (res){
-        console.log(res)
-        that.userData = res.data.data
-        that.displayAvatar = global.storageUrl +  res.data.data.avatar
-      }
-    })
+    this.requestUserData()
   },
   methods: {
+    refreshData(){
+      console.log('success')
+      this.userData = {}
+      this.requestUserData()
+    },
 
+    requestUserData(){
+      let that = this
+      uni.request({
+        url: global.commonLocalServer + '/users/getById/' + that.userDt.id,
+        method:"GET",
+        header:{'token':that.userDt.token},
+        success: function (res){
+          console.log(res)
+          that.userData = res.data.data
+          that.displayAvatar = global.storageUrl +  res.data.data.avatar
+        }
+      })
+    },
 
     showLocalStorage(){
       try{

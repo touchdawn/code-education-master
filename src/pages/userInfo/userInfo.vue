@@ -128,6 +128,10 @@ export default {
     })
   },
 
+  onBackPress(){
+    console.log('back')
+    uni.$emit('refreshUserData',{msg:'更新'})
+  },
 
   methods: {
     submitClicked(){

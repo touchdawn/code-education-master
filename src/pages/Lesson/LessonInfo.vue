@@ -10,7 +10,9 @@
 <!--    <button @click="test3ee">3ee</button>-->
     <u-navbar title="课程详情" :isFixed="false"></u-navbar>
     <view v-if="detail">
-      <video id="myVideo" @play="onPlay" @pause="onPause" autoplay page-gesture
+      <video id="myVideo" @play="onPlay" @pause="onPause" @timeupdate="recordCurrentTime"
+             autoplay
+             page-gesture
              enable-progress-gesture
              enable-play-gesture
              :initial-time="initialTime"
@@ -133,6 +135,7 @@
 
 <!--目录-->
         <view style="background-color: #f1f1f1;width: 750rpx;" v-if="m.id === 1">
+          <u-button @click="changeToCurrent"> 从之前断点开始 </u-button>
           <view v-for="(n,j) in detail.chapter" :key="j">
             <text class="padding-left text-df" style="height:90rpx;line-height:90rpx;">{{n.TITLE}}</text>
             <view class="bg-white">
@@ -156,7 +159,7 @@
           <view class="image-content" style="align-items: center; " v-if="commentList.length === 0">
             <image style="width: 300px; height: 200px; margin-top: 15%;" :src="noComment()"
                    @error="imageError"></image>
-            <text style="color: #8f8f8f;  margin-top:5%; font-size: 40rpx;">添加第一条评论吧~</text>
+            <text style="color: #8f8f8f;  margin-top:5%; font-size: 40rpx;"  @click="test3ee()">添加第一条评论吧~</text>
           </view>
 
           <view class="padding-top-sm padding-lr-sm" style="margin-bottom: 150rpx;">
@@ -333,6 +336,7 @@
   import Vue from 'vue';
   import myRate from '@/components/my-ui/my-rate/my-rate';
   import global from "@/common/common";
+  import {awint} from "@/components/jo-markdown/parse/parse2/entities/maps/entities";
 
 export default {
   components: {
@@ -341,7 +345,10 @@ export default {
   name: "LessonInfo",
   data(){
     return{
-      initialTime:10,
+      initialTime:0,
+      doIt:false,
+      currentSectionId:-1,
+      userServerStorageId:-1,
       commentFocus:false,
       videoOn:false,
       videoUrl:'',
@@ -349,6 +356,7 @@ export default {
       lessonId:0,
       lessonName:"",
       userDt:{},
+      currentTime:0,
       background: {
         backgroundImage: 'linear-gradient(45deg, rgb(28, 187, 180), rgb(141, 198, 63))'
       },
@@ -430,17 +438,30 @@ export default {
       page: 1
     }
   },
+
+  onBackPress(){
+    console.log('back')
+    this.setLocalUserData()
+    // console.log(JSON.parse(currentPoint))
+  },
+
   created() {
     this.currentIndex = 0
     // this.userDt = JSON.parse(window.localStorage.getItem("userLocalData"))
-    try{
+    //获取token
+    try {
       const value = uni.getStorageSync('userLocalData');
-      if(value){
-        // console.log(value)
+      if (value) {
         this.userDt = JSON.parse(value)
       }
-    }catch(e){}
-    console.log(this.userDt)
+
+      //删除本地userCourseCurrentTime
+      this.refreshUserData()
+
+      //从后端获取
+      this.getLocalUserData()
+    } catch (e) {
+    }
     // this.getComment()
     this.getAllData();
     if (this.currentIndex === 2) {
@@ -449,17 +470,35 @@ export default {
       this.listHeight = uni.upx2px(this.pageHeight) - uni.upx2px(100);
     }
   },
+
+  watch:{
+    doIt(newVal,oldVal){
+      console.log('doIt!')
+      if(newVal){
+        this.test3ee()
+        // this.doIt = false
+      }
+    }
+  },
+
   onLoad (e) { //option为object类型，会序列化上个页面传递的参数
     console.log(e)
     var that = this
-    uni.$on('sendMessageSuccess',function(data){
-      // that.$u.toast("发送成功")
-      that.test3ee(that)
-      this.$u.toast(
-          "添加成功!"
-      )
-      // console.log(222)
+    // uni.$on('sendMessageSuccess',function(data){
+    //   // that.$u.toast("发送成功")
+    //   that.test3ee(that)
+    //   this.$u.toast(
+    //       "添加成功!"
+    //   )
+    // })
+
+    uni.$on('videoAutoStart',function(data){
+      console.log('caught1')
+      that.doIt = true
+      // that.currentIndex = 1
     })
+
+
     this.lessonId = e.LessonId
     // this.LessonName = e.LessonName
     const {
@@ -468,6 +507,7 @@ export default {
     } = uni.getSystemInfoSync();
     this.pageHeight = windowHeight / windowWidth * 750;
   },
+
   methods:{
     homeworkClicked(){
       uni.navigateTo({
@@ -475,9 +515,158 @@ export default {
       })
     },
     test3ee(that){
+      console.log(999)
       this.$u.toast(
           "添加成功!"
       )
+    },
+
+    changeToCurrent(){
+      // const currentPoint = uni.getStorageSync('userCourseCurrentTime')
+      // var map=JSON.parse(currentPoint);
+      console.log(111)
+      if (this.currentSectionId === -1){
+        console.log("没有找到之前存的断点！")
+        return null
+      } else {
+        let URL = this.findVideoBySectionId(this.currentSectionId)
+        console.log(URL)
+        this.videoUrl = global.storageUrl + URL
+        console.log(this.videoUrl)
+        this.initialTime = this.currentTime
+        this.imgOn = false
+        this.videoOn = true
+      }
+    },
+
+    getLocalUserData(){
+      var that = this
+
+      //获取后端数据，若没有则创建
+       uni.request({
+          url:global.commonLocalServer + "/userData/getUserData/" + that.userDt.id,
+         method:'GET',
+         header:{token:that.userDt.token},
+         success: function (res){
+           console.log(res)
+           //如果后端有数据
+           if (res.data.flag === 'T'){
+             try {
+               //存在本地中
+               uni.setStorageSync('userCourseCurrentTime',res.data.data.userData);
+               that.userServerStorageId = res.data.data.id
+               console.log("存后端localData成功")
+             } catch (e) {
+               console.log("error")
+             }
+           } else {
+             console.log("userCourseCurrentTime不存在，开始创建")
+             try {
+               // uni.setStorageSync('userCourseCurrentTime',JSON.stringify({'userId':this.userDt.id}));
+               uni.setStorageSync('userCourseCurrentTime','');
+               console.log("userCourseCurrentTime空创建成功")
+             } catch (e) {
+               console.log("error")
+             }
+           }
+
+           //获取当前断点数据
+           const currentPoint = uni.getStorageSync('userCourseCurrentTime')
+           if (currentPoint !== '' && currentPoint !== null) {
+             let currentSection = JSON.parse(currentPoint)[that.lessonId]
+             console.log(currentSection)
+             if (currentSection !== null && currentSection !== '' && currentSection !== undefined) {
+               that.currentTime = currentSection.currentTime
+               console.log('sectionId:' + currentSection.sectionId)
+               that.currentSectionId = currentSection.sectionId
+             } else { //第一次看这门课的话
+               that.currentTime = 0
+               that.currentSectionId = -1
+               console.log("没找到当前课程的历史记录")
+             }
+           } else { //第一次注册的话
+             that.currentTime = 0
+             that.currentSectionId = -1
+             console.log("没找到用户的历史记录")
+           }
+         }
+       })
+    },
+
+    //传给后端保存
+    setLocalUserData(){
+      var that = this
+      var sendData={}
+      sendData.userId = that.userDt.id
+      sendData.userData = uni.getStorageSync('userCourseCurrentTime')
+      sendData.id = that.userServerStorageId
+      sendData.latestCourseId = that.lessonId
+      uni.request({
+        url:global.commonLocalServer + "/userData/addUserData" ,
+        method:'POST',
+        header:{token:that.userDt.token},
+        data:sendData,
+        success: function (res){
+          console.log(res)
+        }
+      })
+    },
+
+    refreshUserData(){
+      uni.removeStorage({
+         key:'userCourseCurrentTime',
+         success() {
+            console.log('删除成功')
+         }
+      })
+    },
+    //记录当前时间
+    recordCurrentTime(e){
+      // console.log(e)
+      // uni.removeStorage({
+      //   key:'userCourseCurrentTime',
+      //   success() {
+      //     console.log('删除成功')
+      //   }
+      // })
+      // try {
+        const value = uni.getStorageSync('userCourseCurrentTime');
+        if (value === null || value === ''){
+          console.log("userCourseCurrentTime不存在，开始创建")
+          try {
+            uni.setStorageSync('userCourseCurrentTime',JSON.stringify({}));
+            console.log("userCourseCurrentTime创建成功")
+          } catch (e) {
+            console.log("error")
+          }
+        }
+////////////////以上基本不会用到////////////
+        //存用户视频当前信息到本地
+        //参数：{课程ID:{章节ID:X,当前时间:X}}
+      const value1 = uni.getStorageSync('userCourseCurrentTime');
+
+      var map=JSON.parse(value1);
+      var key=this.lessonId.toString();
+      console.log(map)
+      // console.log(value)
+      let userCourseCurrentTime = {
+        "currentTime":e.detail.currentTime,
+        "sectionId":this.currentSectionId
+      }
+      this.currentTime = e.detail.currentTime
+      map[key] = userCourseCurrentTime
+      console.log(map)
+      try {
+            uni.setStorageSync('userCourseCurrentTime', JSON.stringify(map));
+          } catch (e) {
+            console.log("error")
+          }
+        // const value2 = uni.getStorageSync('userCourseCurrentTime');
+        // let ttk = 'courseId:4'
+        // console.log(JSON.parse(value2)[ttk])
+      // } catch (e){
+      //   console.log(e)
+      // }
     },
 
     chatClicked(){
@@ -645,9 +834,11 @@ export default {
       if(c.TYPE === "video"){
         this.imgOn = false
         this.videoOn = true
+        console.log(c)
+        console.log(this.currentIndex)
+        this.currentSectionId = c.ID
         this.videoUrl = global.storageUrl + c.URL
       } else if (c.TYPE ==="MD") {
-        console.log('mdmd')
         uni.navigateTo({
           url:'/pages/Lesson/LessonMarkDown'+"?fileUrl="+c.URL
         })
@@ -664,13 +855,33 @@ export default {
         },
         success:function(res){
           that.detail = res.data.data
-          // console.log(that.detail)
           that.detail.imgUrl = global.storageUrl + that.detail.imgUrl
           that.tabs[2].name = '评价(' + that.detail.totalComment + ")"
-          console.log(that.detail)
         }
       })
     },
+
+    findVideoBySectionId(idInput){
+      let flag = 0 //找到了就为1
+      let res = ""
+      this.detail.chapter.forEach(i=>{
+        console.log(i)
+        i.child.forEach(j=>{
+          if (j.ID === idInput){
+            console.log('当前的视频为'+j.URL)
+            flag = 1
+            res =  j.URL
+          }
+        })
+      })
+      if (flag === 0){
+        console.log("没找到断点数据！")
+        return this.detail.chapter.child[0].URL
+      } else {
+        return res
+      }
+    },
+
 
     addStudyLog() {
       // this.$http.post(this.$api.course.addStudyLog, {
@@ -731,7 +942,8 @@ export default {
     },
 
     onPause() {
-      clearInterval(this.timer);
+      console.log('paused')
+      // clearInterval(this.timer);
     },
 
     noComment(){

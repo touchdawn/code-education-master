@@ -7,46 +7,48 @@
                      :currentPage="page.currentPage" @change="change"></page-pagination>
 
     <view>
-
-      <view style="display:flex; justify-content: center">
+      <view  v-show="!sumEmpty "  style="display:flex; justify-content: center">
         <canvas style="width: 600rpx; height: 600rpx; margin-left: 50rpx;margin-right: 50rpx;" canvas-id="homeownerCanvas" class="homeowner-canvas_charts"></canvas>
       </view>
     </view>
 
-    <u-form  ref="uForm" label-width="80"
+
+    <view  ref="uForm"
              style="border-top: 3rpx solid #bdbdbd; margin-left: 5%;margin-right: 5%;">
 
 <!--      填空题-->
-      <u-form-item :label="'题'+page.currentPage" prop="courseName" label-width="40" v-if="questionList[page.currentPage - 1].type === 'gapFill'">
-        <u-text :text="questionList[page.currentPage - 1].question"   />
-      </u-form-item>
-      <u-form-item label="正确答案：" prop="courseIntro"
-                   v-if="questionList[page.currentPage - 1].type === 'gapFill'">
-        <u--text :text="correctAnswerList[page.currentPage - 1]"/>
-      </u-form-item>
+      <view  v-if="questionList[page.currentPage - 1].type === 'gapFill'" style="margin-top: 5%;margin-bottom: 5%;">
+
+        <u-text :text="'题'+page.currentPage" size="20" style="margin-bottom: 4%;"></u-text>
+        <u-text :text="questionList[page.currentPage - 1].question" size="18" lineHeight="25" />
+      </view>
+      <view  v-if="questionList[page.currentPage - 1].type === 'gapFill'">
+        <u-text :text="'答案'" size="20" style="margin-bottom: 4%;" ></u-text>
+        <u--text :text="correctAnswerList[page.currentPage - 1]" size="18" lineHeight="25" />
+      </view>
 
 
 <!--      选择题-->
-      <u-form-item :label="'题'+page.currentPage" prop="courseName" label-width="40" v-if="questionList[page.currentPage - 1].type === 'select'">
-        <u-text :text="questionList[page.currentPage - 1].question" size="20" />
-      </u-form-item>
-      <u-form  label-width="20" >
-        <u-form-item :label="item.name"
-                     prop="courseName" v-for="(item,index) in questionList[page.currentPage - 1].selectList"
-                     v-if="questionList[page.currentPage - 1].type === 'select'">
+      <view  v-if="questionList[page.currentPage - 1].type === 'select'">
+        <u-text :text="'题'+page.currentPage" size="20" style="margin-top: 5%;margin-bottom: 3%;"></u-text>
+        <u-text :text="questionList[page.currentPage - 1].question" size="20" lineHeight="25"  style="margin-bottom: 5%;"/>
+      </view>
+      <view >
+        <view  v-for="(item,index) in questionList[page.currentPage - 1].selectList" 
+                     v-if="questionList[page.currentPage - 1].type === 'select'" style="display:grid;  grid-template-columns: 550rpx 300rpx;  grid-template-rows: 20rpx 20rpx 20rpx 20rpx; ">
+          <u-text :text="item.name + '.' + item.input" size="18" ></u-text>
 <!--          <u-text :text="item.input" />-->
-          <u-text :text="item.input" />
-          <u-text :text="editSelectItem(item,index)" />
-
-        </u-form-item>
-      </u-form>
+          <u-text :text="editSelectItem(item,index)" size="18"  />
+        </view>
+      </view>
 
 
-      <u-form-item label="正确答案：" prop="courseIntro"  v-if="questionList[page.currentPage - 1].type === 'select' ">
-        <u--text :text="correctAnswerList[page.currentPage - 1]"/>
-      </u-form-item>
+      <view v-if="questionList[page.currentPage - 1].type === 'select' ">
+        <u--text :text="'正确答案：'"  size="20"></u--text>
+        <u--text :text="correctAnswerList[page.currentPage - 1]"  size="18"  style="margin-top: 3%;" />
+      </view>
 
-    </u-form>
+    </view>
 
 
 
@@ -64,6 +66,8 @@ export default {
   data() {
     return {
       userDt:{},
+      hwId:-1,
+      sumEmpty:false,
       page: {
         total: 10,
         pageSize: 10,
@@ -103,6 +107,15 @@ export default {
   onReady(){
     // canvas.canvasGraph('homeownerCanvas',this.data,10)
   },
+  mounted(){
+    console.log('mount')
+  },
+  beforeUpdate() {
+    console.log(233)
+  },
+  onLoad(e){
+    this.hwId = e.hwId
+  },
   created() {
     try{
       const value = uni.getStorageSync('userLocalData');
@@ -117,7 +130,7 @@ export default {
     getstatisticData(){
       let that = this
       uni.request({
-        url:global.commonLocalServer + '/homework/getHwStatistic/' + 4,
+        url:global.commonLocalServer + '/homework/getHwStatistic/' + this.hwId,
         header:{token:that.userDt.token},
         method:'GET',
         success:function (res) {
@@ -139,7 +152,7 @@ export default {
     },
     editSelectItem(item,index){
       // console.log(item)
-      return  "(" + this.selectOptionStatList[index] + "人选择）"
+      return  "(" + this.selectOptionStatList[index] + "人选择)"
     },
     processData(index){
       let correctNum = this.statisticDataList[index].correctNumber
@@ -151,10 +164,29 @@ export default {
       this.data[1].money = correctNum
       this.data[0].value = incorrectValue
       this.data[0].money = incorrectNum
+      console.log('data')
+
       console.log(this.data)
+      console.log(sum)
       this.selectOptionStatList  = JSON.parse(this.statisticDataList[index].allAnswer);
       // console.log(parse)
-      canvas.canvasGraph('homeownerCanvas',this.data,sum)
+      if(sum !== 0){
+        console.log('false')
+        canvas.canvasGraph('homeownerCanvas',this.data,sum)
+        this.sumEmpty = false //弃用
+      } else {
+        let data1 = [
+          {
+            "money": 0,
+            "value": 1,
+            "color": "#afdfe4",
+            "title": "正确"
+          },
+        ]
+        console.log('empty')
+        canvas.canvasGraph('homeownerCanvas',data1,0)
+        this.sumEmpty = false //弃用
+      }
     },
 
     change(currentPage, type) {

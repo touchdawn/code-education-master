@@ -5,7 +5,7 @@ export default{
             //定义起始角度
             let tempAngle=0;
             //定圆心位置
-            let x0=150,y0=150;　　　　　　　//伸出长度
+            let x0=157,y0=150;　　　　　　　//伸出长度
             let outLine = 18;
             PieChart.prototype.init = function(data){
                 this.drawPie(data);
@@ -70,24 +70,25 @@ export default{
                 // 刷新配置项  象限判断 与 对应符号
                 let optionArr=[
                     {
-                        quadrant:outX>x0 && outY<y0,
+                        quadrant:outX>=x0 && outY<=y0,
                         symbol:['+','-','left']
                     },
                     {
-                        quadrant:outX<x0 && outY<y0,
+                        quadrant:outX<=x0 && outY<=y0,
                         symbol:['-','-','right']
                     },
                     {
-                        quadrant:outX<x0 && outY>y0,
+                        quadrant:outX<=x0 && outY>=y0,
                         symbol:['-','+','right']
                     },
                     {
-                        quadrant:outX>x0 && outY>y0,
+                        quadrant:outX>=x0 && outY>=y0,
                         symbol:['+','+','left']
                     }
                 ]
+
                 // 渲染的配置项
-                let {symbol} = optionArr.find(el=>el.quadrant&&el.symbol)
+                let {symbol} = optionArr.find(el=>el.quadrant && el.symbol)
                 // 斜线起始点
                 let slashState = eval(outX+symbol[0]+outLine)
                 // 横线起始点

@@ -14,7 +14,7 @@
           <u-input v-model="loginData.email" placeholder="邮箱" />
         </u-form-item>
         <u-form-item label="密码" prop="password">
-          <u-input type="password" v-model="loginData.password" placeholder="请输入密码" />
+          <u-input type="password" v-model="loginData.password" placeholder="请输入密码"  @confirm="submit" />
         </u-form-item>
       </u-form>
       <u-gap height="30"></u-gap>
@@ -113,7 +113,6 @@ export default {
               } catch (e) {
                 // error
               }
-
               // // #ifdef H5
               // localStorage.setItem('userLocalData', JSON.stringify(res.data.data))
               // // #endif

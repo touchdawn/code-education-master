@@ -6,13 +6,13 @@
 // 定义一些公共的属性和方法
 const httpUrl = 'http://39.105.17.99:8080/'
 
-const storageUrl = 'http://r8otjafce.bkt.clouddn.com/'
+const storageUrl = 'http://ra2q5rhzl.hd-bkt.clouddn.com/'
 // const storageUrl = 'http://r9pcezjhx.bkt.clouddn.com/'
 
 const commonLocalhost = ""
 
 const commonLocalServer = "http://192.168.50.149:8083"
-// const commonLocalServer = "touchdawn.asuscomm.com:8083"
+// const commonLocalServer = "http://touchdawn.asuscomm.com:8083"
 
 function commonFun() {
   console.log("公共方法")

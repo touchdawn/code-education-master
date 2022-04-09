@@ -23,26 +23,16 @@
                    v-if="form.type === 'gapFill' && studentAnswer[index] === homeworkForm.correctAnswer[index]">
         <u--text text="正确" color="green" />
       </u-form-item>
-      <!--    <u-form>-->
-      <!--      <u-form-item :label="'题'+(index+1)" prop="courseName" v-if="form.type === 'select'">-->
-      <!--        <u-textarea v-model="form.question" count/>-->
-      <!--      </u-form-item>-->
-      <!--      <u-form-item label="A：" prop="courseName" v-if="form.type === 'select'">-->
-      <!--        <u-input placeholder="A" v-model="form.selectList[0].input"></u-input>-->
-      <!--      </u-form-item>-->
-      <!--      <u-form-item label="B：" prop="courseName" v-if="form.type === 'select'">-->
-      <!--        <u-input placeholder="B"></u-input>-->
-      <!--      </u-form-item>-->
-      <!--      <u-form-item label="C：" prop="courseName" v-if="form.type === 'select'">-->
-      <!--        <u-input placeholder="C"></u-input>-->
-      <!--      </u-form-item>-->
-      <!--      <u-form-item label="D：" prop="courseName" v-if="form.type === 'select'">-->
-      <!--        <u-input placeholder="D"></u-input>-->
-      <!--      </u-form-item>-->
-      <!--    </u-form>-->
+
+      <u-form-item :label="'题'+(index+1)" prop="courseName" label-width="40" v-if="form.type === 'thinking'">
+        <u-text :text="form.question"/>
+      </u-form-item>
+      <u-form-item label="" prop="courseIntro"  v-if="form.type === 'thinking'">
+          <u-text text="思考题，无需作答" />
+      </u-form-item>
 
       <u-form-item :label="'题'+(index+1)" prop="courseName" label-width="40" v-if="form.type === 'select'">
-        <u-text :text="form.question"  placeholder="请输入题目" count/>
+        <u-text :text="form.question"/>
       </u-form-item>
       <u-form v-for="(childForm , childIndex) in form.selectList" label-width="20" >
         <u-form-item :label="childForm.name" prop="courseName" v-if="form.type === 'select'">

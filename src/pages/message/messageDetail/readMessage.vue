@@ -56,7 +56,7 @@ export default {
         messageId:'',
         title:"",
         content:"",
-        senderAvatar:"http://r8otjafce.bkt.clouddn.com/avatar_2_1648269437000",
+        senderAvatar:"http://ra2q5rhzl.hd-bkt.clouddn.com/avatar_2_1648269437000",
         senderName:"",
         sendTime:"",
         senderNickName:""

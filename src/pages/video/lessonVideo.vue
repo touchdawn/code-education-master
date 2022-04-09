@@ -25,7 +25,7 @@ export default {
     return {
       videoData:{
         title:"h5(html5)+css3+移动端前端视频教程",
-        src:"http://r8otjafce.bkt.clouddn.com/h5%28html5%29%2Bcss3%2B%E7%A7%BB%E5%8A%A8%E7%AB%AF%E5%89%8D%E7%AB%AF%E8%A7%86%E9%A2%91%E6%95%99%E7%A8%8B%20-1.mp4"
+        src:"http://ra2q5rhzl.hd-bkt.clouddn.com/h5%28html5%29%2Bcss3%2B%E7%A7%BB%E5%8A%A8%E7%AB%AF%E5%89%8D%E7%AB%AF%E8%A7%86%E9%A2%91%E6%95%99%E7%A8%8B%20-1.mp4"
       },
       danmuList: [{
         text: '第 1s 出现的弹幕',

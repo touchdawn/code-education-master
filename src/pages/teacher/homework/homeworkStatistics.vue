@@ -27,6 +27,13 @@
         <u--text :text="correctAnswerList[page.currentPage - 1]" size="18" lineHeight="25" />
       </view>
 
+      <!--      思考题-->
+      <view  v-if="questionList[page.currentPage - 1].type === 'thinking'" style="margin-top: 5%;margin-bottom: 5%;">
+
+        <u-text :text="'思考题'+page.currentPage" size="20" style="margin-bottom: 4%;"></u-text>
+        <u-text :text="questionList[page.currentPage - 1].question" size="18" lineHeight="25" />
+      </view>
+
 
 <!--      选择题-->
       <view  v-if="questionList[page.currentPage - 1].type === 'select'">
@@ -142,10 +149,10 @@ export default {
           that.correctAnswerList = JSON.parse(that.homeworkData.answer)
 
           console.log('ques')
-          console.log( that.questionList)
+          console.log( that.questionList.length)
           console.log('ans')
 
-          that.page.pageSize = 20
+          that.page.pageSize = that.questionList.length * 10
           that.processData(0)
         }
       })

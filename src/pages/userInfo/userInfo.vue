@@ -235,7 +235,7 @@ export default {
 
 
 
-      // this.userInfo.avatar = "http://r8otjafce.bkt.clouddn.com/Vue%E3%80%81Vuejs%E6%95%99%E7%A8%8B.jpg"
+      // this.userInfo.avatar = "http://ra2q5rhzl.hd-bkt.clouddn.com/Vue%E3%80%81Vuejs%E6%95%99%E7%A8%8B.jpg"
     },
     ...mapActions(['changeUserInfoActions']),
     //获取用户信息请求 刷新vuex

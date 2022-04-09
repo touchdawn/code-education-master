@@ -193,7 +193,7 @@ export default {
 <style scoped>
 .userback {
   height: 800rpx;
-  background-image: url('http://r8otjafce.bkt.clouddn.com/bg1.jpg');
+  /*background-image: url('http://ra2q5rhzl.hd-bkt.clouddn.com/bg1.jpg');*/
   background-size: 100%;
   text-align: center;
   font-size: 40rpx;

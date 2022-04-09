@@ -231,6 +231,13 @@
 
     methods: {
       goToRecent(){
+        console.log(uni.getStorageSync('currentLocalId'))
+        let tempId = uni.getStorageSync('currentLocalId')
+        if (tempId === null || tempId === '' || tempId === -1 || tempId === undefined){
+          console.log("没有")
+        }else {
+          this.latestCourseId = tempId
+        }
         if (this.latestCourseId === -1){
           console.log("没有")
         } else {
@@ -255,7 +262,6 @@
           success: function (res) {
             console.log(res)
             that.latestCourseId = res.data.data.latestCourseId
-            console.log(that.latestCourseId)
             //如果后端有数据this.latestCourseId
             if (res.data.flag === 'T') {
               try {

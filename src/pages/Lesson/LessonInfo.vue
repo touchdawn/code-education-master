@@ -145,8 +145,8 @@
 <!--                  <image :src="chapterIcon(c)" style="width: 40rpx;height: 40rpx;"></image>-->
                   <text class="flex-sub margin-left-xs margin-right text-df"
                         >{{c.TITLE}}</text>
-                  <text v-if="true" class="iconfont text-df text-green"
-                        style="height:90rpx;line-height:90rpx;width:80rpx;">免费</text>
+                  <text v-if="c.ID === detail.currentLesson" class="iconfont text-df text-green"
+                        style="height:90rpx;line-height:90rpx;width:80rpx;">当前</text>
                 </view>
               </view>
             </view>
@@ -371,11 +371,13 @@ export default {
       },
       temp:{
         deleteCourseId:-1,
+        currentLessonId:-1,
       },
       currentIndex: 0,
       shopCount: 0,
       tabList: [],
       detail: {
+        currentLesson:-1,
         favouriteId:-2,
         teacherId:-1,
         favNum:0,
@@ -408,7 +410,7 @@ export default {
         name: '目录'
       }, {
         id: 2,
-        name: '评价'
+        name: '互动'
       }],
       loadStatus: 'loading',
       commentList: [
@@ -441,6 +443,7 @@ export default {
 
   onBackPress(){
     console.log('back')
+    uni.setStorageSync('currentLocalId',this.lessonId)
     this.setLocalUserData()
     // console.log(JSON.parse(currentPoint))
   },
@@ -449,6 +452,7 @@ export default {
     this.currentIndex = 0
     // this.userDt = JSON.parse(window.localStorage.getItem("userLocalData"))
     //获取token
+
     try {
       const value = uni.getStorageSync('userLocalData');
       if (value) {
@@ -524,9 +528,9 @@ export default {
     changeToCurrent(){
       // const currentPoint = uni.getStorageSync('userCourseCurrentTime')
       // var map=JSON.parse(currentPoint);
-      console.log(111)
       if (this.currentSectionId === -1){
         console.log("没有找到之前存的断点！")
+        this.$u.toast("没有找到历史记录!")
         return null
       } else {
         let URL = this.findVideoBySectionId(this.currentSectionId)
@@ -574,11 +578,13 @@ export default {
            const currentPoint = uni.getStorageSync('userCourseCurrentTime')
            if (currentPoint !== '' && currentPoint !== null) {
              let currentSection = JSON.parse(currentPoint)[that.lessonId]
+             console.log('当前课程断点数据：')
              console.log(currentSection)
              if (currentSection !== null && currentSection !== '' && currentSection !== undefined) {
                that.currentTime = currentSection.currentTime
                console.log('sectionId:' + currentSection.sectionId)
                that.currentSectionId = currentSection.sectionId
+               that.temp.currentLessonId = currentSection.sectionId
              } else { //第一次看这门课的话
                that.currentTime = 0
                that.currentSectionId = -1
@@ -601,6 +607,8 @@ export default {
       sendData.userData = uni.getStorageSync('userCourseCurrentTime')
       sendData.id = that.userServerStorageId
       sendData.latestCourseId = that.lessonId
+      console.log('向后端存储cookie')
+      console.log(sendData)
       uni.request({
         url:global.commonLocalServer + "/userData/addUserData" ,
         method:'POST',
@@ -610,6 +618,12 @@ export default {
           console.log(res)
         }
       })
+    },
+
+
+    addCurrentInfo(){
+      console.log('往detail中添加历史ID')
+      this.detail.currentLesson = this.temp.currentLessonId
     },
 
     refreshUserData(){
@@ -817,6 +831,7 @@ export default {
 
     clickTabs(item){
       console.log(item)
+      console.log(this.detail)
       let index = item.index
       this.currentIndex = item.index
       if (index === 2) {
@@ -831,6 +846,7 @@ export default {
 
     onSectionClick(c){
       console.log(c)
+      this.detail.currentLesson = c.ID
       if(c.TYPE === "video"){
         this.imgOn = false
         this.videoOn = true
@@ -854,9 +870,11 @@ export default {
           'token':that.userDt.token
         },
         success:function(res){
+          console.log('获取数据成功')
           that.detail = res.data.data
           that.detail.imgUrl = global.storageUrl + that.detail.imgUrl
-          that.tabs[2].name = '评价(' + that.detail.totalComment + ")"
+          that.tabs[2].name = '互动(' + that.detail.totalComment + ")"
+          that.addCurrentInfo()
         }
       })
     },

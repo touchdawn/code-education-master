@@ -15,23 +15,9 @@
         <u--textarea v-model="addHomeworkForm.answer[index]" placeholder="请输入答案" count />
       </u-form-item>
 
-<!--    <u-form>-->
-<!--      <u-form-item :label="'题'+(index+1)" prop="courseName" v-if="form.type === 'select'">-->
-<!--        <u-textarea v-model="form.question" count/>-->
-<!--      </u-form-item>-->
-<!--      <u-form-item label="A：" prop="courseName" v-if="form.type === 'select'">-->
-<!--        <u-input placeholder="A" v-model="form.selectList[0].input"></u-input>-->
-<!--      </u-form-item>-->
-<!--      <u-form-item label="B：" prop="courseName" v-if="form.type === 'select'">-->
-<!--        <u-input placeholder="B"></u-input>-->
-<!--      </u-form-item>-->
-<!--      <u-form-item label="C：" prop="courseName" v-if="form.type === 'select'">-->
-<!--        <u-input placeholder="C"></u-input>-->
-<!--      </u-form-item>-->
-<!--      <u-form-item label="D：" prop="courseName" v-if="form.type === 'select'">-->
-<!--        <u-input placeholder="D"></u-input>-->
-<!--      </u-form-item>-->
-<!--    </u-form>-->
+      <u-form-item :label="'题'+(index+1)" prop="courseName" v-if="form.type === 'thinking'">
+        <u-textarea v-model="form.question"  placeholder="请输入题目" count/>
+      </u-form-item>
 
       <u-form-item :label="'题'+(index+1)" prop="courseName" v-if="form.type === 'select'">
         <u-textarea v-model="form.question"  placeholder="请输入题目" count/>
@@ -62,8 +48,9 @@
 
     </u-form>
     <view style="display:flex; justify-content: space-between; margin-top: 7%;">
-      <u-button @click="addNewGapFill" type="success" style="width: 40%">添加填空题</u-button>
-      <u-button @click="addNewSelect" type="primary" style="width: 40%">添加选择题</u-button>
+      <u-button @click="addNewGapFill" type="primary" style="width: 30%">添加填空题</u-button>
+      <u-button @click="addNewSelect" type="success" style="width: 30%">添加选择题</u-button>
+      <u-button @click="addNewThinking" type="primary" style="width: 30%">添加思考题</u-button>
     </view>
 
     <u-button @click="submit" style="margin-top: 4%;">提交</u-button>
@@ -161,8 +148,16 @@ export default {
         type:'gapFill'
       })
       this.addHomeworkForm.answer.push('')
-
     },
+
+    addNewThinking(){
+      this.addHomeworkForm.mainInfo.push({
+        question: '',
+        type:'thinking'
+      })
+      this.addHomeworkForm.answer.push('ThinkQuestion!&$')
+    },
+
     addNewSelect(){
       this.addHomeworkForm.mainInfo.push(
         {
@@ -192,6 +187,8 @@ export default {
     },
     deleteDynamic(index){
       this.addHomeworkForm.mainInfo.splice(index, 1)
+      this.addHomeworkForm.answer.splice(index, 1)
+
     }
   }
 }

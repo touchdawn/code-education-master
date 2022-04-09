@@ -9,29 +9,20 @@
     <u-form :model="homeworkForm" ref="uForm" label-width="40"
             v-for="(form, index) in homeworkForm.mainInfo" style="border-bottom: 3rpx solid #bdbdbd;margin-top: 6%; ">
       <u-form-item :label="'题'+(index+1)" prop="courseName" v-if="form.type === 'gapFill'">
-        <u-text :text="form.question"  placeholder="请输入题目" count/>
+        <u-text :text="form.question"/>
       </u-form-item>
       <u-form-item label="答案" prop="courseIntro"  v-if="form.type === 'gapFill'">
         <u--textarea v-model="homeworkForm.answer[index]" placeholder="请输入答案" count />
       </u-form-item>
 
-      <!--    <u-form>-->
-      <!--      <u-form-item :label="'题'+(index+1)" prop="courseName" v-if="form.type === 'select'">-->
-      <!--        <u-textarea v-model="form.question" count/>-->
-      <!--      </u-form-item>-->
-      <!--      <u-form-item label="A：" prop="courseName" v-if="form.type === 'select'">-->
-      <!--        <u-input placeholder="A" v-model="form.selectList[0].input"></u-input>-->
-      <!--      </u-form-item>-->
-      <!--      <u-form-item label="B：" prop="courseName" v-if="form.type === 'select'">-->
-      <!--        <u-input placeholder="B"></u-input>-->
-      <!--      </u-form-item>-->
-      <!--      <u-form-item label="C：" prop="courseName" v-if="form.type === 'select'">-->
-      <!--        <u-input placeholder="C"></u-input>-->
-      <!--      </u-form-item>-->
-      <!--      <u-form-item label="D：" prop="courseName" v-if="form.type === 'select'">-->
-      <!--        <u-input placeholder="D"></u-input>-->
-      <!--      </u-form-item>-->
-      <!--    </u-form>-->
+      <u-form-item :label="'题'+(index+1) " prop="courseName" v-if="form.type === 'thinking'">
+        <u-text :text="form.question"/>
+      </u-form-item>
+      <u-form-item label="答案" prop="courseIntro"  v-if="form.type === 'thinking'">
+        <u--textarea disabled :v-model="setThinkAnswer(index)" placeholder="思考题,不需要作答" count />
+      </u-form-item>
+
+
 
       <u-form-item :label="'题'+(index+1)" prop="courseName" v-if="form.type === 'select'">
         <u-text :text="form.question"  placeholder="请输入题目" count/>
@@ -119,6 +110,11 @@ export default {
     this.getHomework()
   },
   methods:{
+    setThinkAnswer(index){
+      this.homeworkForm.answer[index] = 'ThinkQuestion!&$'
+      return this.homeworkForm.answer[index]
+    },
+
     submit(){
       // console.log(this.addHomeworkForm)
       let formData={}

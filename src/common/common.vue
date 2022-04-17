@@ -11,8 +11,8 @@ const storageUrl = 'http://ra2q5rhzl.hd-bkt.clouddn.com/'
 
 const commonLocalhost = ""
 
-const commonLocalServer = "http://192.168.50.149:8083"
-// const commonLocalServer = "http://touchdawn.asuscomm.com:8083"
+// const commonLocalServer = "http://192.168.50.149:8083"
+const commonLocalServer = "http://touchdawn.asuscomm.com:8083"
 
 function commonFun() {
   console.log("公共方法")

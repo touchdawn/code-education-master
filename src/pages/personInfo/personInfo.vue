@@ -31,6 +31,8 @@
 
     <u-button @click="myCourseClicked" v-if="userDt.type === 1">我的课程</u-button>
 
+    <u-button @click="mySubClicked">我的订阅</u-button>
+
     <u-button @click="myFavClicked">我的收藏夹</u-button>
 
     <u-button @click="applyForTeacherClicked" v-if="userDt.type === 0">申请成为教师</u-button>
@@ -155,6 +157,12 @@ export default {
     myCourseClicked(){
       uni.navigateTo({
         url: '/pages/teacher/course/myCourse'
+      });
+    },
+
+    mySubClicked(){
+      uni.navigateTo({
+        url: '/pages/personInfo/mySubscribe/mySubscribe'
       });
     },
 

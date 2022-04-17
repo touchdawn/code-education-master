@@ -21,6 +21,13 @@
 			}
 		},
 
+		{
+			"path": "pages/personInfo/mySubscribe/mySubscribe",
+			"style": {
+				"navigationBarTitleText": "我的订阅"
+			}
+		},
+
 
 		{
 			"path": "pages/student/homework/readHomework",

@@ -1,7 +1,8 @@
 <template>
   <view style="background-color: #f2f2f2;padding-top: 10rpx;" >
 <!--    <YSteps lineNum='0' color='#fff' backgroundColor='#000fff' :infoList='list'></YSteps>-->
-    <view class="bg" :style="getStyle()">
+<!--    <view class="bg" :style="getStyle()">-->
+    <view class="bg" >
       <view class="steps">
         <view class="steps_item" v-for="(i, index) in list">
           <view class="s_r">

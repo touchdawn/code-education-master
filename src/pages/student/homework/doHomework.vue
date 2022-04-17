@@ -27,7 +27,7 @@
       <u-form-item :label="'题'+(index+1)" prop="courseName" v-if="form.type === 'select'">
         <u-text :text="form.question"  placeholder="请输入题目" count/>
       </u-form-item>
-      <u-form v-for="(childForm , childIndex) in form.selectList">
+      <u-form v-for="(childForm , childIndex) in form.selectList" key="child">
         <u-form-item :label="childForm.name" prop="courseName" v-if="form.type === 'select'">
           <u-text :text="childForm.input" />
         </u-form-item>
@@ -37,8 +37,8 @@
         <u-radio-group v-model="homeworkForm.answer[index]"  v-if="form.type === 'select'">
           <u-radio
               :customStyle="{marginRight: '16px'}"
-              v-for="(item, index) in form.selectList"
-              :key="index"
+              v-for="(item, index2) in form.selectList"
+              :key="index2"
               :label="item.name"
               :name="item.name"
           >

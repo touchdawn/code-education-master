@@ -17,7 +17,7 @@
           </view>
           <view class="d-flex  align-center uni-row margin-top-xs">
             <view class="d-flex a-end" @click="cardClicked(item)">
-              <text style="margin-bottom: 10rpx;">{{item.createAt}}</text>
+              <text style="margin-bottom: 10rpx;">{{momentTimeTransfer(item.createAt)}}</text>
             </view>
               <view class="a-end">
                 <u-icon name="trash" style="position: absolute; right: 40rpx; margin-bottom: 20rpx;"
@@ -42,7 +42,7 @@
       <!-- 提示窗示例 -->
       <uni-popup ref="alertDialog" type="dialog">
         <uni-popup-dialog type="error" cancelText="取消" confirmText="删除"
-                          title="警告" content="确认取消收藏吗？"
+                          title="警告" content="确认取消订阅吗？"
                           @confirm="dialogConfirm"
         ></uni-popup-dialog>
       </uni-popup>
@@ -53,9 +53,10 @@
 <script>
 import global from "@/common/common";
 import HLessonsListRow from "@/components/h-lessons-list-row/h-lessons-list-row";
+import moment from 'moment';
 
 export default {
-  name: "myFavourite",
+  name: "mySubscribe",
   components: {HLessonsListRow},
   data() {
     return {
@@ -120,18 +121,11 @@ export default {
     },
     dialogConfirm(){
       var that = this
-      let uploadData = {}
-      uploadData.userId = that.userDt.id
-      uploadData.favouriteId = that.temp.deleteFavId
-      uploadData.courseId = that.temp.courseId
-      uploadData.action = "delete"
+
       let header = {token:that.userDt.token}
-      console.log("upload:")
-      console.log(uploadData)
       uni.request({
-        method:'POST',
-        url: global.commonLocalServer + "/fav/addFavourite",
-        data:uploadData,
+        method:'GET',
+        url: global.commonLocalServer + "/redis/cancelCourseSubscribe/" + that.temp.courseId + '/' + that.userDt.id,
         header:header,
         success: function (res){
           console.log("res:")
@@ -146,14 +140,15 @@ export default {
       var that = this
       uni.request({
         method:'GET',
-        url: global.commonLocalServer+ '/fav/getFavouriteCourseByUserId/' + that.userDt.id,
+        url: global.commonLocalServer+ '/redis/getSubCourseByUserId/' + that.userDt.id,
         header : {'token': that.userDt.token},
         success: function (res) {
           // if (res.data.data !== null)
           // that.favList = res.data.data
+          console.log(res)
           that.favList = that.addQiniuUrl(res.data.data)
 
-          console.log(res)
+          console.log(that.favList)
 
         }
       })
@@ -177,6 +172,9 @@ export default {
 
     noResult() {
       return global.storageUrl + 'noResultGray.png'
+    },
+    momentTimeTransfer(input){
+      return moment(input).format('YYYY年MM月DD日 HH:mm:ss')
     }
   }
 }

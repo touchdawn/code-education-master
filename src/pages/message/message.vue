@@ -5,13 +5,23 @@
     <!--              v-model="lessonName"  @custom="searchClicked()"></u-search>-->
     <u-toast ref="uToast" />
 
+
+
     <view style="text-align:center; margin-top: 3%; padding-bottom: 3%;;
-     font-size: 40rpx; border-bottom: 3rpx solid #bdbdbd;">
+     font-size: 40rpx;">
       <text >消息</text>
     </view>
+    <u-tabs  ref="tabs" active-color="#1CBBB4" :bold="false" font-size="28" :list="tabs"
+             :current="currentIndex" @change="clickTabs" :is-scroll="false" swiperWidth="750">
+    </u-tabs>
 
-    <view class="px-20 border-bottom" style="margin-top: 10rpx;">
-      <view v-for="(item,index) in messageList" v-if="messageList.length !== 0"
+   <view class="bg-white" style="width: 750rpx;" v-if="currentIndex === i" v-for="(m, i) in tabs" :key="i">
+
+    <view class="px-20 border-bottom" v-if="m.id === 0"
+          style="margin-top: 10rpx;">
+
+<!--      我的消息-->
+      <view v-for="(item,index) in messageList" v-if="messageList.length !== 0 && item.senderId !== 1"
             class=" u-border-radius d-flex a-center"
             style="height: 200rpx; border-bottom: 3rpx solid #bdbdbd;">
         <view>
@@ -40,7 +50,44 @@
           </view>
         </view>
       </view>
-    </view>
+   </view>
+
+      <view class="px-20 border-bottom" v-if="m.id === 1"
+            style="margin-top: 10rpx;">
+        <!--      系统消息-->
+        <view v-for="(item,index) in messageList" v-if="messageList.length !== 0 && item.senderId === 1"
+              class=" u-border-radius d-flex a-center"
+              style="height: 200rpx; border-bottom: 3rpx solid #bdbdbd;">
+          <view>
+            <u-badge :isDot="true" type="error" v-if="item.isRead === 1"></u-badge>
+            <image class="u-border-radius flex-shrink " @click="cardClicked(item,index)"
+                   :src="item.senderAvatar" style="width: 100rpx;height: 100rpx; margin-left: 20rpx; margin-right: 40rpx;"></image>
+
+          </view>
+          <view class="d-flex flex-column j-sb " style="padding-right: 10rpx;height: 80%">
+            <view style="margin-top: 10rpx; position: relative" @click="cardClicked(item,index)">
+
+              <view class="u-line-1" style="font-size: 32rpx; margin-bottom: 5rpx;">
+                <!--              <text style="margin-right: 5%;" >[新]</text>-->
+                <!--              <u-icon name="info-circle-fill"></u-icon>-->
+                {{item.title}}
+              </view>
+              <view class="u-line-1 " >{{item.senderNickName}}</view>
+            </view>
+            <view class="d-flex  align-center uni-row margin-top-xs">
+              <text class="gray-color" style="margin-bottom: 10rpx;font-size: 26rpx" >{{item.sendTime}}</text>
+              <!--            <view class="a-end">-->
+              <!--              <u-icon name="trash" style="position: absolute; right: 40rpx; margin-bottom: 20rpx;"-->
+              <!--                      @click = deleteFav(item)>-->
+              <!--              </u-icon>-->
+              <!--            </view>-->
+            </view>
+          </view>
+        </view>
+      </view>
+
+
+      </view>
     <view v-if="messageList.length  === 0" style="text-align:center">
       <view >
         <image style="width: 200px; height: 200px; margin-top: 15%;"
@@ -96,6 +143,13 @@ export default {
         id: 1,
         name: '审核中'
       }],
+      tabs: [{
+        id: 0,
+        name: '我的消息'
+      }, {
+        id: 1,
+        name: '系统通知'
+      }],
       currentIndex: 0,
     }
   },
@@ -123,6 +177,18 @@ export default {
     })
   },
   methods: {
+
+    clickTabs(item){
+      console.log(item)
+      console.log(this.detail)
+      let index = item.index
+      this.currentIndex = item.index
+      if (index === 2) {
+      } else {
+        if(index === 1){
+        }
+      }
+    },
 
     cardClicked(item,index){
       this.messageList[index].isRead = 0

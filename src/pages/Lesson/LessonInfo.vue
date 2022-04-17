@@ -19,7 +19,7 @@
              v-if="videoOn"
              :src="videoUrl"
              controls :show-center-play-btn="true" style="width: 750rpx;height: 450rpx;"></video>
-      <img :src="detail.imgUrl" style="width: 100%" v-if="imgOn"/>
+<!--      <image src="http://121.4.145.14//wp-content/uploads/2021/12/%E6%96%B9%E6%B3%A2%E4%B8%89%E8%A7%921K.jpg" style="width: 100%" v-if="imgOn"/>-->
     </view>
     <u-tabs v-if="detail" ref="tabs" active-color="#1CBBB4" :bold="false" font-size="28" :list="tabs"
                    :current="currentIndex" @change="clickTabs" :is-scroll="false" swiperWidth="750">
@@ -35,7 +35,7 @@
 <!--              <text style="font-size:32rpx; margin-bottom: 40rpx; font-size: 40rpx;">{{detail.courseName}}</text>-->
               <u--text  style="margin-bottom: 10rpx;" :text="detail.courseName" size="20" lineHeight="30"></u--text>
 
-              <!--              <view class="uni-row">-->
+<!--                            <view class="uni-row">-->
 <!--                <my-rate :score="4"></my-rate>-->
 <!--                <text class="text-df"-->
 <!--                      style="color:#70788C;margin-left:5rpx">5分</text>-->
@@ -51,12 +51,12 @@
 
             <view class="uni-row">
               <view style="width:345rpx;height:80rpx;">
-                <view class="uni-row">
+<!--                <view class="uni-row">-->
 <!--                  <text class="text-df" style="color:#70788C">有效期</text>-->
 <!--                  <text class="text-df margin-left-sm">1年</text>-->
 <!--                  <text class="text-df" style="color:#70788C;margin-left:20rpx;">|</text>-->
 <!--                  <text class="text-df ">1课时</text>-->
-                </view>
+<!--                </view>-->
 
 <!--                <view class="uni-row">-->
 <!--                  <view class="text-df" style="color:#70788C; ">老 师</view>-->
@@ -65,7 +65,7 @@
 <!--                    <text class="text-df margin-left-sm" style="display:inline">{{detail.teacherName}}</text>-->
 <!--                  </view>-->
 <!--                </view>-->
-                <view class="uni-row align-center" style="height: 80rpx; width: 400rpx">
+                <view class="uni-row align-center" style="height: 80rpx; width: 400rpx; padding-top: 15%;">
                   <image
                          :src="getTeacherAvatar()"
                          style="height: 80rpx; width: 80rpx; border-radius: 100rpx; margin-right: 20rpx;" />
@@ -117,6 +117,27 @@
                       @click="homeworkClicked()"
                       name="order"  size="28">
 
+                  </u-icon>
+                </view>
+
+                <view class="uni-row align-center margin-top-xs">
+                  <text class="text-sm"
+                        style="color:#A4A9B2;font-size: 40rpx;">{{detail.likeNum}}</text>
+                  <u-icon
+                      @click="addLike()"
+                      :name="detail.isLike === false ? 'thumb-up' : 'thumb-up-fill'" :color="detail.isLike === false ?'#000000':'#5af'" size="28">
+                  </u-icon>
+                  <text class="text-sm"
+                        style="color:#A4A9B2;font-size: 40rpx;"> | </text>
+                  <u-icon
+                      @click="addDislike()"
+                      :name="detail.isDislike === false ? 'thumb-down' : 'thumb-down-fill'" :color="detail.isDislike === false ?'#000000':'#5af'" size="28">
+                  </u-icon>
+                  <text class="text-sm"
+                        style="color:#A4A9B2;font-size: 40rpx;"> | </text>
+                  <u-icon
+                      @click="addSubscribe()"
+                      :name="detail.isSubscribe === false ? 'bell' : 'bell-fill'" :color="detail.isSubscribe === false ?'#000000':'#f8a900'" size="28">
                   </u-icon>
                 </view>
               </view>
@@ -381,6 +402,7 @@ export default {
         favouriteId:-2,
         teacherId:-1,
         favNum:0,
+        imgUrl:'http://ra2q5rhzl.hd-bkt.clouddn.com/1647790222000cut.JPG',
         teacherAvatar:'', // ←一定要有，不然会请求undefined
         chapter:[
           {
@@ -466,8 +488,7 @@ export default {
       this.getLocalUserData()
     } catch (e) {
     }
-    // this.getComment()
-    this.getAllData();
+    // this.getAllData();
     if (this.currentIndex === 2) {
       this.listHeight = uni.upx2px(this.pageHeight) - uni.upx2px(100) - uni.upx2px(140);
     } else {
@@ -502,9 +523,12 @@ export default {
       // that.currentIndex = 1
     })
 
-
+    console.log('onload++++++++++++++++++++++++++')
+    console.log(e.LessonId)
     this.lessonId = e.LessonId
     // this.LessonName = e.LessonName
+    this.getAllData();
+
     const {
       windowHeight,
       windowWidth
@@ -545,10 +569,10 @@ export default {
 
     getLocalUserData(){
       var that = this
-
+      console.log('getLocalUserData============')
       //获取后端数据，若没有则创建
        uni.request({
-          url:global.commonLocalServer + "/userData/getUserData/" + that.userDt.id,
+         url:global.commonLocalServer + "/userData/getUserData/" + that.userDt.id,
          method:'GET',
          header:{token:that.userDt.token},
          success: function (res){
@@ -717,10 +741,14 @@ export default {
             that.detail.favouriteId = res.data.data
             that.detail.favNum ++
             that.detail.isFavourite = true
+            that.$u.toast("收藏成功！")
+
           } else {
             that.detail.favouriteId = -1
             that.detail.favNum --
             that.detail.isFavourite = false
+            that.$u.toast("取消成功！")
+
           }
         }
       })
@@ -863,6 +891,8 @@ export default {
 
     getAllData(){
       var that = this
+      console.log('getAllData +++++++++++++')
+      console.log(that.lessonId)
       uni.request({
         url:global.commonLocalServer+"/lesson/getCourseInfo/" + that.lessonId + "/" + that.userDt.id,
         method:"GET",
@@ -871,8 +901,11 @@ export default {
         },
         success:function(res){
           console.log('获取数据成功')
+          that.detail.imgUrl = global.storageUrl + res.data.data.imgUrl
           that.detail = res.data.data
-          that.detail.imgUrl = global.storageUrl + that.detail.imgUrl
+          that.detail.imgUrl = global.storageUrl + res.data.data.imgUrl
+
+          console.log(that.detail)
           that.tabs[2].name = '互动(' + that.detail.totalComment + ")"
           that.addCurrentInfo()
         }
@@ -909,6 +942,95 @@ export default {
       // });
     },
 
+    addLike(){
+      var that = this
+      if (that.detail.isLike === false){
+        uni.request({
+          method:'GET',
+          header:{token:that.userDt.token},
+          url:global.commonLocalServer + '/redis/addCourseLike/'+ that.lessonId + '/' + that.userDt.id,
+          success: function (res){
+            console.log(res)
+            that.detail.isLike = true
+            that.detail.isDislike = false
+            that.detail.likeNum ++
+            that.$u.toast("点赞成功！")
+          }
+        })
+      } else {
+        uni.request({
+          method:'GET',
+          header:{token:that.userDt.token},
+          url:global.commonLocalServer + '/redis/cancelCourseLike/'+ that.lessonId + '/' + that.userDt.id,
+          success: function (res){
+            console.log(res)
+            that.detail.isLike = false
+            that.detail.likeNum --
+            that.$u.toast("取消成功！")
+          }
+        })
+      }
+    },
+
+    addDislike(){
+      var that = this
+      if (that.detail.isDislike === false){
+        uni.request({
+          method:'GET',
+          header:{token:that.userDt.token},
+          url:global.commonLocalServer + '/redis/addCourseDislike/'+ that.lessonId + '/' + that.userDt.id,
+          success: function (res){
+            console.log(res)
+            that.detail.isLike = false
+            that.detail.isDislike = true
+            that.detail.likeNum  = (that.detail.likeNum === 0 ? 0 : that.detail.likeNum -1 )
+            that.$u.toast("点踩成功！")
+
+          }
+        })
+      } else {
+        uni.request({
+          method:'GET',
+          header:{token:that.userDt.token},
+          url:global.commonLocalServer + '/redis/cancelCourseDislike/'+ that.lessonId + '/' + that.userDt.id,
+          success: function (res){
+            console.log(res)
+            that.detail.isDislike = false
+            that.detail.likeNum  = (that.detail.likeNum === 0 ? 0 : that.detail.likeNum +1 )
+            that.$u.toast("取消成功！")
+
+          }
+        })
+      }
+    },
+
+    addSubscribe(){
+      var that = this
+      if (that.detail.isSubscribe === false){
+        uni.request({
+          method:'GET',
+          header:{token:that.userDt.token},
+          url:global.commonLocalServer + '/redis/addCourseSubscribe/'+ that.lessonId + '/' + that.userDt.id,
+          success: function (res){
+            console.log(res)
+            that.detail.isSubscribe = true
+            that.$u.toast("订阅成功！")
+          }
+        })
+      } else {
+        uni.request({
+          method:'GET',
+          header:{token:that.userDt.token},
+          url:global.commonLocalServer + '/redis/cancelCourseSubscribe/'+ that.lessonId + '/' + that.userDt.id,
+          success: function (res){
+            console.log(res)
+            that.detail.isSubscribe = false
+            that.$u.toast("取消订阅成功！")
+
+          }
+        })
+      }
+    },
 
     tabPageCurrentTabSelected(index) {
       const me = this;
@@ -970,7 +1092,12 @@ export default {
     },
 
     getTeacherAvatar(){
-      return global.storageUrl + this.detail.teacherAvatar
+      if (this.detail.teacherAvatar === '' || this.detail.teacherAvatar === null){
+        return global.storageUrl + 'defaultAvatar.png'
+      } else {
+        return global.storageUrl + this.detail.teacherAvatar
+      }
+      // return global.storageUrl + this.detail.teacherAvatar
     }
 
   }

@@ -86,7 +86,7 @@
 
 
 
-  <h-lessons-list></h-lessons-list>
+<!--  <h-lessons-list></h-lessons-list>-->
 
 <!--    自定义标题组件-->
     <h-rec-title title="猜你喜欢" desc="GUESS YOU LIKE"></h-rec-title>
@@ -253,6 +253,7 @@
       },
 
       getLocalUserData() {
+        console.log('getLocalUserData==========')
         var that = this
         //获取后端数据，若没有则创建
         uni.request({

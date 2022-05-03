@@ -90,11 +90,24 @@ export default{
                 // 渲染的配置项
                 let {symbol} = optionArr.find(el=>el.quadrant && el.symbol)
                 // 斜线起始点
+
+                // #ifndef MP-WEIXIN
                 let slashState = eval(outX+symbol[0]+outLine)
                 // 横线起始点
                 let lineState = eval(outX+symbol[0]+textWidth+symbol[0]+outLine)
                 // 终点
                 let lineEnd = eval(outY+symbol[1]+outLine)
+                // #endif
+
+                // #ifdef MP-WEIXIN
+                let slashStateWX = outX+symbol[0]+outLine
+                // 横线起始点
+                let lineStateWX = outX+symbol[0]+textWidth+symbol[0]+outLine
+                // 终点
+                let lineEndWX = outY+symbol[1]+outLine
+                // #endif
+
+                // #ifndef MP-WEIXIN
                 // 标题文字样式
                 ctx.textAlign = symbol[2];
                 // 画出伸出的斜线
@@ -105,6 +118,20 @@ export default{
                 ctx.fillText(title,slashState,lineEnd);
                 // 填充
                 ctx.stroke();
+                // #endif
+
+                // #ifdef MP-WEIXIN
+                // 标题文字样式
+                ctx.textAlign = symbol[2];
+                // 画出伸出的斜线
+                ctx.lineTo(slashStateWX,lineEndWX);
+                // 接上斜线画出标题下面的直线
+                ctx.lineTo(lineStateWX,lineEndWX);
+                // 填充标题
+                ctx.fillText(title,slashStateWX,lineEndWX);
+                // 填充
+                ctx.stroke();
+                // #endif
             }
             // 绘制中心文字
             PieChart.prototype.drawCenterTitle = function(){

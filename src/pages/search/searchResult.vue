@@ -44,7 +44,7 @@ export default {
   components: {HLessonsListRow},
   data() {
     return {
-      lessonName:"node",
+      lessonName:"",
       searchResultList:[
         {
           id:1,
@@ -75,11 +75,17 @@ export default {
         this.userDt = JSON.parse(userLocalDataValue)
       }
     }catch(e){}
+    // #ifndef MP-WEIXIN
     this.getLists()
+    // #endif
   },
   onLoad (e) { //option为object类型，会序列化上个页面传递的参数
     console.log(e)
     this.lessonName = e.lessonName
+    // #ifdef MP-WEIXIN
+    this.getLists()
+    // #endif
+
   },
   methods: {
     cardClicked(item){

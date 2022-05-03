@@ -341,12 +341,21 @@ export default {
     }
   },
 
+  // #ifndef  MP-WEIXIN
   onBackPress() {
     console.log('back')
     uni.setStorageSync('currentLocalId', this.lessonId)
     this.setLocalUserData()
-    // console.log(JSON.parse(currentPoint))
   },
+  // #endif
+
+  // #ifdef  MP-WEIXIN
+  onUnload(){
+    console.log('wxBack')
+    uni.setStorageSync('currentLocalId', this.lessonId)
+    this.setLocalUserData()
+  },
+  // #endif
 
   created() {
     this.currentIndex = 0
@@ -357,6 +366,7 @@ export default {
       const value = uni.getStorageSync('userLocalData');
       if (value) {
         this.userDt = JSON.parse(value)
+        console.log('用户本地信息获取成功')
       }
 
       //删除本地userCourseCurrentTime
@@ -365,7 +375,9 @@ export default {
       //从后端获取
       this.getLocalUserData()
     } catch (e) {}
-    // this.getAllData();
+    // #ifdef  H5
+    this.getAllData();
+    // #endif
     if (this.currentIndex === 2) {
       this.listHeight = uni.upx2px(this.pageHeight) - uni.upx2px(100) - uni.upx2px(140);
     } else {
@@ -400,12 +412,30 @@ export default {
       // that.currentIndex = 1
     })
 
+
+
     console.log('onload++++++++++++++++++++++++++')
     console.log(e.LessonId)
     this.lessonId = e.LessonId
     // this.LessonName = e.LessonName
-    this.getAllData();
 
+	console.log('hahaha');
+
+	
+	// #ifndef H5
+	console.log('ndef H5');
+	const value = uni.getStorageSync('userLocalData');
+	if (value) {
+	  this.userDt = JSON.parse(value)
+	  console.log('非H5用户本地信息获取成功V2')
+	}
+	console.log();
+    this.getAllData(this.userDt.token);
+  // #endif
+	
+	// #ifdef H5
+	console.log('def H5');
+	// #endif
     const {
       windowHeight,
       windowWidth
@@ -784,15 +814,16 @@ export default {
       console.log('getAllData +++++++++++++')
       console.log(that.lessonId)
       uni.request({
-        url: global.commonLocalServer + "/lesson/getCourseInfo/" + that.lessonId + "/" + that.userDt
-            .id,
+        url: global.commonLocalServer + "/lesson/getCourseInfo/" + that.lessonId + "/" + that.userDt.id,
         method: "GET",
         header: {
           'token': that.userDt.token
         },
         success: function(res) {
+          console.log(that.userDt.token)
           console.log('获取数据成功-------------------------------------------------------')
-          that.detail.imgUrl = global.storageUrl + res.data.data.imgUrl
+          console.log(res)
+          // that.detail.imgUrl = global.storageUrl + res.data.data.imgUrl
           that.detail = res.data.data
           that.detail.imgUrl = global.storageUrl + res.data.data.imgUrl
           that.imgs = that.detail.imgUrl

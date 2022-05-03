@@ -66,10 +66,10 @@
 </template>
 
 <script>
-import HLessonsList from "@/components/h-lessons-list/h-lessons-list";
+// import HLessonsList from "@/components/h-lessons-list/h-lessons-list";
 export default {
   name: "h-rec-cate",
-  components: {HLessonsList},
+  // components: {HLessonsList},
   methods:{
     viewClicked(){
       uni.navigateTo({

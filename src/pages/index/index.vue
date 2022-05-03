@@ -1,13 +1,8 @@
 <template>
   <view>
-    <!-- 2.0.19支持autoBack，默认为false -->
-<!--    自定义导航-->
-<!--      <u-navbar-->
-<!--          title="个人中心"-->
-<!--          @rightClick="rightClick"-->
-<!--          :autoBack="true"-->
-<!--      >-->
-<!--      </u-navbar>-->
+<!-- #ifdef MP-WEIXIN -->
+  <view style="margin-top: 9%;"></view>
+<!-- #endif -->
 <!--轮播图组件-->
     <view class="u-demo-block " >
       <u-swiper
@@ -93,7 +88,7 @@
 
 <!--    商品列表样式2-->
 <!--    <u-gap height="5" bg-color="#f8f8f8"></u-gap>-->
-    <h-lessons-list-row></h-lessons-list-row>
+<!--    <h-lessons-list-row></h-lessons-list-row>-->
 
     <u-back-top :scrollTop="scrollTop" :mode="mode" :icon-style="iconStyle"></u-back-top>
 <!--    上拉加载更多-->
@@ -128,7 +123,7 @@
   import global from "@/common/common";
 
   export default {
-    components: {TabBar, HLessonsListRow, HOprice, HRecTitle, HLessonsList, HRecCate, HPprice},
+    components: {TabBar, HLessonsListRow, HOprice, HRecTitle,  HRecCate, HPprice},
     data() {
 			return {
         latestCourseId:-1,

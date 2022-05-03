@@ -80,17 +80,26 @@ export default {
   },
   onLoad(e){
     this.courseId = e.courseId
+    console.log('作业load')
     console.log(e.courseId)
+    // #ifdef MP-WEIXIN
+    this.getHwList()
+    this.getAuthority()
+    // #endif
   },
   created() {
+    console.log('作业create')
+    console.log()
     try{
       const value = uni.getStorageSync('userLocalData');
       if(value){
         this.userDt = JSON.parse(value)
       }
     }catch(e){}
+    // #ifndef MP-WEIXIN
     this.getHwList()
     this.getAuthority()
+    // #endif
   },
   methods:{
     cardClicked(item,index){

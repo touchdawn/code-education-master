@@ -1,7 +1,6 @@
 <template>
   <view>
     <u-toast ref="uToast" />
-
     <view
           class="d-flex flex-row align-center"
           style=" border-bottom: 3rpx solid #bdbdbd; padding-bottom: 2%; margin-bottom: 2%; margin-top: 3%;">
@@ -73,12 +72,17 @@ export default {
         this.userDt = JSON.parse(userLocalDataValue)
       }
     }catch(e){}
+    // #ifdef  H5
     this.getMessageById()
+    // #endif
   },
 
   onLoad(e){
     this.senderMessage.messageId = e.messageId
     console.log(this.senderMessage.messageId)
+    // #ifdef  MP-WEIXIN
+    this.getMessageById()
+    // #endif
   },
 
   methods:{

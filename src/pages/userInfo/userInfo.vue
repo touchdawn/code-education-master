@@ -1,7 +1,9 @@
 <template>
   <view class="profile" >
-    <u-navbar title="个人信息" :background="background">
-    </u-navbar>
+    <!-- #ifdef H5 -->
+    <u-navbar title="个人信息" :background="background"></u-navbar>
+    <!-- #endif -->
+
     <!-- 第一组cell -->
     <u-cell-group class="profile-content"  style=" margin-left: 5%; width: 90%;">
         <!-- 头像 -->
@@ -137,7 +139,13 @@ export default {
     submitClicked(){
       if (this.userInfo.avatar !== global.storageUrl + this.avatarWithoutUrlBeforeChange){
         console.log("检测到头像发生了改变")
+        // #ifndef MP-WEIXIN
         this.uploadAvatar()
+        // #endif
+
+        // #ifdef MP-WEIXIN
+        this.uploadAvatarWX()
+        // #endif
       } else {
         this.uploadUserData(this.avatarWithoutUrlBeforeChange)
       }
@@ -151,7 +159,7 @@ export default {
       }).catch(error => {
         console.error(error)
       })
-      this.picFile = new File([convertBase64ToBlob(this.base64Result)],fileName);
+      // this.picFile = new File([convertBase64ToBlob(this.base64Result)],fileName);
       // let data = new FormData();
       // await data.append('token', that.uploadToken)
       // await data.append("file", that.picFile);
@@ -171,6 +179,47 @@ export default {
         })
       })
     },
+
+    async uploadAvatarWX() {
+      var that = this
+      let fileName = "avatar" + "_" + this.userDt.id + "_" + Date.parse(new Date())
+      await pathToBase64(this.userInfo.avatar).then(base64 => {
+        this.base64Result = base64;
+      }).catch(error => {
+        console.error(error)
+      })
+      // this.picFile = new File([convertBase64ToBlob(this.base64Result)],fileName);
+      // let data = new FormData();
+      // await data.append('token', that.uploadToken)
+      // await data.append("file", that.picFile);
+      return new Promise((resolve, reject) => {
+        console.log(that.userInfo.avatar)
+        let a = uni.uploadFile({
+          url: 'http://up-cn-east-2.qiniup.com',
+          filePath: that.userInfo.avatar,
+          formData: {
+            'key': fileName,
+            "token": that.uploadToken
+          },
+          success: (res) => {
+            console.log(JSON.parse(res.data).key)
+            that.uploadUserData(JSON.parse(res.data).key)
+          }
+        })
+      })
+      // let that = this
+      // let fileName = "avatar" + "_" + this.userDt.id + "_" + Date.parse(new Date())
+      //
+      // wx.uploadFile({
+      //   url:'http://up-cn-east-2.qiniup.com',
+      //   filePath:that.userInfo.avatar,
+      //   formData: {
+      //     'key':fileName,
+      //     "token":that.uploadToken
+      //   },
+      // })
+    },
+
 
     uploadUserData(avatarWithoutUrl){
       let that = this

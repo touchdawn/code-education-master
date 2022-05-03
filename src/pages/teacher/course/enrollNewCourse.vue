@@ -171,7 +171,13 @@ export default {
       //   }
       // });
       if (this.checkUploadData()) {
+        // #ifndef MP-WEIXIN
         await this.uploadCourseCover()
+        // #endif
+
+        // #ifdef MP-WEIXIN
+        await this.uploadCourseCoverWX()
+        // #endif
 
       }
     },
@@ -207,9 +213,9 @@ export default {
       }).catch(error => {
         console.error(error)
       })
-      this.picFile = new File([convertBase64ToBlob(this.base64Result)],fileName);
+      console.log('uploadCourseCover')
       return new Promise( (resolve, reject) => {
-        let a = uni.uploadFile({
+        uni.uploadFile({
           url:'http://up-cn-east-2.qiniup.com',
           filePath:that.imageWithUrl,
           formData: {
@@ -224,6 +230,37 @@ export default {
         })
       })
     },
+    // 微信特供
+    async uploadCourseCoverWX() {
+      console.log('uploadCourseCoverWX')
+      var that = this
+      let fileName = "cover" + "_" + this.userDt.id + "_" + Date.parse(new Date())
+      // await pathToBase64(this.imageWithUrl).then(base64 => {
+      //   this.base64Result = base64;
+      // }).catch(error => {
+      //   console.error(error)
+      // })
+      console.log('uploadCourseCover')
+      return new Promise( (resolve, reject) => {
+        wx.uploadFile({
+          url:'http://up-cn-east-2.qiniup.com',
+          filePath:that.imageWithUrl,
+          formData: {
+            'key':fileName,
+            "token":that.uploadToken
+          },
+          success: (res) => {
+            console.log('微信上传成功')
+            console.log(JSON.parse(res.data).key)
+            // that.uploadUserData(JSON.parse(res.data).key)
+            that.addNewCourse(JSON.parse(res.data).key)
+          }
+        })
+      })
+    },
+
+
+
 
     addNewCourse(coverWithoutUrl) {
       let that = this
@@ -270,10 +307,20 @@ export default {
     }catch(e){}
 
   },
+
+  // #ifndef  MP-WEIXIN
   onReady() {
     this.$refs.uForm.setRules(this.rules);
     this.getTagList()
   },
+  // #endif
+
+  // #ifdef  MP-WEIXIN
+  onLoad(){
+    // this.$refs.uForm.setRules(this.rules);
+    this.getTagList()
+  }
+  // #endif
 };
 </script>
 

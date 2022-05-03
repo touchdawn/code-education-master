@@ -79,6 +79,9 @@ export default {
   },
   onLoad(e){
     this.skillMapId = e.id
+    // #ifdef MP-WEIXIN
+    this.getCourseList()
+    // #endif
   },
   created() {
     try{
@@ -87,7 +90,9 @@ export default {
         this.userDt = JSON.parse(userLocalDataValue)
       }
     }catch(e){}
+    // #ifndef MP-WEIXIN
     this.getCourseList()
+    // #endif
   },
   methods: {
     test1(){
@@ -136,7 +141,7 @@ page {
 .bg {
   margin: 20upx 0;
   background-color: #f2f2f2;
-  //background-image: url('http://ra2q5rhzl.hd-bkt.clouddn.com/python_dbdb.png');
+  background-image: url('http://ra2q5rhzl.hd-bkt.clouddn.com/python_dbdb.png');
   background-position:center  center;
   background-attachment:fixed;
   background-repeat: no-repeat;

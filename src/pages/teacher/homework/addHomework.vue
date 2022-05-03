@@ -48,12 +48,14 @@
 
     </u-form>
     <view style="display:flex; justify-content: space-between; margin-top: 7%;">
-      <u-button @click="addNewGapFill" type="primary" style="width: 30%">添加填空题</u-button>
-      <u-button @click="addNewSelect" type="success" style="width: 30%">添加选择题</u-button>
-      <u-button @click="addNewThinking" type="primary" style="width: 30%">添加思考题</u-button>
+      <u-button class="buttonClass" @click="addNewGapFill" type="primary">添加填空题</u-button>
+      <u-button class="buttonClass" @click="addNewSelect" type="success">添加选择题</u-button>
+      <u-button class="buttonClass" @click="addNewThinking" type="primary">添加思考题</u-button>
     </view>
 
-    <u-button @click="submit" style="margin-top: 4%;">提交</u-button>
+    <view style="margin-top: 4%;">
+      <u-button @click="submit" >提交</u-button>
+    </view>
   </view>
 </template>
 
@@ -109,9 +111,12 @@ export default {
   },
   onLoad(e){
     this.courseId = e.courseId
+    // console.log('作业load')
+
   },
   created() {
     try{
+      // console.log('作业create')
       const value = uni.getStorageSync('userLocalData');
       if(value){
         // console.log(value)
@@ -197,5 +202,8 @@ export default {
 <style scoped>
 .form-content {
   padding: 30px;
+}
+.buttonClass {
+  width:30%;
 }
 </style>

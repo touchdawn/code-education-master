@@ -3,7 +3,8 @@
 <!--    <view class="title">{{homeworkData.homeworkName}}</view>-->
     <u--text :text="homeworkData.homeworkName" size="20" align="center"></u--text>
     <page-pagination mode="simple" style="margin-top: 5%;"
-                     :total="statisticDataList.length * 10"
+                     :total="pageTotal"
+                     :page-size="1"
                      :currentPage="page.currentPage" @change="change"></page-pagination>
 
     <view>
@@ -35,17 +36,19 @@
       </view>
 
 
-<!--      选择题-->
-      <view  v-if="questionList[page.currentPage - 1].type === 'select'">
-        <u-text :text="'题'+page.currentPage" size="20" style="margin-top: 5%;margin-bottom: 3%;"></u-text>
-        <u-text :text="questionList[page.currentPage - 1].question" size="20" lineHeight="25"  style="margin-bottom: 5%;"/>
-      </view>
-      <view >
-        <view  v-for="(item,index) in questionList[page.currentPage - 1].selectList" 
-                     v-if="questionList[page.currentPage - 1].type === 'select'" style="display:grid;  grid-template-columns: 550rpx 300rpx;  grid-template-rows: 20rpx 20rpx 20rpx 20rpx; ">
-          <u-text :text="item.name + '.' + item.input" size="18" ></u-text>
-<!--          <u-text :text="item.input" />-->
-          <u-text :text="editSelectItem(item,index)" size="18"  />
+      <view>
+        <!--      选择题-->
+        <view  v-if="questionList[page.currentPage - 1].type === 'select'">
+          <u-text :text="'题'+page.currentPage" size="20" style="margin-top: 5%;margin-bottom: 3%;"></u-text>
+          <u-text :text="questionList[page.currentPage - 1].question" size="20" lineHeight="25"  style="margin-bottom: 5%"/>
+        </view>
+        <view >
+          <view  v-for="(item,index) in questionList[page.currentPage - 1].selectList"
+                 v-if="questionList[page.currentPage - 1].type === 'select'" style="display:grid;  grid-template-columns: 550rpx 300rpx;  grid-template-rows: 20rpx 20rpx 20rpx 20rpx; ">
+            <u-text :text="item.name + '.' + item.input" size="18" ></u-text>
+            <!--          <u-text :text="item.input" />-->
+            <u-text :text="editSelectItem(item,index)" size="18"  />
+          </view>
         </view>
       </view>
 
@@ -75,6 +78,7 @@ export default {
       userDt:{},
       hwId:-1,
       sumEmpty:false,
+      pageTotal:0,
       page: {
         total: 10,
         pageSize: 10,
@@ -122,8 +126,14 @@ export default {
   },
   onLoad(e){
     this.hwId = e.hwId
+    console.log('load')
+    // #ifdef MP-WEIXIN
+    this.getstatisticData()
+    // #endif
   },
   created() {
+    console.log('create')
+
     try{
       const value = uni.getStorageSync('userLocalData');
       if(value){
@@ -131,10 +141,14 @@ export default {
         this.userDt = JSON.parse(value)
       }
     }catch(e){}
+    // #ifndef MP-WEIXIN
     this.getstatisticData()
+    // #endif
+
   },
   methods: {
     getstatisticData(){
+      console.log('getData')
       let that = this
       uni.request({
         url:global.commonLocalServer + '/homework/getHwStatistic/' + this.hwId,
@@ -146,7 +160,9 @@ export default {
           that.statisticDataList = res.data.data.statisticData
 
           that.questionList = JSON.parse(that.homeworkData.question)
+          let questionList2 = JSON.parse(that.homeworkData.question)
           that.correctAnswerList = JSON.parse(that.homeworkData.answer)
+          that.pageTotal = that.questionList.length
 
           console.log('ques')
           console.log( that.questionList.length)
@@ -162,6 +178,7 @@ export default {
       return  "(" + this.selectOptionStatList[index] + "人选择)"
     },
     processData(index){
+      console.log('processData')
       let correctNum = this.statisticDataList[index].correctNumber
       let incorrectNum = this.statisticDataList[index].incorrectNumber
       let sum = correctNum + incorrectNum

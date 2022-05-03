@@ -5,7 +5,9 @@
     <!--              v-model="lessonName"  @custom="searchClicked()"></u-search>-->
     <u-toast ref="uToast" />
 
-
+    <!-- #ifdef MP-WEIXIN -->
+    <view style="margin-top: 9%;"></view>
+    <!-- #endif -->
 
     <view style="text-align:center; margin-top: 3%; padding-bottom: 3%;;
      font-size: 40rpx;">

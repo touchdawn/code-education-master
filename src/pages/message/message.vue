@@ -23,7 +23,7 @@
           style="margin-top: 10rpx;">
 
 <!--      我的消息-->
-      <view v-for="(item,index) in messageList" v-if="messageList.length !== 0 && item.senderId !== 1"
+      <view v-for="(item,index) in messageList" v-if="messageList.length !== 0 && item.senderId !== 1 && item.receiverId !== -1"
             class=" u-border-radius d-flex a-center"
             style="height: 200rpx; border-bottom: 3rpx solid #bdbdbd;">
         <view>
@@ -57,7 +57,7 @@
       <view class="px-20 border-bottom" v-if="m.id === 1"
             style="margin-top: 10rpx;">
         <!--      系统消息-->
-        <view v-for="(item,index) in messageList" v-if="messageList.length !== 0 && item.senderId === 1"
+        <view v-for="(item,index) in messageList" v-if="messageList.length !== 0 && (item.senderId === 1 || item.receiverId === -1)"
               class=" u-border-radius d-flex a-center"
               style="height: 200rpx; border-bottom: 3rpx solid #bdbdbd;">
           <view>
@@ -195,9 +195,14 @@ export default {
     cardClicked(item,index){
       this.messageList[index].isRead = 0
       // this.$set(this.messageList,index,0)
-
+      let optionAbility = true
+      console.log(item)
+      //如果是系统消息则为只读
+      if (item.receiverId === -1 || item.senderId === 1){
+        optionAbility = false
+      }
       uni.navigateTo({
-        url:'/pages/message/messageDetail/readMessage'+"?messageId="+item.messageId
+        url:'/pages/message/messageDetail/readMessage'+"?messageId="+item.messageId + "&optionAbility=" + optionAbility
       })
     },
     searchClicked(){

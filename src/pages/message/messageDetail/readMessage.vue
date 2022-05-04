@@ -22,6 +22,7 @@
     </view>
 
     <u-tabbar
+        v-if="optionAbility === 'true'"
         :value="1"
         :fixed="true"
         :placeholder="true"
@@ -51,6 +52,7 @@ export default {
   data(){
     return{
       userDt:{},
+      optionAbility:true,
       senderMessage:{
         messageId:'',
         title:"",
@@ -79,7 +81,9 @@ export default {
 
   onLoad(e){
     this.senderMessage.messageId = e.messageId
+    this.optionAbility = e.optionAbility
     console.log(this.senderMessage.messageId)
+    console.log(this.optionAbility)
     // #ifdef  MP-WEIXIN
     this.getMessageById()
     // #endif

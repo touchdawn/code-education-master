@@ -20,7 +20,7 @@
       <u-gap height="30"></u-gap>
       <button @click="submit" class="getSmsCode">登录</button>
       <view class="alternative">
-        <view class="password" @click="passwordLogin()">忘记密码</view>
+<!--        <view class="password" @click="passwordLogin()">忘记密码</view>-->
         <view class="issue" @click="registerClicked()">注册</view>
       </view>
     </view>
@@ -165,8 +165,8 @@ export default {
     },
 
     registerClicked(type) {
-      this.$router.replace({path:'pages/register/register'})
-
+      // this.$router.replace({path:'pages/register/register'})
+      uni.redirectTo({url:'/pages/register/register'})
       this.$u.toast('开发中，敬请期待');
     },
     goPage(url) {

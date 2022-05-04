@@ -1,11 +1,11 @@
 <template>
   <view class="wrap">
     <!--    自定义导航-->
-    <u-navbar
-        title="个人中心"
-        :autoBack="true"
-    >
-    </u-navbar>
+<!--    <u-navbar-->
+<!--        title="个人中心"-->
+<!--        :autoBack="true"-->
+<!--    >-->
+<!--    </u-navbar>-->
     <view class="top" style="margin-top: 50rpx;"></view>
     <view class="content">
       <view class="title" style="margin-bottom: 50rpx;">注册</view>
@@ -33,6 +33,8 @@
       </u-form>
       <u-gap height="30"></u-gap>
       <button @click="register" class="getSmsCode">注册</button>
+      <u-gap height="15"></u-gap>
+      <view style="text-align:center; color: #8f939c" @click="backToLogin">登录页面</view>
       <view class="alternative">
       </view>
     </view>
@@ -152,6 +154,8 @@ export default {
         })
       }
 
+
+
       // this.$refs.form1.validate().then(res => {
       //   console.log(this.registerData)
       //   let that = this;
@@ -178,7 +182,11 @@ export default {
       //   uni.$u.toast('请填写222')
       // })
     },
-
+    backToLogin() {
+      uni.redirectTo({
+        url: '/pages/login/login'
+      });
+    },
     getEmail(){
       if(this.registerData.email !== null && this.registerData.email !== ""){
         var that = this

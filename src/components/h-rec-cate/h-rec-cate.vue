@@ -7,6 +7,8 @@
           <text style="font-size: 26rpx; padding: 20rpx 0 10rpx 0; border-bottom: 3rpx solid #FFFFFF;">热门语言 从零开始</text>
           <text class="font-weight" style="font-size: 36rpx; margin-top: 20rpx">编程学习路线</text>
         </view>
+<!--        <div  style="position: fixed; z-index: 20; right: 0; background-color: #2e2e2e; display: flex; justify-content: center; align-items: center;-->
+<!--        padding-left: 20px; border-radius: 15px 0 0 15px; height: 40px; bottom: 50px">rtfrf</div>-->
       </view>
       <!--      <view class="bg-white-color shadow u-border-radius d-flex flex-wrap"-->
       <!--            style="width: 710rpx;height: 350rpx;margin: -175rpx auto 30rpx;">-->

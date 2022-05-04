@@ -6,8 +6,8 @@
 // 定义一些公共的属性和方法
 const httpUrl = 'http://39.105.17.99:8080/'
 
-const storageUrl = 'http://ra2q5rhzl.hd-bkt.clouddn.com/'
-// const storageUrl = 'http://r9pcezjhx.bkt.clouddn.com/'
+// const storageUrl = 'http://ra2q5rhzl.hd-bkt.clouddn.com/'
+const storageUrl = 'https://coding-education.xyz/'
 
 const commonLocalhost = ""
 

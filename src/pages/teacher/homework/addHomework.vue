@@ -142,6 +142,19 @@ export default {
         data:formData,
         success:function (res) {
           console.log(res)
+          if(res.data.flag === 'T'){
+            uni.showToast({
+              title: '提交成功',
+              icon: 'success',
+              duration: 1000
+            })
+            setTimeout(function () {
+              uni.navigateBack({
+                delta: 1
+              })
+              uni.$emit('teacherRefreshHwList',{msg:'刷新作业列表'})
+            }, 500)
+        }
         }
       })
     },

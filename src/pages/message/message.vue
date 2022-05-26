@@ -90,7 +90,8 @@
 
 
       </view>
-    <view v-if="messageList.length  === 0" style="text-align:center">
+<!--    <view v-if="messageList.length  === 0" style="text-align:center">-->
+    <view v-show="checkIfNull()" style="text-align:center">
       <view >
         <image style="width: 200px; height: 200px; margin-top: 15%;"
                :src="noResult()" ></image>
@@ -182,7 +183,6 @@ export default {
 
     clickTabs(item){
       console.log(item)
-      console.log(this.detail)
       let index = item.index
       this.currentIndex = item.index
       if (index === 2) {
@@ -191,7 +191,28 @@ export default {
         }
       }
     },
-
+    checkIfNull(){
+      let userMsgCount = 0
+      let sysMsgCount = 0
+      this.messageList.forEach(item => {
+        console.log(item)
+        if ((item.senderId === 1 || item.receiverId === -1) ) {
+          userMsgCount++
+        } else {
+          sysMsgCount++
+        }
+      })
+      //如果是用户消息
+      if (this.currentIndex === 0 && userMsgCount === 0){
+        console.log("用户消息为空")
+        return false
+      } else if (this.currentIndex === 1 && sysMsgCount === 0){
+        console.log("系统消息为空")
+        return false
+      } else {
+        return true
+      }
+    },
     cardClicked(item,index){
       this.messageList[index].isRead = 0
       // this.$set(this.messageList,index,0)

@@ -189,7 +189,6 @@ export default {
       this.data[0].value = incorrectValue
       this.data[0].money = incorrectNum
       console.log('data')
-
       console.log(this.data)
       console.log(sum)
       this.selectOptionStatList  = JSON.parse(this.statisticDataList[index].allAnswer);

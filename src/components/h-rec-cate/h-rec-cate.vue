@@ -32,14 +32,14 @@
               style="flex: 1; height: 300rpx; border-right: 1rpx solid #CCCCCC" @click="viewClicked"
         >
           <text class="font-weight" style="margin-top: 20rpx;padding-bottom: 10rpx;font-size: 26rpx; border-bottom: 2rpx solid #1BBF80">Python</text>
-          <image src="http://ra2q5rhzl.hd-bkt.clouddn.com/pythonLogo.png"
+          <image src="https://coding-education.xyz/pythonLogo.png"
                  class="img-160" ></image>
         </view>
 
         <view class="h-100 d-flex flex-column j-sb py-20 a-center"
               style="flex: 1; height: 300rpx; border-right: 1rpx solid #CCCCCC"
         >
-          <image src="http://ra2q5rhzl.hd-bkt.clouddn.com/cppLogo.png"
+          <image src="https://coding-education.xyz/cppLogo.png"
                  class="img-160" ></image>
           <text class="font-weight" style="margin-top: 20rpx;padding-bottom: 10rpx;font-size: 26rpx; border-bottom: 2rpx solid #1BBF80">CPP</text>
         </view>
@@ -48,14 +48,14 @@
               style="flex: 1; height: 300rpx; border-right: 1rpx solid #CCCCCC"
         >
           <text class="font-weight" style="margin-top: 20rpx;padding-bottom: 10rpx;font-size: 26rpx; border-bottom: 2rpx solid #1BBF80">JavaScript</text>
-          <image src="http://ra2q5rhzl.hd-bkt.clouddn.com/JavaScriptLogo.png"
+          <image src="https://coding-education.xyz/JavaScriptLogo.png"
                  class="img-160" ></image>
         </view>
 
         <view class="h-100 d-flex flex-column j-sb py-20 a-center"
               style="flex: 1; height: 300rpx"
         >
-          <image src="http://ra2q5rhzl.hd-bkt.clouddn.com/javaLogo.png"
+          <image src="https://coding-education.xyz/javaLogo.png"
                  class="img-160" ></image>
           <text class="font-weight" style="margin-top: 20rpx;padding-bottom: 10rpx;font-size: 26rpx; border-bottom: 2rpx solid #1BBF80">Java</text>
         </view>

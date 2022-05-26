@@ -99,12 +99,12 @@ export default {
     async uploadSectionVideo() {
       var that = this
       let fileName = "video" + "_" + this.userDt.id + "_" + Date.parse(new Date())
-      await pathToBase64(this.videoWithUrl).then(base64 => {
-        this.base64Result = base64;
-      }).catch(error => {
-        console.error(error)
-      })
-      this.picFile = new File([convertBase64ToBlob(this.base64Result)],fileName);
+      // await pathToBase64(this.videoWithUrl).then(base64 => {
+      //   this.base64Result = base64;
+      // }).catch(error => {
+      //   console.error(error)
+      // })
+      //this.picFile = new File([convertBase64ToBlob(this.base64Result)],fileName);
       return new Promise( (resolve, reject) => {
         let a = uni.uploadFile({
           url:'http://up-cn-east-2.qiniup.com',

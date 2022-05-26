@@ -32,8 +32,8 @@
                       <text style="margin-bottom: 10rpx;margin-right: 110rpx;">{{i.createTime}}</text>
                     </view>
                     <view>
-                      <u-button type="primary" size="mini"
-                                style="margin-top: 30rpx; width: 130rpx;" text="添加到收藏"></u-button>
+<!--                      <u-button type="primary" size="mini"-->
+<!--                                style="margin-top: 30rpx; width: 130rpx;" text="添加到收藏"></u-button>-->
                     </view>
                   </view>
                 </view>
@@ -141,7 +141,7 @@ page {
 .bg {
   margin: 20upx 0;
   background-color: #f2f2f2;
-  background-image: url('http://ra2q5rhzl.hd-bkt.clouddn.com/python_dbdb.png');
+  background-image: url('https://coding-education.xyz/python_dbdb.png');
   background-position:center  center;
   background-attachment:fixed;
   background-repeat: no-repeat;

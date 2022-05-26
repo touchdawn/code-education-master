@@ -79,6 +79,7 @@ export default {
     }
   },
   onLoad(e){
+    let that = this
     this.courseId = e.courseId
     console.log('作业load')
     console.log(e.courseId)
@@ -86,6 +87,15 @@ export default {
     this.getHwList()
     this.getAuthority()
     // #endif
+    uni.$on('freshStudentHw',function(data){
+      console.log('监听到事件来自 update ，携带参数 msg 为：' + data.msg);
+      that.getHwList();
+      that.$u.toast('添加成功！')
+    })
+    uni.$on('teacherRefreshHwList',function(data){
+      console.log('监听到事件来自 update ，携带参数 msg 为：' + data.msg);
+      that.getHwList();
+    })
   },
   created() {
     console.log('作业create')

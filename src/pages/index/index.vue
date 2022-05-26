@@ -137,6 +137,7 @@
     components: {TabBar, HLessonsListRow, HOprice, HRecTitle,  HRecCate, HPprice},
     data() {
 			return {
+        keyword:'',
         latestCourseId:-1,
         lessonList:[],
         restLessonList:[],
@@ -215,17 +216,10 @@
         success:function(res){
           that.lessonList = res.data.data
           for(var i=0; i < that.swiperNumber; i++){
-            // for(var i=0; i<that.lessonList.length;i++){
               that.lessonImgList.push(global.storageUrl + that.lessonList[i].imgUrl)
           }
           that.restLessonList = that.lessonList.splice(that.swiperNumber + 1) //前四个做轮播图，后面的添加到列表里
           console.log(that.restLessonList)
-
-          // try {
-          //   uni.setStorageSync('restLessonList', that.restLessonList);
-          // } catch (e) {
-          //   // error
-          // }
         }
       })
     },

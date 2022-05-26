@@ -107,7 +107,22 @@ export default {
     }
   },
   methods: {
-    checkFormData(){ //判断输入合法
+    checkFormData() {
+      // 手机校验
+      if (!/^1[3456789]\d{9}$/.test(this.registerData.phone)) {
+        this.$u.toast('请输入正确的手机号');
+        return false;
+      }
+      // 密码校验
+      if (this.registerData.password.length < 6) {
+        this.$u.toast('请输入6位以上的密码');
+        return false;
+      }
+      // 邮箱校验
+      if (!/^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/.test(this.registerData.email)) {
+        this.$u.toast('请输入正确的邮箱');
+        return false;
+      }
       let checkPhone = !this.registerData.phone.isEmpty
       let checkName = !this.registerData.name.isEmpty
       let checkEmail = !this.registerData.email.isEmpty
@@ -118,10 +133,15 @@ export default {
       if (!pwd){
         this.$u.toast('两次密码不匹配');
       }
+      // 手机号验证
       let res = (checkPhone && checkName && checkEmail && checkVerify && password && passwordConfirm && pwd)
       console.log(res)
       return res
+
     },
+
+
+    //
 
     register() {
       let that = this;
@@ -148,7 +168,7 @@ export default {
                     url: '/pages/index/index'
               });
             } else {
-              that.$u.toast(res.data.errorInfo);
+              that.$u.toast("注册失败");
             }
           }
         })

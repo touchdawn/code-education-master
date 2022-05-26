@@ -27,7 +27,7 @@
       <u-form-item :label="'题'+(index+1)" prop="courseName" v-if="form.type === 'select'">
         <u-text :text="form.question"  placeholder="请输入题目" count/>
       </u-form-item>
-      <u-form v-for="(childForm , childIndex) in form.selectList" key="child">
+      <u-form v-for="(childForm , childIndex) in form.selectList">
         <u-form-item :label="childForm.name" prop="courseName" v-if="form.type === 'select'">
           <u-text :text="childForm.input" />
         </u-form-item>
@@ -130,6 +130,13 @@ export default {
         data:formData,
         success:function (res) {
           console.log(res)
+          if(res.data.flag === 'T'){
+            that.$u.toast("提交成功")
+            uni.navigateBack({delta:1})
+            uni.$emit('freshStudentHw',{msg:'刷新作业'})
+          } else {
+            that.$u.toast("已经提交过了")
+          }
         }
       })
     },

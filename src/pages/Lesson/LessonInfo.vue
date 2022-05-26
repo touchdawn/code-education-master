@@ -628,17 +628,12 @@ export default {
     },
 
     addFavourite() {
-      // console.log(comt.voted)
       var that = this
       let uploadData = {}
       uploadData.userId = that.userDt.id
       uploadData.courseId = that.lessonId
-
-
       uploadData.favouriteId = that.detail.favouriteId
       uploadData.action = that.detail.isFavourite === false ? "add" : "delete"
-
-
       let header = {
         token: that.userDt.token
       }
@@ -657,13 +652,11 @@ export default {
             that.detail.favNum++
             that.detail.isFavourite = true
             that.$u.toast("收藏成功！")
-
           } else {
             that.detail.favouriteId = -1
             that.detail.favNum--
             that.detail.isFavourite = false
             that.$u.toast("取消成功！")
-
           }
         }
       })

@@ -12,7 +12,7 @@
       <view class="">
         <view class="" style="margin-top: 40rpx;">
           <view class="content" @click="showLocalStorage">软件版本</view>
-          <view class="action">3.1.5</view>
+          <view class="action">0.1.6</view>
         </view>
       </view>
     </view>
